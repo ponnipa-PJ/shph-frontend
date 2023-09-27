@@ -154,6 +154,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import EventService from '../services/EventService'
 import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
+import NotificationService from '../services/NotificationService'
 
 export default {
   name: "Nav",
@@ -227,12 +228,17 @@ export default {
       }],
       doctors: [],
       header: '',
-      allday: true
+      allday: true,
+      noti:{}
     };
   },
   mounted() {
-    this.getEvents('',this.currentUser.id)
+    this.getEvents()
     this.getUsers();
+    NotificationService.getnotification(1).then((res)=>{
+      this.noti = res.data
+    })
+    // console.log(this.currentUser);
   },
   methods: {
     deleteque() {
@@ -241,9 +247,13 @@ export default {
           title: 'ว่าง',
           userId: null,
         };
+        EventService.geteventbydocanddate(this.book.date,this.book.doctorId).then((res)=>{
         EventService.updateuser(this.user_id, userdatak).then(() => {
+          LinkImageService.sendNotify(this.noti.cancel_chiropractor+ ' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
           document.getElementById("closeduser").click();
           this.getEvents();
+          });
+
 
         });
     },
@@ -269,6 +279,7 @@ export default {
     },
     getEvents() {
       EventService.getbooks('',this.currentUser.id).then((res) => {
+        console.log(res.data);
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -279,22 +290,30 @@ export default {
       })
     },
     handleEventClick(clickInfo) {
-      // console.log(clickInfo.event.id);
       var id = clickInfo.event.id
+      EventService.getevent(id).then((res) => {
+        this.book = res.data
+      // console.log(clickInfo.event.id);
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1) + '-' + breaktime.getDate()
-      var now = new Date()
+      var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
+      
+      EventService.geteventbyuseranddate(d,this.currentUser.id).then((res) => {
+        // console.log(res.data);
+        if (res.data.length == this.noti.hour && this.book.bookstatus == 1) {
+          alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
+        }else{
+          var now = new Date()
       var selectdate = new Date(d)
 
       now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
       now = new Date(now)
       
       
-      // console.log(breaktime);
+      // console.log(d);
 
       if (selectdate < now || breaktime.getHours() == 12) {
-        console.log(1);
+        // console.log(1);
       } else{
         this.header = breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
@@ -333,6 +352,10 @@ export default {
       //         this.getEvents()
       //       })
       //       }
+        }
+      });
+    });
+      
     },
     timeformat(time) {
       time = time.split(':')
@@ -359,18 +382,26 @@ export default {
       if (id != 0) {
         // console.log(this.user_id);
         EventService.getevent(id).then((res) => {
-          // console.log(res.data);
           this.book = res.data;
+          // console.log(this.book);
+          EventService.getquebyuserid(res.data.date,this.currentUser.id).then((res) => {
+            if (res.data.length > 0) {
+              this.book = res.data;
+            }        
           EventService.getdoctorbydate(this.book.date,this.currentUser.id).then((res) => {
         this.doctors = res.data
         // console.log(this.doctors);
         // console.log(this.book);
         EventService.getquebyuserid(this.book.date,this.currentUser.id).then((res) => {
-        this.event_id = res.data.id
+          // console.log(res.data);
+          if (res.data.length !=0) {
+            this.event_id = res.data.doctorId
+          }
         // console.log(this.event_id);
         if (this.event_id) {
           this.allday = false
         }else{
+        
           this.allday = true
         }
         });
@@ -378,11 +409,13 @@ export default {
       })
           // console.log( this.course_id);
         });
+      });
       } else {
         this.course_id = []
         this.days = []
         this.book = {};
       }
+      
     },
     save() {
       if (this.event_id == '' || this.event_id == null) {
@@ -393,14 +426,15 @@ export default {
           title: 'จองแล้ว',
           userId: this.currentUser.id,
         };
-        EventService.updateuser(this.user_id, userdata).then(() => {
+        // console.log(this.book);
+        EventService.geteventbydocanddate(this.book.date,this.event_id).then((res)=>{
+// console.log(res.data);
+        EventService.updateuser(res.data.id, userdata).then(() => {
           // console.log(res.data);
+          LinkImageService.sendNotify(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
           document.getElementById("closeduser").click();
           this.getEvents();
-          //       setTimeout(function () {
-          //   location.reload();
-          // }, 500);
-          // window.scrollTo(0, 0);
+          });
         });
       }
     },

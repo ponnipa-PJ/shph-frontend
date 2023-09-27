@@ -123,6 +123,13 @@
                     </div>
                     <div v-if="doctors.length == 0">ไม่พบหมอที่ให้บริการวันที่เลือก</div>
                   </div>
+                  <div class="form-group">
+                  <label>อาการ</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" v-model="book.remark">
+                  </div>
+
+                </div>
                 </div>
               </div>
             </form>
@@ -131,7 +138,7 @@
             <button type="button" class="btn btn-danger" @click="deleteque()" v-if="!allday">
               ยกเลิกการจอง
             </button>
-            <button type="button" class="btn btn-success" @click="save()" v-else>
+            <button type="button" class="btn btn-success" @click="save()" v-if="allday && doctors.length > 0">
               ยืนยันการจอง
             </button>
 
@@ -154,6 +161,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import EventDentistService from '../services/EventDentistService'
 import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
+import NotificationService from '../services/NotificationService'
 
 export default {
   name: "Nav",
@@ -227,12 +235,18 @@ export default {
       }],
       doctors: [],
       header: '',
-      allday: true
+      allday: true,
+      noti:{},
+      limitdoc:[],
+      date:''
     };
   },
   mounted() {
     this.getEvents('',this.currentUser.id)
     this.getUsers();
+    NotificationService.getnotification(1).then((res)=>{
+      this.noti = res.data
+    })
   },
   methods: {
     deleteque() {
@@ -240,16 +254,23 @@ export default {
           bookstatus: 1,
           title: 'ว่าง',
           userId: null,
+          remark:null
         };
-        EventDentistService.updateuser(this.user_id, userdatak).then(() => {
+        // console.log(this.book);
+        EventDentistService.geteventbydocanddate(this.book.date,this.book.doctorId).then((res)=>{
+          // console.log(res.data);
+        EventDentistService.updateuser(res.data.id, userdatak).then(() => {
+          LinkImageService.sendNotify(this.noti.cancel_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
           document.getElementById("closeduser").click();
           this.getEvents();
+          location.reload();
+          });
 
         });
     },
     sentline() {
       UserService.getUser(this.book.userId).then((res) => {
-        console.log(res.data.line_token);
+        // console.log(res.data.line_token);
         LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, res.data.line_token)
         this.save()
       })
@@ -279,11 +300,22 @@ export default {
       })
     },
     handleEventClick(clickInfo) {
-      // console.log(clickInfo.event.id);
+      this.limitdoc =[]
+      // console.log(clickInfo.event);
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1) + '-' + breaktime.getDate()
+      var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))      
+      
+      
+      EventDentistService.geteventbyuseranddate(d,'').then((res)=>{
+        // console.log(res.data);
+        for (let d = 0; d < res.data.length; d++) {
+          if (res.data[d].count == this.noti.no_dentist) {
+            this.limitdoc.push(res.data[d].doctorId)
+          }
+        }
+      })
       var now = new Date()
       var selectdate = new Date(d)
 
@@ -294,7 +326,7 @@ export default {
       // console.log(selectdate,now);
 
       if (selectdate < now || breaktime.getHours() == 12) {
-        console.log(1);
+        // console.log(1);
       }else{
         this.header = breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
@@ -352,31 +384,52 @@ export default {
 
     },
     getid(id) {
-      // console.log(id);
+      // console.log(this.date);
       this.event_id = ''
       this.user_id = id;
       if (id != 0) {
-        // console.log(this.user_id);
+       
+       var arrayWithout = []
         EventDentistService.getevent(id).then((res) => {
-          // console.log(res.data);
           this.book = res.data;
-          EventDentistService.getdoctorbydate(this.book.date,this.currentUser.id).then((res) => {
+          EventDentistService.getquebyuserid(res.data.date,this.currentUser.id).then((res) => {
+            if (res.data.length > 0) {
+              this.book = res.data;
+            }
+            // console.log(this.book);
+        if (this.book.bookstatus == 0) {
+          for (let i = 0; i < this.limitdoc.length; i++) {
+    if (this.limitdoc[i] !== this.book.doctorId) {
+      arrayWithout.push(this.limitdoc[i]);
+    }
+}
+          
+        }else{
+          arrayWithout = this.limitdoc
+        }
+          // console.log(arrayWithout);
+
+          EventDentistService.getdoctorbydate(this.book.date,this.currentUser.id,JSON.stringify(arrayWithout)).then((res) => {
         this.doctors = res.data
         // console.log(this.doctors);
         // console.log(this.book);
         EventDentistService.getquebyuserid(this.book.date,this.currentUser.id).then((res) => {
-        this.event_id = res.data.id
-        // console.log(this.event_id);
+          if (res.data.length !=0) {
+            this.event_id = res.data.doctorId
+          }
+        // console.log(res.data);
         if (this.event_id) {
           this.allday = false
-        }else{
+        }else{  
           this.allday = true
         }
         });
+      });
         // console.log(this.allday);
       })
+    })
           // console.log( this.course_id);
-        });
+      
       } else {
         this.course_id = []
         this.days = []
@@ -384,23 +437,35 @@ export default {
       }
     },
     save() {
+      // console.log(this.event_id);
       if (this.event_id == '' || this.event_id == null) {
         alert('กรุณาเลือกหมอฟัน')
+      }else if (this.book.remark == '' || this.book.remark == null) {
+        alert('กรุณากรอกอาการ')
       }else{
         var userdata = {
           bookstatus: 0,
           title: 'จองแล้ว',
           userId: this.currentUser.id,
+          remark:this.book.remark
         };
-        EventDentistService.updateuser(this.user_id, userdata).then(() => {
+        EventDentistService.geteventbydocanddate(this.book.date,this.event_id).then((res)=>{
           // console.log(res.data);
-          document.getElementById("closeduser").click();
-          this.getEvents();
-          //       setTimeout(function () {
-          //   location.reload();
-          // }, 500);
-          // window.scrollTo(0, 0);
-        });
+
+EventDentistService.updateuser(res.data.id, userdata).then(() => {
+  // console.log(res.data);
+  // UserService.getUser(this.event_id)
+  LinkImageService.sendNotify(this.noti.message_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
+  document.getElementById("closeduser").click();
+  this.getEvents();
+  location.reload();
+  });
+  //       setTimeout(function () {
+  //   location.reload();
+  // }, 500);
+  // window.scrollTo(0, 0);
+        })      
+        //    
       }
     },
     getUsers() {

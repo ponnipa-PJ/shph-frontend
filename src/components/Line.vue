@@ -27,18 +27,18 @@ export default {
   mounted() {
     this.getUsers();
     this.getroles()
-    console.log(this.$route.query.code)
+    // console.log(this.$route.query.code)
     LinkImageService.gettoken(this.$route.query.code).then((res)=>{
-      console.log(res.data);
-      console.log(this.currentUser);
+      // console.log(res.data);
+      // console.log(this.currentUser);
       var d = {
         line_token:res.data
       }
       UserService.updatetokenline(this.currentUser.id,d).then(()=>{
-        console.log(res.data);
+        // console.log(res.data);
         UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
           var menu = res.data[0].url
-          console.log(menu);
+          // console.log(menu);
         this.$router.push(menu);
         setTimeout(function () {
           location.reload();

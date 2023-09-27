@@ -128,7 +128,7 @@ export default {
   methods: {
     saveorderlist() {
       for (let l = 0; l < this.list.length; l++) {
-        console.log(l+1);
+        // console.log(l+1);
         var list = {
           no: l + 1,
         };
@@ -154,7 +154,7 @@ export default {
         this.title = "แก้ไขชื่อเมนู";
         MenuService.getmenu(this.user_id).then((res) => {
           this.user = res.data;
-          console.log(res.data);
+          // console.log(res.data);
         });
       }
     },
@@ -165,10 +165,10 @@ export default {
         var userdata = {
           name: this.user.name,
         };
-        console.log(userdata);
+        // console.log(userdata);
         if (this.user_id == 0) {
           UserService.getUsers(this.user.email).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
                 document.getElementById("closedmenu").click();
@@ -180,7 +180,7 @@ export default {
           });
         } else {
           MenuService.updatemenu(this.user_id, userdata).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data) {
               document.getElementById("closedmenu").click();
               this.getMenus();
@@ -196,7 +196,7 @@ export default {
     getMenus() {
       MenuService.getmenus().then((res) => {
         this.list = res.data;
-        console.log(res.data);
+        // console.log(res.data);
       });
     },
   },

@@ -16,6 +16,7 @@ import Profile from './components/Profile.vue';
 import Menumanage from './components/Menumanage.vue';
 import plandoctordentist from './components/plandoctordentist.vue';
 import bookdentist from './components/bookdentist.vue';
+import notification from './components/notification.vue';
 
 const router = new Router({
   mode: "history",
@@ -118,6 +119,12 @@ const router = new Router({
     name: "bookdentist",
     component: bookdentist
   },
+  {
+    path: "/setting",
+    alias: "/setting",
+    name: "setting",
+    component: notification
+  },
   ]
 });
 
@@ -137,7 +144,7 @@ router.beforeEach((to, from, next) => {
   // trying to access a restricted page + not logged in
   // redirect to login page
   if (authRequired && !loggedIn) {
-    next('permissionlist');
+    next('login');
   } else {
     next();
   }

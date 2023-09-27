@@ -133,7 +133,7 @@
                       <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
                     </div>
                   </div>
-
+ 
                 </div>
                 <div class="form-group" v-if="allday">
                   <label>ข้อความแจ้งเตือนไลน์</label>
@@ -152,6 +152,9 @@
             </form>
           </div>
           <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-danger" @click="deletequeall()" v-if="allday">
+              ลบคิวทั้งหมด
+            </button>
             <button type="button" class="btn btn-danger" @click="deleteque()" v-if="allday">
               แจ้งยกเลิกคิวและส่งแจ้งเตือน
             </button>
@@ -265,6 +268,13 @@ export default {
     }
   },
   methods: {
+    deletequeall(){
+EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
+  // console.log(res.data);
+  document.getElementById("closeduser").click();
+                  this.getEvents('',this.currentUser.id);
+})
+    },
     deleteque() {
       if (this.book.noti == '' || this.book.noti == null) {
         alert('กรุณากรอกข้อความแจ้งเตือน')
@@ -303,7 +313,7 @@ export default {
     },
     sentline() {
       UserService.getUser(this.book.userId).then((res) => {
-        console.log(res.data.line_token);
+        // console.log(res.data.line_token);
         LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, res.data.line_token)
         this.save()
       })
@@ -368,7 +378,7 @@ export default {
       now = new Date(now)
       
       
-      console.log(selectdate,now);
+      // console.log(selectdate,now);
 
       if (selectdate < now) {
         console.log(1);
@@ -442,7 +452,7 @@ export default {
     }
     },
     handleEventClick(clickInfo) {
-      console.log(clickInfo.event.id);
+      // console.log(clickInfo.event.id);
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
@@ -454,7 +464,7 @@ export default {
       now = new Date(now)
       
       
-      console.log(selectdate,now);
+      // console.log(selectdate,now);
 
       if (selectdate < now) {
         console.log(1);
@@ -509,9 +519,9 @@ export default {
       })
     },
     searchtime() {
-      console.log(this.doctor_id);
+      // console.log(this.doctor_id);
       DoctorService.gettimebydoctor(this.doctor_id).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.courses = res.data
       })
     },
@@ -523,18 +533,18 @@ export default {
 
     },
     getid(id) {
-      console.log(id);
+      // console.log(id);
       this.user_id = id;
       if (id != 0) {
         // console.log(this.user_id);
         EventService.getevent(id).then((res) => {
           // console.log(res.data);
           this.book = res.data;
-          console.log(this.book);
+          // console.log(this.book);
           EventService.getevents(this.book.date,this.currentUser.id).then((res) => {
 
             this.alltoken = res.data
-            console.log(res.data);
+            // console.log(res.data);
           })
           // console.log( this.course_id);
         });

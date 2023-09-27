@@ -353,7 +353,7 @@ export default {
               UserService.getUser(id).then((res)=>{
                 localStorage.removeItem('usershph');
               localStorage.setItem('usershph', JSON.stringify(res.data));
-              console.log(this.currentUser);
+              // console.log(this.currentUser);
               UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
               // console.log(this.urlAuth());
           var menu = res.data[0].url

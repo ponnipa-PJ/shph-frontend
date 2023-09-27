@@ -10,8 +10,17 @@ class EventService {
     getdoctorbydate(date,id){
         return http.get('/events/getdoctorbydate?date='+date+'&&id='+id);
     }
+    deleteAll(date,id){
+        return http.get('/events/deleteevent?date='+date+'&&id='+id);
+    }
     getquebyuserid(date,id){
         return http.get('/events/getquebyuserid?date='+date+'&&id='+id);
+    }
+    geteventbyuseranddate(date,id){
+        return http.get('/events/geteventbyuseranddate?date='+date+'&&id='+id);
+    }
+    geteventbydocanddate(date,id){
+        return http.get('/events/geteventbydocanddate?date='+date+'&&id='+id);
     }
     getevent(id) {
         return http.get('/events/' + id);
