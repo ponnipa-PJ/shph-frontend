@@ -10,14 +10,11 @@ class EventService {
     getdoctorbydate(date,id){
         return http.get('/events/getdoctorbydate?date='+date+'&&id='+id);
     }
-    gettimebydoctoranddate(date,id,userid){
-        return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid);
-    }
     deleteAll(date,id){
         return http.get('/events/deleteevent?date='+date+'&&id='+id);
     }
-    getquebyuserid(date,id,doctorid){
-        return http.get('/events/getquebyuserid?date='+date+'&&id='+id+'&&doctorid='+doctorid);
+    getquebyuserid(date,id){
+        return http.get('/events/getquebyuserid?date='+date+'&&id='+id);
     }
     geteventbyuseranddate(date,id){
         return http.get('/events/geteventbyuseranddate?date='+date+'&&id='+id);

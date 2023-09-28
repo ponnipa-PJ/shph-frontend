@@ -112,14 +112,16 @@
           <div class="modal-body">
             <form>
               <div class="card-body" style="padding:0px">
-                <div class="form-group" v-if="!allday">
+                <!-- <div class="form-group" v-if="!allday">
                   <div class="input-group">
+                    <label>{{book.title}}</label>
+
                     <input v-model="book.title" v-if="book.bookstatus == 1" type="text" class="form-control form-control-sm float-right"
                       id="reservationtime" disabled>
                       <input v-model="book.title" v-else type="text" class="form-control form-control-sm float-right"
                       id="reservationtime">
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group" v-if="book.userfirst">
                   <label>ชื่อผู้จอง</label><br/>
                   <label>{{book.userfirst}} {{ book.userlast }}</label>
@@ -135,16 +137,6 @@
                   </div>
  
                 </div>
-                <div class="form-group" v-if="allday">
-                  <label>ข้อความแจ้งเตือนไลน์</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" v-model="book.noti">
-                    <div class="input-group-append">
-                      <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
-                    </div>
-                  </div>
-
-                </div>
                 <button v-if="book.userId" type="button" class="btn btn-success btn-sm" @click="sentline()">
                   ส่งข้อความแจ้งเตือนไลน์
                 </button>
@@ -155,15 +147,15 @@
             <button type="button" class="btn btn-danger" @click="deletequeall()" v-if="allday">
               ลบคิวทั้งหมด
             </button>
-            <button type="button" class="btn btn-danger" @click="deleteque()" v-if="allday">
+            <button type="button" class="btn btn-danger" @click="deleteque()" v-if="book.userfirst">
               แจ้งยกเลิกคิวและส่งแจ้งเตือน
             </button>
             <button type="button" class="btn btn-danger" @click="deleteq()" v-if="book.bookstatus == 1">
               ลบคิว
             </button>
-            <button type="button" class="btn btn-success" @click="save()" v-if="book.bookstatus == 0">
+            <!-- <button type="button" class="btn btn-success" @click="save()" v-if="book.bookstatus == 0">
               บันทึก
-            </button>
+            </button> -->
             <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
@@ -409,7 +401,7 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
           // console.log(strtime);
           if (strtime == 12) {
             console.log(1);
-            title = 'พักเทียง'
+            title = 'พักเที่ยง'
             color = 'red'
           }
           var eventper = {

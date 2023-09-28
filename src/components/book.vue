@@ -3,7 +3,7 @@
     <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอนวดประจำเดือน</h5>
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
-        <b>{{ converttime(arg.timeText) }}</b>
+        <!-- <b>{{ converttime(arg.timeText) }}</b> -->
         <i>{{ arg.event.title }}</i>
       </template>
     </FullCalendar>
@@ -114,14 +114,29 @@
             <form>
               <div class="card-body" style="padding:0px">
                 <div class="form-group">
-                  <label>หมอนวด</label><br/>
+                  <label>เวลา</label><br/>
+                  <!-- <div class="row mt-3">
+        <div class="col-12" v-for="d in doctors" :key="d.id">
+          <div class="form-group" style="text-align: left">
+            <label>
+              <input
+                type="checkbox"
+                v-model="event_id"
+                :id="d.date"
+                :value="d.id"
+              />
+              <span> {{ timeformat(d.date) }}</span>
+            </label>
+          </div>
+        </div>
+      </div> -->
+
                   <div class="form-group">
                     <div class="custom-control custom-checkbox" v-for="(i, r) in doctors" :key="r" >
-                      <input class="form-check-input" type="radio" name="radio1" :id="i.id"
+                      <input class="form-check-input" type="checkbox" :id="i.date"
                         :value="i.id" v-model="event_id">
-                      <label :for="i.id" class="form-check-label">{{ i.firstname }} {{ i.lastname }}</label>
+                      <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
                     </div>
-                    <div v-if="doctors.length == 0">ไม่พบหมอที่ให้บริการวันที่เลือก</div>
                   </div>
                 </div>
               </div>
@@ -190,7 +205,7 @@ export default {
         },
         events: [],
       },
-      event_id:0,
+      event_id:[],
       alltoken: [],
       book: {},
       events: [],
@@ -229,7 +244,9 @@ export default {
       doctors: [],
       header: '',
       allday: true,
-      noti:{}
+      noti:{},
+      eventold:[],
+      date:''
     };
   },
   mounted() {
@@ -242,26 +259,83 @@ export default {
   },
   methods: {
     deleteque() {
-        var userdatak = {
+        // var userdatak = {
+        //   bookstatus: 1,
+        //   title: 'ว่าง',
+        //   userId: null,
+        // };
+        // EventService.geteventbydocanddate(this.book.date,this.book.doctorId).then((res)=>{
+        // EventService.updateuser(this.user_id, userdatak).then(() => {
+        //   LinkImageService.sendNotify(this.noti.cancel_chiropractor+ ' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
+        //   document.getElementById("closeduser").click();
+        //   this.getEvents();
+        //   });
+
+
+        // });
+        var timeold = ' เวลา '
+        for (let e = 0; e < this.eventold.length; e++) {
+          var userdataold = {
           bookstatus: 1,
           title: 'ว่าง',
           userId: null,
         };
-        EventService.geteventbydocanddate(this.book.date,this.book.doctorId).then((res)=>{
-        EventService.updateuser(this.user_id, userdatak).then(() => {
-          LinkImageService.sendNotify(this.noti.cancel_chiropractor+ ' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
-          document.getElementById("closeduser").click();
-          this.getEvents();
+        console.log(userdataold);
+// console.log(res.data);
+        EventService.updateuser(this.eventold[e], userdataold).then(() => {
+          
+          EventService.getevent(this.event_id[e]).then((res)=>{
+            console.log(res.data);
+            timeold += this.timeformat(res.data.date)
+            console.log(e+1 , this.event_id.length);
+         if (e+1 == this.eventold.length) {
+          console.log(timeold);
+          var message = this.noti.cancel_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + timeold
+console.log(message);
+           LinkImageService.sendNotify(message, this.currentUser.line_token)
+           document.getElementById("closeduser").click();
+           location.reload();
+//           var time = ' เวลา '
+//         for (let e = 0; e < this.event_id.length; e++) {
+//           var userdata = {
+//           bookstatus: 0,
+//           title: 'จองแล้ว',
+//           userId: this.currentUser.id,
+//         };
+//         console.log(userdata);
+// // console.log(res.data);
+//         EventService.updateuser(this.event_id[e], userdata).then(() => {
+          
+//           EventService.getevent(this.event_id[e]).then((res)=>{
+//             console.log(res.data);
+//             time += this.timeformat(res.data.date)
+//             console.log(e+1 , this.event_id.length);
+//          if (e+1 == this.event_id.length) {
+//           console.log(time);
+//           var text = this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + time
+// console.log(text);
+//           //  LinkImageService.sendNotify(text, this.currentUser.line_token)
+//            document.getElementById("closeduser").click();
+//            this.getEvents();
+//          }
+//           })
+          
+//           });
+        // }
+         }
+          })
+          
           });
+        }
 
-
-        });
+       
     },
     sentline() {
       UserService.getUser(this.book.userId).then((res) => {
         console.log(res.data.line_token);
         LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, res.data.line_token)
         this.save()
+
       })
     },
     converttime(time) {
@@ -291,74 +365,84 @@ export default {
     },
     handleEventClick(clickInfo) {
       var id = clickInfo.event.id
-      EventService.getevent(id).then((res) => {
-        this.book = res.data
-      // console.log(clickInfo.event.id);
       var breaktime = new Date(clickInfo.event.start)
 
       var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
       
-      EventService.geteventbyuseranddate(d,this.currentUser.id).then((res) => {
-        // console.log(res.data);
-        if (res.data.length == this.noti.hour && this.book.bookstatus == 1) {
-          alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
-        }else{
-          var now = new Date()
-      var selectdate = new Date(d)
+      console.log(id);
+      this.getid(id,d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
-      now = new Date(now)
+        document.getElementById("AddEventDentist").click();
+    //   EventService.getevent(id).then((res) => {
+    //     this.book = res.data
+    //   // console.log(clickInfo.event.id);
+    //   var breaktime = new Date(clickInfo.event.start)
+
+    //   var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
+      
+    //   EventService.geteventbyuseranddate(d,this.currentUser.id).then((res) => {
+    //     // console.log(res.data);
+    //     if (res.data.length == this.noti.hour && this.book.bookstatus == 1) {
+    //       alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
+    //     }else{
+    //       var now = new Date()
+    //   var selectdate = new Date(d)
+
+    //   now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
+    //   now = new Date(now)
       
       
-      // console.log(d);
+    //   // console.log(d);
 
-      if (selectdate < now || breaktime.getHours() == 12) {
-        // console.log(1);
-      } else{
+    //   if (selectdate < now || breaktime.getHours() == 12) {
+    //     // console.log(1);
+    //   } else{
         this.header = breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
         })
-        this.getid(id)
+    //     this.getid(id)
         this.title = 'จองคิวหมอนวดวันที่ ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
         })
-        if (breaktime.getHours() != 0) {
-          this.title += ' เวลา ' + this.timeformat(breaktime.toLocaleTimeString('th-TH'))
-          this.header += ' เวลา ' + this.timeformat(breaktime.toLocaleTimeString('th-TH'))
-          this.allday = false
-        } else {
-          this.allday = true
-        }
-      this.getid(id)
+    //     if (breaktime.getHours() != 0) {
+    //       this.title += ' เวลา ' + this.timeformat(breaktime.toLocaleTimeString('th-TH'))
+    //       this.header += ' เวลา ' + this.timeformat(breaktime.toLocaleTimeString('th-TH'))
+    //       this.allday = false
+    //     } else {
+    //       this.allday = true
+    //     }
+    //   this.getid(id)
 
-        document.getElementById("AddEventDentist").click();
+    //     document.getElementById("AddEventDentist").click();
     
-      }
-      // const result = date.toLocaleDateString('th-TH', {
-      //   year: 'numeric',
-      //   month: 'long',
-      //   day: 'numeric',
-      // })
-      //       if (confirm(`ยืนการการลบ '${result}'`)) {
-      //         // clickInfo.event.remove()
-      //         var event = {
-      //         status:0
-      //       }
-      //       EventService.updateevent(clickInfo.event.id,event).then(()=>{
-      //         this.getEvents()
-      //       })
-      //       }
-        }
-      });
-    });
+    //   }
+    //   // const result = date.toLocaleDateString('th-TH', {
+    //   //   year: 'numeric',
+    //   //   month: 'long',
+    //   //   day: 'numeric',
+    //   // })
+    //   //       if (confirm(`ยืนการการลบ '${result}'`)) {
+    //   //         // clickInfo.event.remove()
+    //   //         var event = {
+    //   //         status:0
+    //   //       }
+    //   //       EventService.updateevent(clickInfo.event.id,event).then(()=>{
+    //   //         this.getEvents()
+    //   //       })
+    //   //       }
+    //     }
+    //   });
+    // });
       
     },
-    timeformat(time) {
-      time = time.split(':')
+    timeformat(date) {
+      var time = date.split('T')
+      time = time[1].split(':')
+// console.log(time);
       return time[0] + '.' + time[1] + ' น.'
     },
     searchtime() {
@@ -375,40 +459,28 @@ export default {
       return value
 
     },
-    getid(id) {
-      // console.log(id);
-      this.event_id = ''
-      this.user_id = id;
-      if (id != 0) {
-        // console.log(this.user_id);
-        EventService.getevent(id).then((res) => {
-          this.book = res.data;
-          // console.log(this.book);
-          EventService.getquebyuserid(res.data.date,this.currentUser.id).then((res) => {
-            if (res.data.length > 0) {
-              this.book = res.data;
-            }        
-          EventService.getdoctorbydate(this.book.date,this.currentUser.id).then((res) => {
+    getid(id,date) {
+      // console.log(date);
+      this.date = date
+      this.event_id = []
+            this.eventold = []
+      this.doctor_id = id;
+      if (id != 0) {    
+          EventService.gettimebydoctoranddate(date,this.doctor_id,this.currentUser.id).then((res) => {
         this.doctors = res.data
-        // console.log(this.doctors);
+        console.log(this.doctors);
         // console.log(this.book);
-        EventService.getquebyuserid(this.book.date,this.currentUser.id).then((res) => {
-          // console.log(res.data);
+        EventService.getquebyuserid(date,this.currentUser.id,this.doctor_id).then((res) => {
+          console.log(res.data);
           if (res.data.length !=0) {
-            this.event_id = res.data.doctorId
+            this.event_id = res.data
+            this.eventold = res.data
+            this.allday = false
+          }else{
+            this.allday = true
           }
-        // console.log(this.event_id);
-        if (this.event_id) {
-          this.allday = false
-        }else{
-        
-          this.allday = true
-        }
         });
         // console.log(this.allday);
-      })
-          // console.log( this.course_id);
-        });
       });
       } else {
         this.course_id = []
@@ -418,25 +490,45 @@ export default {
       
     },
     save() {
-      if (this.event_id == '' || this.event_id == null) {
-        alert('กรุณาเลือกหมอนวด')
+      EventService.geteventbyuseranddate(this.date,this.currentUser.id).then((res) => {
+        console.log(res.data);
+        if (res.data.length == this.noti.hour) {
+          alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
+        }else{
+      if (this.event_id.length == 0) {
+        alert('กรุณาเลือกเวลา')
       }else{
-        var userdata = {
+        var time = ' เวลา '
+        for (let e = 0; e < this.event_id.length; e++) {
+          var userdata = {
           bookstatus: 0,
           title: 'จองแล้ว',
           userId: this.currentUser.id,
         };
-        // console.log(this.book);
-        EventService.geteventbydocanddate(this.book.date,this.event_id).then((res)=>{
+        console.log(userdata);
 // console.log(res.data);
-        EventService.updateuser(res.data.id, userdata).then(() => {
-          // console.log(res.data);
-          LinkImageService.sendNotify(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
-          document.getElementById("closeduser").click();
-          this.getEvents();
+        EventService.updateuser(this.event_id[e], userdata).then(() => {
+          
+          EventService.getevent(this.event_id[e]).then((res)=>{
+            console.log(res.data);
+            time += this.timeformat(res.data.date)
+            console.log(e+1 , this.event_id.length);
+         if (e+1 == this.event_id.length) {
+          console.log(time);
+console.log(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + time);
+           LinkImageService.sendNotify(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + time, this.currentUser.line_token)
+           document.getElementById("closeduser").click();
+           location.reload();
+         }
+          })
+          
           });
-        });
+        }
+       
       }
+    }
+    
+  });
     },
     getUsers() {
       DoctorService.getdoctors('').then((res) => {
