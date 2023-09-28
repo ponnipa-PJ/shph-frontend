@@ -71,10 +71,9 @@ export default {
   },
   mounted() {
     if (this.currentUser) {
-      this.$router.push('/login');
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
           this.menu = res.data
-          // this.$router.push(res.data[0].url);
+          this.$router.push(res.data[0].url);
         })
       }
   },

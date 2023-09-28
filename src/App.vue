@@ -2,7 +2,10 @@
   <div id="app">
     <div v-if="!statuseva">
       <Nav  msg="Welcome to Your Vue.js App"/>
+
     <router-view />
+    <!-- <div id="google_translate_element"></div> -->
+
     </div>
     <div v-else>
       <table width=100%>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอนวด</h5>
+    <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอนวดประจำเดือน</h5>
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }}</b>
