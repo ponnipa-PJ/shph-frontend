@@ -151,6 +151,7 @@
     </div>
   </div>
 </template>
+<script src='../assets/locale/th'></script>
 
 <script>
 import DoctorService from "../services/DoctorService";
@@ -162,6 +163,7 @@ import EventDentistService from '../services/EventDentistService'
 import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import NotificationService from '../services/NotificationService'
+import esLocale from '@fullcalendar/core/locales/th';
 
 export default {
   name: "Nav",
@@ -185,7 +187,7 @@ export default {
           right: 'timeGridWeek,dayGridMonth'
         },
         height:850,
-        locale: 'en-GB',
+        locale: esLocale,
         scrollTime: '08:00',
         omitZeroMinute: false,
         slotLabelFormat:

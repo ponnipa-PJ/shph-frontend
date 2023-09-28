@@ -170,6 +170,7 @@ import EventService from '../services/EventService'
 import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import NotificationService from '../services/NotificationService'
+import esLocale from '@fullcalendar/core/locales/th';
 
 export default {
   name: "Nav",
@@ -187,13 +188,20 @@ export default {
         dateClick: this.handleDateClick,
         weekends: true,
         eventClick: this.handleEventClick,
+  //       views: {
+  //   dayGridMonth: {
+  //     dayHeaderFormat: {
+  //       weekday: 'short'
+  //     }
+  //   }
+  // },
         headerToolbar: {
           left: 'prev,next',
           center: 'title',
           right: 'timeGridWeek,dayGridMonth'
         },
+        locale: esLocale,
         height:850,
-        locale: 'en-GB',
         scrollTime: '08:00',
         omitZeroMinute: false,
         slotLabelFormat:
