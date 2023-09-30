@@ -5,7 +5,7 @@ class AuthService {
     // console.log(user)
     return http.post('user/signin', user)
       .then(response => {
-        // console.log(response.data);
+        console.log(response.data);
         if (response.data.accessToken) {
           localStorage.setItem('usershph', JSON.stringify(response.data));
         }

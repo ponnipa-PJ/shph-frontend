@@ -17,6 +17,8 @@ import Menumanage from './components/Menumanage.vue';
 import plandoctordentist from './components/plandoctordentist.vue';
 import bookdentist from './components/bookdentist.vue';
 import notification from './components/notification.vue';
+import shphmasseuse from './components/shphmasseuse.vue';
+import shphdentist from './components/shphdentist.vue';
 
 const router = new Router({
   mode: "history",
@@ -124,6 +126,18 @@ const router = new Router({
     alias: "/setting",
     name: "setting",
     component: notification
+  },
+  {
+    path: "/shphmasseuse",
+    alias: "/shphmasseuse",
+    name: "shphmasseuse",
+    component: shphmasseuse
+  },
+  {
+    path: "/shphdentist",
+    alias: "/shphdentist",
+    name: "shphdentist",
+    component: shphdentist
   },
   ]
 });

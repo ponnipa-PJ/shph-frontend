@@ -14,6 +14,7 @@
           <th scope="col">ชื่อ-นามสกุล</th>
           <th scope="col">อีเมล</th>
           <th scope="col">เบอร์โทรศัพท์</th>
+          <th scope="col">รพ.สต.</th>
           <th scope="col">สิทธิ์การใช้งาน</th>
           <th scope="col"></th>
         </tr>
@@ -32,6 +33,10 @@
           <td>
             {{ l.phone }}
           </td>
+          <td>
+            {{ l.shphname }}
+          </td>
+          
           <td>
             {{ l.role_name }}
           </td>
@@ -71,6 +76,15 @@
                   <label for="password">สิทธิ์การใช้งาน</label>
                   <select class="form-control form-control-sm" v-model="user.role_id">
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
+                  </select>
+                </div>
+                <div class="form-group mt-3">
+                  <label for="password">รพ.สต.</label>
+                  <select class="form-control form-control-sm" v-model="user.shphId" v-if="currentUser.role_id != 5" disabled>
+                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
+                  </select>
+                  <select class="form-control form-control-sm" v-model="user.shphId" v-else >
+                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
                 <div class="form-group mt-3">
@@ -175,6 +189,7 @@ import UserService from "../services/UserService";
 import DistrictService from "../services/DistrictService";
 import ProvinceService from "../services/ProvinceService";
 import AmphuresService from "../services/AmphuresService";
+import shphService from "../services/shphService";
 
 export default {
   name: "Nav",
@@ -193,15 +208,22 @@ export default {
       provinces: [],
       amphurs: [],
       districts: [],
-      zipcode: ''
+      zipcode: '',
+      shphlist:[]
     };
   },
   mounted() {
     this.getprovinces()
     this.getUsers();
     this.getroles()
+    this.getshph()
   },
   methods: {
+    getshph(){
+      shphService.getShphs().then((res)=>{
+        this.shphlist = res.data
+      })
+    },
     onChangeProvince() {
       // console.log(evt.target.value);
       this.getamphurs()
@@ -254,6 +276,7 @@ export default {
           // console.log(res.data);
           this.user = res.data;
           this.hash = this.user.password;
+          
           this.getamphurs()
           this.getdistricts()
           this.getzipcode()
@@ -262,6 +285,9 @@ export default {
         this.title = "เพิ่มข้อมูลผู้ใช้งาน";
         this.user = [];
       }
+      if (this.currentUser.role_id != 5) {
+            this.user.shphId = this.currentUser.shphId
+          }
     },
     save() {
       if (this.user.role_id == 1 || this.user.role_id == 4) {
@@ -272,7 +298,9 @@ export default {
       }else{
 this.saveUser()
       }
-      }else{
+      }else if (this.user.role_id == ""|| this.user.role_id == null) {
+        alert("กรุณาเลือกสิทธิ์");
+      } else{
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
       } else if (this.user.lastname == "" || this.user.lastname == null) {
@@ -289,9 +317,8 @@ this.saveUser()
         alert("กรุณาเลือกอำเภอ");
       } else if (this.user.districtsId == "" || this.user.amphureId == null) {
         alert("กรุณาเลือกตำบล");
-      } else if (this.user.role_id == "") {
-        alert("กรุณาเลือกสิทธิ์");
-      } else {
+      } else if (this.currentUser.role_id == 5 && (this.user.shphId == null || this.user.shphId == '')) {
+        alert("กรุณาเลือกรพ.สต.");}else{
         this.saveUser()
       }
       }
@@ -313,6 +340,7 @@ this.saveUser()
           provinceId: this.user.provinceId,
           amphureId: this.user.amphureId,
           districtsId: this.user.districtsId,
+          shphId:this.user.shphId,
         };
         if (this.user_id == 0) {
 
@@ -345,7 +373,13 @@ this.saveUser()
         }
     }
 ,    getUsers() {
-      UserService.getUsers('').then((res) => {
+  console.log(this.currentUser.role_id);
+  var shphId = ''
+  if (this.currentUser.role_id !=5) {
+    shphId = this.currentUser.shphId
+  }
+  console.log(shphId);
+      UserService.getUsers('',shphId).then((res) => {
         this.list = res.data;
       });
     },

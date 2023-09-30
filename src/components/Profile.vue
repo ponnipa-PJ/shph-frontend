@@ -74,14 +74,30 @@
                     id="phone" />
                 </div>
                 </div>
-                <!-- <div class="col-md-6">
+                <div class="col-md-6" v-if="currentUser.role_id != 5">
                   <div class="form-group">
-                  <label for="password">ประเภทผู้ใช้งาน<span style="color: red">*</span> </label>
+                  <label for="password">สิทธิการใช้งาน<span style="color: red">*</span> </label>
+                  <select class="form-control form-control-sm" v-model="user.role_id" disabled>
+  <option v-for="(i,r) in roles" :key="r" :value="i.id">{{i.name}}</option>
+</select>
+                </div>
+                </div>
+                <div class="col-md-6" v-else>
+                  <div class="form-group">
+                  <label for="password">สิทธิการใช้งาน<span style="color: red">*</span> </label>
                   <select class="form-control form-control-sm" v-model="user.role_id">
   <option v-for="(i,r) in roles" :key="r" :value="i.id">{{i.name}}</option>
 </select>
                 </div>
-                </div> -->
+                </div>
+                <div class="col-md-6" v-if="currentUser.role_id != 5">
+                  <div class="form-group">
+                  <label for="password">รพ.สต.<span style="color: red">*</span> </label>
+                  <select class="form-control form-control-sm" v-model="user.shphId" disabled>
+                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
+                  </select>
+                </div>
+                </div>
                </div>
                 
                 <div class="row">
@@ -169,7 +185,7 @@ import LinkImageService from "../services/LinkImageService";
 import DistrictService from "../services/DistrictService";
 import ProvinceService from "../services/ProvinceService";
 import AmphuresService from "../services/AmphuresService";
-
+import shphService from "../services/shphService";
 
 export default {
   name: "Nav",
@@ -189,16 +205,23 @@ export default {
       districts: [],
       zipcode:'',
       roles:[],
+      shphlist:[]
       // line: "<h1 style='color:red'>Hello Gowtham</h1>"
     };
   },
   async mounted() {
-    // this.getroles()
+    this.getroles()
     this.getUser()
     this.user.from_name = 'ระบบจองคิวของรพ.สต.'
     this.user.message = this.generateGuid()
+    this.getshph()
   },
   methods: {
+    getshph(){
+      shphService.getShphs().then((res)=>{
+        this.shphlist = res.data
+      })
+    },
     getUser(){
       UserService.getUser(this.currentUser.id).then((res) => {
           // console.log(res.data);
@@ -324,6 +347,7 @@ export default {
           provinceId: this.user.provinceId,
           amphureId: this.user.amphureId,
           districtsId: this.user.districtsId,
+          shphId:this.user.shphId,
         };
         if (this.user_id == 0) {
 

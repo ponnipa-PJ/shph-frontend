@@ -2,7 +2,7 @@
   <div class="container">
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
-        <b>{{ converttime(arg.timeText) }}</b>
+        <b>{{ converttime(arg.timeText) }} </b>
         <i>{{ arg.event.title }}</i>
       </template>
     </FullCalendar>
@@ -112,16 +112,6 @@
           <div class="modal-body">
             <form>
               <div class="card-body" style="padding:0px">
-                <!-- <div class="form-group" v-if="!allday">
-                  <div class="input-group">
-                    <label>{{book.title}}</label>
-
-                    <input v-model="book.title" v-if="book.bookstatus == 1" type="text" class="form-control form-control-sm float-right"
-                      id="reservationtime" disabled>
-                      <input v-model="book.title" v-else type="text" class="form-control form-control-sm float-right"
-                      id="reservationtime">
-                  </div>
-                </div> -->
                 <div class="form-group" v-if="book.userfirst">
                   <label>ชื่อผู้จอง</label><br/>
                   <label>{{book.userfirst}} {{ book.userlast }}</label>
@@ -140,6 +130,16 @@
                 <button v-if="book.userId" type="button" class="btn btn-success btn-sm" @click="sentline()">
                   ส่งข้อความแจ้งเตือนไลน์
                 </button>
+                <div class="form-group" v-if="alltoken && allday">
+                  <label>ข้อความแจ้งเตือนไลน์</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" v-model="book.noti">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
+                    </div>
+                  </div>
+ 
+                </div>
               </div>
             </form>
           </div>
@@ -147,10 +147,13 @@
             <button type="button" class="btn btn-danger" @click="deletequeall()" v-if="allday">
               ลบคิวทั้งหมด
             </button>
+            <button type="button" class="btn btn-danger" @click="deletequeandsendnotify()" v-if="alltoken && allday">
+              แจ้งยกเลิกคิวทั้งหมดและส่งแจ้งเตือน
+            </button>
             <button type="button" class="btn btn-danger" @click="deleteque()" v-if="book.userfirst">
               แจ้งยกเลิกคิวและส่งแจ้งเตือน
             </button>
-            <button type="button" class="btn btn-danger" @click="deleteq()" v-if="book.bookstatus == 1">
+            <button type="button" class="btn btn-danger" @click="deleteq()" v-if="!book.userId && !allday">
               ลบคิว
             </button>
             <!-- <button type="button" class="btn btn-success" @click="save()" v-if="book.bookstatus == 0">
@@ -177,6 +180,7 @@ import EventService from '../services/EventService'
 import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import esLocale from '@fullcalendar/core/locales/th';
+import HistorymasseuseService from '../services/HistorymasseuseService'
 
 export default {
   name: "Nav",
@@ -194,6 +198,13 @@ export default {
         dateClick: this.handleDateClick,
         weekends: true,
         eventClick: this.handleEventClick,
+        views: {
+    dayGridMonth: {
+      dayHeaderFormat: {
+        weekday: 'long'
+      }
+    }
+  },
         headerToolbar: {
           left: 'prev,next',
           center: 'title',
@@ -269,39 +280,57 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
                   this.getEvents('',this.currentUser.id);
 })
     },
+    deletequeandsendnotify(){
+      if (this.book.noti == '' || this.book.noti == null) {
+        alert('กรุณากรอกข้อความแจ้งเตือน')
+      } else {
+for (let a = 0; a < this.alltoken.length; a++) {
+  var userdatak = {
+          noti: this.book.noti,
+          title: this.book.noti,
+          userId: this.book.userId,
+        };
+        EventService.updateevent(this.alltoken[a].id, userdatak).then(() => {
+              LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.alltoken[a].line_token)
+             
+                var his = {
+            eventId:this.alltoken[a].id,
+            title:this.book.noti,
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
+                if (a + 1 == this.alltoken.length) {
+                  document.getElementById("closeduser").click();
+                  this.getEvents('',this.currentUser.id);
+                }
+              });});
+          }
+        }
+    },
     deleteque() {
       if (this.book.noti == '' || this.book.noti == null) {
         alert('กรุณากรอกข้อความแจ้งเตือน')
       } else {
         var userdatak = {
           noti: this.book.noti,
-          title: this.book.title,
+          title: this.book.noti,
           userId: this.book.userId,
         };
         EventService.updateevent(this.user_id, userdatak).then(() => {
+          var his = {
+            eventId:this.user_id,
+            title:this.book.noti,
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
+            LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.book.line_token)
 
+          document.getElementById("closeduser").click();
+                  this.getEvents('',this.currentUser.id);
+          });
 
         });
-        for (let a = 0; a < this.alltoken.length; a++) {
-          if (this.alltoken[a].userId != null) {
-            // console.log(this.alltoken[a].userId);
-            UserService.getUser(this.alltoken[a].userId).then((res) => {
-              // console.log(res.data.line_token);
-              LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, res.data.line_token)
-              var userdata = {
-                noti: this.book.noti,
-                title: this.alltoken[a].title,
-                userId: this.alltoken[a].userId,
-              };
-              EventService.updateevent(this.alltoken[a].id, userdata).then(() => {
-                if (a + 1 == this.alltoken.length) {
-                  document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
-                }
-              });
-            })
-          }
-        }
+        
 
       }
     },
@@ -328,6 +357,7 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
     getEvents() {
       EventService.getevents('',this.currentUser.id).then((res) => {
         this.calendarOptions.events = res.data
+        console.log(res.data);
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
         //   title:'test',
@@ -337,35 +367,13 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
       })
     },
     handleDateClick: function (arg) {
-      //   var d = new Date(arg.dateStr)
-      //   var date =''
-      //     console.log(arg.dateStr);
-      //     var day = (d.getDate()).toString().padStart(2, "0");
-      //     var month = (d.getMonth() + 1).toString().padStart(2, "0");
-      //     var year =   d.getFullYear()
-      //     var hour = String((d.getHours()).toString().padStart(2, "0"));
-      //     var minute = String((d.getMinutes()).toString().padStart(2, "0"));
-      //     var second = String((d.getSeconds()).toString().padStart(2, "0"));
-
-      //     var check = arg.dateStr.split('-')
-      //     console.log(check);
-      //     if (check.length >3 ) {
-      //       console.log(1);
-      //       date = year+'-'+month+'-'+day+'T'+hour+':'+minute+':'+second+'+07:00'
-      // }else{
-      //       date = year+'-'+month+'-'+day
-      //     }
-      // // console.log(d.getTime());     
-      // // console.log(day);   
-      // // console.log(month);   
-      // // console.log(year);  
-      // console.log(hour);
-      // console.log(minute);
-      // console.log(second);
       var breaktime = new Date(arg.dateStr)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1) + '-' + breaktime.getDate()
-      var now = new Date()
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      EventService.getevents(d,this.currentUser.id).then((res) => {
+        // console.log(res.data);
+        if (res.data.length == 0) {
+          var now = new Date()
       var selectdate = new Date(d)
 
       now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
@@ -377,7 +385,6 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
       if (selectdate < now) {
         console.log(1);
       }else{
-
       var date = arg.dateStr
       var da = arg.dateStr.split(':')
       // console.log(da);
@@ -444,9 +451,12 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
         // console.log(this.calendarOptions.events);
       }
     }
+        }
+      });
+      
     },
     handleEventClick(clickInfo) {
-      // console.log(clickInfo.event.id);
+      console.log(clickInfo.event);
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
@@ -460,16 +470,12 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
       
       // console.log(selectdate,now);
 
-      if (selectdate < now) {
-        console.log(1);
-      }else
       if (breaktime.getHours() != 12) {
         this.header = breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
         })
-        this.getid(id)
         this.title = 'แก้ไขข้อมูลคิว ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
@@ -536,11 +542,15 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
           this.book = res.data;
           // console.log(this.book);
           EventService.getevents(this.book.date,this.currentUser.id).then((res) => {
-
-            this.alltoken = res.data
             // console.log(res.data);
+            for (let a = 0; a < res.data.length; a++) {
+              // console.log(res.data[a].id);
+          if (res.data[a].userId != null) {
+            this.alltoken.push(res.data[a])
+        }
+      }
           })
-          // console.log( this.course_id);
+          console.log( this.alltoken);
         });
       } else {
         this.course_id = []
@@ -556,12 +566,19 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
         // };
         EventService.deleteevent(this.user_id).then(() => {
           // console.log(res.data);
+          var his = {
+            eventId:this.user_id,
+            title:'ลบคิว',
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
           document.getElementById("closeduser").click();
           this.getEvents('',this.currentUser.id);
           //       setTimeout(function () {
           //   location.reload();
           // }, 500);
           // window.scrollTo(0, 0);
+          });
         });
       
     },
@@ -573,12 +590,19 @@ EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
         };
         EventService.updateevent(this.user_id,userdata).then(() => {
           // console.log(res.data);
+          var his = {
+            eventId:this.user_id,
+            title:this.book.noti,
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
           document.getElementById("closeduser").click();
           this.getEvents('',this.currentUser.id);
           //       setTimeout(function () {
           //   location.reload();
           // }, 500);
           // window.scrollTo(0, 0);
+          });
         });
       
     },

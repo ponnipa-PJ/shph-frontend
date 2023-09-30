@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอฟันประจำเดือน</h5>
+    <h5 class="mt-5" style="text-align:center">{{shphName}}</h5>
+    <h5 class="mb-5" style="text-align:center">จองคิวหมอฟันประจำเดือน</h5>
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }}</b>
@@ -164,11 +165,13 @@ import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import NotificationService from '../services/NotificationService'
 import esLocale from '@fullcalendar/core/locales/th';
+import shphService from '../services/shphService'
+import HistorydentistService from '../services/HistorydentistService'
 
 export default {
   name: "Nav",
   props: {
-    msg: String,
+    msg: String, 
   },
   components: {
     FullCalendar // make the <FullCalendar> tag available
@@ -181,6 +184,13 @@ export default {
         dateClick: this.handleDateClick,
         weekends: true,
         eventClick: this.handleEventClick,
+        views: {
+    dayGridMonth: {
+      dayHeaderFormat: {
+        weekday: 'long'
+      }
+    }
+  },
         headerToolbar: {
           left: 'prev,next',
           center: 'title',
@@ -240,11 +250,19 @@ export default {
       allday: true,
       noti:{},
       limitdoc:[],
-      date:''
+      date:'',
+      shphId:0,
+      shphName:''
     };
   },
   mounted() {
-    this.getEvents('',this.currentUser.id)
+    this.shphId = this.$route.query.id
+    console.log(this.$route.query.id);
+    
+    shphService.getShph(this.shphId).then((res)=>{
+this.shphName = res.data.name
+    })
+    this.getEvents()
     this.getUsers();
     NotificationService.getnotification(1).then((res)=>{
       this.noti = res.data
@@ -262,12 +280,18 @@ export default {
         EventDentistService.geteventbydocanddate(this.book.date,this.book.doctorId).then((res)=>{
           // console.log(res.data);
         EventDentistService.updateuser(res.data.id, userdatak).then(() => {
+          var his = {
+            eventId:res.data.id,
+            title:'ลบคิว',
+            createdBy:this.currentUser.id
+          }
+          HistorydentistService.createhistoryhistorydentist(his).then(()=>{
           LinkImageService.sendNotify(this.noti.cancel_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
           document.getElementById("closeduser").click();
           this.getEvents();
           location.reload();
           });
-
+        });
         });
     },
     sentline() {
@@ -291,7 +315,7 @@ export default {
       return time
     },
     getEvents() {
-      EventDentistService.getbooks('',this.currentUser.id).then((res) => {
+      EventDentistService.getbooks('',this.currentUser.id,this.shphId).then((res) => {
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -310,7 +334,7 @@ export default {
       var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))      
       
       
-      EventDentistService.geteventbyuseranddate(d,'').then((res)=>{
+      EventDentistService.geteventbyuseranddate(d,'',this.shphId).then((res)=>{
         // console.log(res.data);
         for (let d = 0; d < res.data.length; d++) {
           if (res.data[d].count == this.noti.no_dentist) {
@@ -411,11 +435,11 @@ export default {
         }
           // console.log(arrayWithout);
 
-          EventDentistService.getdoctorbydate(this.book.date,this.currentUser.id,JSON.stringify(arrayWithout)).then((res) => {
+          EventDentistService.getdoctorbydate(this.book.date,this.currentUser.id,JSON.stringify(arrayWithout),this.shphId).then((res) => {
         this.doctors = res.data
         // console.log(this.doctors);
         // console.log(this.book);
-        EventDentistService.getquebyuserid(this.book.date,this.currentUser.id).then((res) => {
+        EventDentistService.getquebyuserid(this.book.date,this.currentUser.id,this.shphId).then((res) => {
           if (res.data.length !=0) {
             this.event_id = res.data.doctorId
           }
@@ -457,11 +481,18 @@ export default {
 EventDentistService.updateuser(res.data.id, userdata).then(() => {
   // console.log(res.data);
   // UserService.getUser(this.event_id)
+  var his = {
+            eventId:res.data.id,
+            title:'จองแล้ว',
+            createdBy:this.currentUser.id
+          }
+          HistorydentistService.createhistoryhistorydentist(his).then(()=>{
   LinkImageService.sendNotify(this.noti.message_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
   document.getElementById("closeduser").click();
   this.getEvents();
   location.reload();
   });
+});
   //       setTimeout(function () {
   //   location.reload();
   // }, 500);

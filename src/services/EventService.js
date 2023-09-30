@@ -4,8 +4,8 @@ class EventService {
     getevents(name,id){
         return http.get('/events?name='+name+'&&id='+id);
     }
-    getbooks(name,id){
-        return http.get('/events/book?name='+name+'&&id='+id);
+    getbooks(name,id,shphId){
+        return http.get('/events/book?name='+name+'&&id='+id+'&&shphId='+shphId);
     }
     getdoctorbydate(date,id){
         return http.get('/events/getdoctorbydate?date='+date+'&&id='+id);

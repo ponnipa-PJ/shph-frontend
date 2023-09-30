@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอนวดประจำเดือน</h5>
+    <h5 class="mt-5" style="text-align:center">{{shphName}}</h5>
+    <h5 class="mb-5" style="text-align:center">จองคิวหมอนวดแผนไทยประจำเดือน</h5>
+    
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <!-- <b>{{ converttime(arg.timeText) }}</b> -->
@@ -171,6 +173,8 @@ import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import NotificationService from '../services/NotificationService'
 import esLocale from '@fullcalendar/core/locales/th';
+import shphService from '../services/shphService'
+import HistorymasseuseService from '../services/HistorymasseuseService'
 
 export default {
   name: "Nav",
@@ -188,13 +192,13 @@ export default {
         dateClick: this.handleDateClick,
         weekends: true,
         eventClick: this.handleEventClick,
-  //       views: {
-  //   dayGridMonth: {
-  //     dayHeaderFormat: {
-  //       weekday: 'short'
-  //     }
-  //   }
-  // },
+        views: {
+    dayGridMonth: {
+      dayHeaderFormat: {
+        weekday: 'long'
+      }
+    }
+  },
         headerToolbar: {
           left: 'prev,next',
           center: 'title',
@@ -254,10 +258,18 @@ export default {
       allday: true,
       noti:{},
       eventold:[],
-      date:''
+      date:'',
+      shphId:0,
+      shphName:''
     };
   },
   mounted() {
+    this.shphId = this.$route.query.id
+    console.log(this.$route.query.id);
+    
+    shphService.getShph(this.shphId).then((res)=>{
+this.shphName = res.data.name
+    })
     this.getEvents()
     this.getUsers();
     NotificationService.getnotification(1).then((res)=>{
@@ -291,13 +303,22 @@ export default {
         console.log(userdataold);
 // console.log(res.data);
         EventService.updateuser(this.eventold[e], userdataold).then(() => {
-          
+          var his = {
+            eventId:this.event_id[e],
+            title:'ลบคิว',
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
           EventService.getevent(this.event_id[e]).then((res)=>{
             console.log(res.data);
-            timeold += this.timeformat(res.data.date)
-            console.log(e+1 , this.event_id.length);
+            if (this.event_id.length > 1 && e+1 == this.event_id.length) {
+              timeold+= ' - '
+            }
+            if (e== 0 || e+1 == this.event_id.length) {
+              timeold += this.timeformat(res.data.date)
+            }
          if (e+1 == this.eventold.length) {
-          console.log(timeold);
+          // console.log(timeold);
           var message = this.noti.cancel_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + timeold
 console.log(message);
            LinkImageService.sendNotify(message, this.currentUser.line_token)
@@ -332,6 +353,7 @@ console.log(message);
         // }
          }
           })
+        });
           
           });
         }
@@ -360,7 +382,7 @@ console.log(message);
       return time
     },
     getEvents() {
-      EventService.getbooks('',this.currentUser.id).then((res) => {
+      EventService.getbooks('',this.currentUser.id,this.shphId).then((res) => {
         console.log(res.data);
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
@@ -499,8 +521,9 @@ console.log(message);
     },
     save() {
       EventService.geteventbyuseranddate(this.date,this.currentUser.id).then((res) => {
-        console.log(res.data);
-        if (res.data.length == this.noti.hour) {
+        console.log(res.data.length , this.noti.hour ,  this.event_id.length);
+        
+        if (res.data.length >= this.noti.hour || this.event_id.length > this.noti.hour) {
           alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
         }else{
       if (this.event_id.length == 0) {
@@ -516,20 +539,31 @@ console.log(message);
         console.log(userdata);
 // console.log(res.data);
         EventService.updateuser(this.event_id[e], userdata).then(() => {
-          
+          var his = {
+            eventId:this.event_id[e],
+            title:'จองแล้ว',
+            createdBy:this.currentUser.id
+          }
+          HistorymasseuseService.createhistorymasseus(his).then(()=>{
           EventService.getevent(this.event_id[e]).then((res)=>{
             console.log(res.data);
+            
+            if (this.event_id.length > 1 && e+1 == this.event_id.length) {
+              time+= ' - '
+            }
+            if (e== 0 || e+1 == this.event_id.length) {
             time += this.timeformat(res.data.date)
-            console.log(e+1 , this.event_id.length);
+            }
+            // console.log(e+1 , this.event_id.length);
          if (e+1 == this.event_id.length) {
           console.log(time);
 console.log(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + time);
            LinkImageService.sendNotify(this.noti.message_chiropractor+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header + time, this.currentUser.line_token)
            document.getElementById("closeduser").click();
-           location.reload();
+          //  location.reload();
          }
           })
-          
+        })
           });
         }
        
