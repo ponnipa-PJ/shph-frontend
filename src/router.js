@@ -19,6 +19,9 @@ import bookdentist from './components/bookdentist.vue';
 import notification from './components/notification.vue';
 import shphmasseuse from './components/shphmasseuse.vue';
 import shphdentist from './components/shphdentist.vue';
+import Shph from './components/Shph.vue';
+import Confirmmasseuse from './components//Confirmmasseuse.vue';
+import Confirmdentist from './components/Confirmdentist.vue';
 
 const router = new Router({
   mode: "history",
@@ -139,6 +142,24 @@ const router = new Router({
     name: "shphdentist",
     component: shphdentist
   },
+  {
+    path: "/Shph",
+    alias: "/Shph",
+    name: "Shph",
+    component: Shph
+  },
+  {
+    path: "/Confirmmasseuse",
+    alias: "/Confirmmasseuse",
+    name: "Confirmmasseuse",
+    component: Confirmmasseuse
+  },
+  {
+    path: "/Confirmdentist",
+    alias: "/Confirmdentist",
+    name: "Confirmdentist",
+    component: Confirmdentist
+  },
   ]
 });
 
@@ -147,7 +168,7 @@ Vue.use(Router);
 router.beforeEach((to, from, next) => {
   var page = to.path.split("/")
   var qrcode = ''
-  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'permissiondocpb') {
+  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'Confirmdentist' || page[1] ==  'Confirmmasseuse') {
     qrcode = to.path
   }
   // console.log(page[1]);

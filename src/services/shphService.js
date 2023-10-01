@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class shphService {
-    getShphs() {
-        return http.get('/shph');
+    getShphs(name) {
+        return http.get('/shph?name='+name);
     }
     getShph(id) {
         return http.get('/shph/' + id);
@@ -12,6 +12,9 @@ class shphService {
     }
     updateShph(id, data) {
         return http.put(`/shph/${id}`, data);
+    }
+    deleteShph(id) {
+        return http.delete(`/shph/${id}`);
     }
 }
 

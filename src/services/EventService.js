@@ -43,6 +43,9 @@ class EventService {
     deleteevent(id) {
         return http.delete('/events/' + id);
     }
+    updateconfirm(id, data) {
+        return http.put(`/events/updateconfirm/${id}`, data);
+    }
 }
 
 export default new EventService();

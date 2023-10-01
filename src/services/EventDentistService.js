@@ -41,6 +41,9 @@ class EventDentistService {
     deleteevent(id) {
         return http.delete('/eventsdentist/' + id);
     }
+    updateconfirm(id, data) {
+        return http.put(`/eventsdentist/updateconfirm/${id}`, data);
+    }
 }
 
 export default new EventDentistService();

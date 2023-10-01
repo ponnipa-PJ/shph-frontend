@@ -135,15 +135,7 @@
                 <button v-if="book.userId" type="button" class="btn btn-success btn-sm" @click="sentline()">
                   ส่งข้อความแจ้งเตือนไลน์
                 </button>
-                <div class="form-group" v-if="book.userId">
-                  <label>ข้อความแจ้งเตือนไลน์</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" v-model="book.noti">
-                    <div class="input-group-append">
-                      <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
-                    </div>
-                  </div>
-                  </div>
+                
               </div>
             </form>
           </div>

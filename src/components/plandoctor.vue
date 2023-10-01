@@ -341,6 +341,9 @@ for (let a = 0; a < this.alltoken.length; a++) {
         this.save()
       })
     },
+    converttimeend(time){
+return time
+    },
     converttime(time) {
       // console.log(time);
       // console.log(time.length);

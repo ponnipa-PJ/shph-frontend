@@ -218,7 +218,7 @@ export default {
   },
   methods: {
     getshph(){
-      shphService.getShphs().then((res)=>{
+      shphService.getShphs(1).then((res)=>{
         this.shphlist = res.data
       })
     },

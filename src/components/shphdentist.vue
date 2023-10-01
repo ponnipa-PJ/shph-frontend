@@ -32,7 +32,6 @@
 
 <script>
 import UserService from "../services/UserService";
-import LinkImageService from "../services/LinkImageService";
 import shphService from "../services/shphService";
 
 export default {
@@ -56,34 +55,16 @@ export default {
     this.getUsers();
     this.getroles()
     this.getshph()
-    // console.log(this.$route.query.code)
-    LinkImageService.gettoken(this.$route.query.code).then((res)=>{
-      // console.log(res.data);
-      // console.log(this.currentUser);
-      var d = {
-        line_token:res.data
-      }
-      UserService.updatetokenline(this.currentUser.id,d).then(()=>{
-        // console.log(res.data);
-        UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
-          var menu = res.data[0].url
-          // console.log(menu);
-        this.$router.push(menu);
-        setTimeout(function () {
-          location.reload();
-        }, 1000);
-        });
-
-      })
-
-    })
-
 
   },
   methods: {
     getshph(){
-shphService.getShphs().then((res)=>{
+shphService.getShphs(1).then((res)=>{
   this.shphlist = res.data
+
+  if (this.shphlist.length == 1) {
+      this.$router.push('/bookdentist?id='+this.shphlist[0].id)
+    }
 })
     },
     getroles(){
