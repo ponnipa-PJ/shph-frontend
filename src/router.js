@@ -24,6 +24,7 @@ import Confirmmasseuse from './components//Confirmmasseuse.vue';
 import Confirmdentist from './components/Confirmdentist.vue';
 import plandoctordentistlist from './components/plandoctordentistlist.vue';
 import plandoctormasseuselist from './components/plandoctormasseuselist.vue';
+import dashboard from './components/dashboard.vue';
 
 const router = new Router({
   mode: "history",
@@ -173,6 +174,12 @@ const router = new Router({
     alias: "/plandoctormasseuselist",
     name: "plandoctormasseuselist",
     component: plandoctormasseuselist
+  },
+  {
+    path: "/dashboard",
+    alias: "/dashboard",
+    name: "dashboard",
+    component: dashboard
   },
   ]
 });

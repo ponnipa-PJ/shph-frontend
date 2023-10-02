@@ -53,6 +53,10 @@ export default {
   },
   mounted() {
     this.getshph()
+    if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
+      alert('กรุณากรอกข้อมูลส่วนตัวให้ครบ')
+      this.$router.push('/profile')
+    }
 
   },
   methods: {
