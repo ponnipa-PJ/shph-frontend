@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">      
-      <button
+    <a class="navbar-brand" href="#" v-if="currentUser">{{currentUser.firstname}}</a>
+    <button
         class="navbar-toggler"
         type="button"
         data-toggle="collapse"
@@ -11,7 +11,8 @@
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
-      </button>
+      </button>    <div class="container-fluid">      
+     
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav" v-if="currentUser">
           <li class="nav-item"  v-for="m in menu" :key="m.id">

@@ -4,8 +4,8 @@ class UserService {
     getUsers(email,shphId) {
         return http.get('/user?name='+email+'&&shphId='+shphId)
     }
-    getdatabyrole(role) {
-        return http.get('/user/getdatabyrole?role='+role)
+    getdatabyrole(role,shphId) {
+        return http.get('/user/getdatabyrole?role='+role+'&&shphId='+shphId)
     }
     updateToken(id, data) {
         return http.put(`/user/token/${id}`, data);
@@ -42,6 +42,9 @@ class UserService {
     }
     deleteRoleMenu(id) {
         return http.delete(`/role_menu/` + id);
+    }
+    deleteUser(id) {
+        return http.delete(`/user/` + id);
     }
 }
 

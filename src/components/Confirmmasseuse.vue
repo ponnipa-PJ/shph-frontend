@@ -95,13 +95,19 @@ this.title = 'คุณได้จองคิวหมอนวดแผนไ
       if (this.user.confirmstatus == null) {
         alert('กรุณายืนยันคิว')
       }else{
-        var data ={
+        for (let t = 0; t < this.time.length; t++) {
+          var data ={
         confirmstatus:this.user.confirmstatus
       }
-console.log(data);
-      EventService.updateconfirm(this.event_id,data).then(()=>{
+// console.log(data);
+      EventService.updateconfirm(this.time[t].id,data).then(()=>{
+        if (t+1 == this.time.length) {
         alert('บันทึกสำเร็จ')
+          
+        }
 })
+        }
+        
       }
       
     }

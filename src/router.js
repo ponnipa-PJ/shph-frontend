@@ -22,6 +22,8 @@ import shphdentist from './components/shphdentist.vue';
 import Shph from './components/Shph.vue';
 import Confirmmasseuse from './components//Confirmmasseuse.vue';
 import Confirmdentist from './components/Confirmdentist.vue';
+import plandoctordentistlist from './components/plandoctordentistlist.vue';
+import plandoctormasseuselist from './components/plandoctormasseuselist.vue';
 
 const router = new Router({
   mode: "history",
@@ -159,6 +161,18 @@ const router = new Router({
     alias: "/Confirmdentist",
     name: "Confirmdentist",
     component: Confirmdentist
+  },
+  {
+    path: "/plandoctordentistlist",
+    alias: "/plandoctordentistlist",
+    name: "plandoctordentistlist",
+    component: plandoctordentistlist
+  },
+  {
+    path: "/plandoctormasseuselist",
+    alias: "/plandoctormasseuselist",
+    name: "plandoctormasseuselist",
+    component: plandoctormasseuselist
   },
   ]
 });

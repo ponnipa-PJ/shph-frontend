@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-md-6" v-if="currentUser.role_id != 5">
                   <div class="form-group">
-                  <label for="password">สิทธิการใช้งาน<span style="color: red">*</span> </label>
+                  <label for="password">สิทธิ์การใช้งาน<span style="color: red">*</span> </label>
                   <select class="form-control form-control-sm" v-model="user.role_id" disabled>
   <option v-for="(i,r) in roles" :key="r" :value="i.id">{{i.name}}</option>
 </select>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-md-6" v-else>
                   <div class="form-group">
-                  <label for="password">สิทธิการใช้งาน<span style="color: red">*</span> </label>
+                  <label for="password">สิทธิ์การใช้งาน<span style="color: red">*</span> </label>
                   <select class="form-control form-control-sm" v-model="user.role_id">
   <option v-for="(i,r) in roles" :key="r" :value="i.id">{{i.name}}</option>
 </select>

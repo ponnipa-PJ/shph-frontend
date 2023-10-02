@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }} </b>
@@ -115,6 +116,12 @@
                 <div class="form-group" v-if="book.userfirst">
                   <label>ชื่อผู้จอง</label><br/>
                   <label>{{book.userfirst}} {{ book.userlast }}</label>
+
+                </div>
+                <div class="form-group" v-if="book.confirmstatus">
+                  <label>สถานะ</label><br/>
+                  <label v-if="book.confirmstatus == 1">ยืนยันการจองคิว</label>
+                  <label v-if="book.confirmstatus == 0">ยกเลิกการจองคิว</label>
 
                 </div>
                 <div class="form-group" v-if="book.userId">
@@ -261,11 +268,17 @@ export default {
       }],
       doctors: [],
       header: '',
-      allday: true
+      allday: true,
+      head:''
     };
   },
   mounted() {
-    this.getEvents('',this.currentUser.id)
+    this.doctor_id = this.$route.query.id
+    console.log(this.doctor_id);
+    UserService.getUser(this.doctor_id).then((res)=>{
+      this.head = res.data.firstname +' '+res.data.lastname
+    })
+    this.getEvents()
     this.getUsers();
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
       alert('กรุณากรอกข้อมูลส่วนตัวให้ครบ')
@@ -274,10 +287,10 @@ export default {
   },
   methods: {
     deletequeall(){
-EventService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
+EventService.deleteAll(this.book.date,this.doctor_id).then(()=>{
   // console.log(res.data);
   document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
 })
     },
     deletequeandsendnotify(){
@@ -301,7 +314,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           HistorymasseuseService.createhistorymasseus(his).then(()=>{
                 if (a + 1 == this.alltoken.length) {
                   document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
                 }
               });});
           }
@@ -326,7 +339,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
             LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.book.line_token)
 
           document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
           });
 
         });
@@ -358,7 +371,7 @@ return time
       return time
     },
     getEvents() {
-      EventService.getevents('',this.currentUser.id).then((res) => {
+      EventService.getevents('',this.doctor_id).then((res) => {
         this.calendarOptions.events = res.data
         console.log(res.data);
         // this.calendarOptions.events = this.events 
@@ -373,7 +386,7 @@ return time
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
-      EventService.getevents(d,this.currentUser.id).then((res) => {
+      EventService.getevents(d,this.doctor_id).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
           var now = new Date()
@@ -395,14 +408,15 @@ return time
         var newevent = {
           title: 'ยกเลิกคิวทั้งวัน',
           date: date,
-          doctorId: this.currentUser.id,
+          doctorId: this.doctor_id,
           bookstatus: 2,
           status: 1,
           backgroundColor: 'red',
           borderColor: 'red',
+          createdBy:this.currentUser.id
         }
         EventService.createevent(newevent).then(() => {
-          this.getEvents('',this.currentUser.id)
+          this.getEvents()
         })
         var time = [8, 9, 10, 11, 12, 13, 14, 15, 16]
         for (let t = 0; t < time.length; t++) {
@@ -419,16 +433,17 @@ return time
           var eventper = {
             title: title,
             date: datepertime,
-            doctorId: this.currentUser.id,
+            doctorId: this.doctor_id,
             bookstatus: 1,
             status: 1,
             backgroundColor: color,
             borderColor: color,
+            createdBy:this.currentUser.id
           }
           // console.log(eventper);
           EventService.createevent(eventper).then(() => {
             if (t + 1 == time.length) {
-              this.getEvents('',this.currentUser.id)
+              this.getEvents()
             }
           })
         }
@@ -436,14 +451,15 @@ return time
         var event = {
           title: 'ว่าง',
           date: date,
-          doctorId: this.currentUser.id,
+          doctorId: this.doctor_id,
           bookstatus: 1,
           status: 1,
           backgroundColor: 'primary',
           borderColor: 'primary',
+          createdBy:this.currentUser.id
         }
         EventService.createevent(event).then(() => {
-          this.getEvents('',this.currentUser.id)
+          this.getEvents()
         })
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -543,8 +559,8 @@ return time
         EventService.getevent(id).then((res) => {
           // console.log(res.data);
           this.book = res.data;
-          // console.log(this.book);
-          EventService.getevents(this.book.date,this.currentUser.id).then((res) => {
+          console.log(this.book);
+          EventService.getevents(this.book.date,this.doctor_id).then((res) => {
             // console.log(res.data);
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);
@@ -576,7 +592,7 @@ return time
           }
           HistorymasseuseService.createhistorymasseus(his).then(()=>{
           document.getElementById("closeduser").click();
-          this.getEvents('',this.currentUser.id);
+          this.getEvents();
           //       setTimeout(function () {
           //   location.reload();
           // }, 500);
@@ -600,7 +616,7 @@ return time
           }
           HistorymasseuseService.createhistorymasseus(his).then(()=>{
           document.getElementById("closeduser").click();
-          this.getEvents('',this.currentUser.id);
+          this.getEvents();
           //       setTimeout(function () {
           //   location.reload();
           // }, 500);

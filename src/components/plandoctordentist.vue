@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
+    
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }}</b>
@@ -120,6 +122,12 @@
                 <div class="form-group" v-if="book.userfirst">
                   <label>อาการ</label><br/>
                   <label>{{book.remark}}</label>
+
+                </div>
+                <div class="form-group" v-if="book.confirmstatus">
+                  <label>สถานะ</label><br/>
+                  <label v-if="book.confirmstatus == 1">ยืนยันการจองคิว</label>
+                  <label v-if="book.confirmstatus == 0">ยกเลิกการจองคิว</label>
 
                 </div>
                 <div class="form-group" v-if="book.userId">
@@ -258,11 +266,17 @@ export default {
       }],
       doctors: [],
       header: '',
-      allday: true
+      allday: true,
+      head:''
     };
   },
   mounted() {
-    this.getEvents('',this.currentUser.id)
+    this.doctor_id = this.$route.query.id
+    console.log(this.doctor_id);
+    UserService.getUser(this.doctor_id).then((res)=>{
+      this.head = res.data.firstname +' '+res.data.lastname
+    })
+    this.getEvents()
     this.getUsers();
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
       alert('กรุณากรอกข้อมูลส่วนตัวให้ครบ')
@@ -271,10 +285,10 @@ export default {
   },
   methods: {
     deletequeall(){
-      EventDentistService.deleteAll(this.book.date,this.currentUser.id).then(()=>{
+      EventDentistService.deleteAll(this.book.date,this.doctor_id).then(()=>{
   // console.log(res.data);
   document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
 })
     },
     deletequeandsendnotify(){
@@ -296,7 +310,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           HistorydentistService.createhistoryhistorydentist(his).then(()=>{
               LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.alltoken[a].line_token)
               document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
           //       var his = {
           //   eventId:this.alltoken[a].id,
           //   title:this.book.noti,
@@ -330,7 +344,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           }
           HistorydentistService.createhistoryhistorydentist(his).then(()=>{
             document.getElementById("closeduser").click();
-                  this.getEvents('',this.currentUser.id);
+                  this.getEvents();
           });
 
         });
@@ -358,7 +372,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       return time
     },
     getEvents() {
-      EventDentistService.getevents('',this.currentUser.id).then((res) => {
+      EventDentistService.getevents('',this.doctor_id).then((res) => {
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -372,7 +386,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
-      EventDentistService.getevents(d,this.currentUser.id).then((res) => {
+      EventDentistService.getevents(d,this.doctor_id).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
                 var now = new Date()
@@ -395,14 +409,15 @@ for (let a = 0; a < this.alltoken.length; a++) {
         var newevent = {
           title: 'ยกเลิกคิวทั้งวัน',
           date: date,
-          doctorId: this.currentUser.id,
+          doctorId: this.doctor_id,
           bookstatus: 2,
           status: 1,
           backgroundColor: 'red',
           borderColor: 'red',
+          createdBy:this.currentUser.id
         }
         EventDentistService.createevent(newevent).then(() => {
-          this.getEvents('',this.currentUser.id)
+          this.getEvents()
         })
         var time = [8, 9, 10, 11, 12, 13, 14, 15, 16]
         for (let t = 0; t < time.length; t++) {
@@ -419,16 +434,17 @@ for (let a = 0; a < this.alltoken.length; a++) {
           var eventper = {
             title: title,
             date: datepertime,
-            doctorId: this.currentUser.id,
+            doctorId: this.doctor_id,
             bookstatus: 1,
             status: 1,
             backgroundColor: color,
             borderColor: color,
+            createdBy:this.currentUser.id
           }
           // console.log(eventper);
           EventDentistService.createevent(eventper).then(() => {
             if (t + 1 == time.length) {
-              this.getEvents('',this.currentUser.id)
+              this.getEvents('',this.doctor_id)
             }
           })
         }
@@ -436,14 +452,15 @@ for (let a = 0; a < this.alltoken.length; a++) {
         var event = {
           title: 'ว่าง',
           date: date,
-          doctorId: this.currentUser.id,
+          doctorId: this.doctor_id,
           bookstatus: 1,
           status: 1,
           backgroundColor: 'primary',
           borderColor: 'primary',
+          createdBy:this.currentUser.id
         }
         EventDentistService.createevent(event).then(() => {
-          this.getEvents('',this.currentUser.id)
+          this.getEvents()
         })
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -544,7 +561,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           // console.log(res.data);
           this.book = res.data;
           // console.log(this.book);
-          EventDentistService.getevents(this.book.date,this.currentUser.id).then((res) => {
+          EventDentistService.getevents(this.book.date,this.doctor_id).then((res) => {
 
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);
@@ -577,7 +594,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           }
           HistorydentistService.createhistoryhistorydentist(his).then(()=>{
           document.getElementById("closeduser").click();
-          this.getEvents('',this.currentUser.id);
+          this.getEvents();
           });
           //       setTimeout(function () {
           //   location.reload();
@@ -595,7 +612,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
         EventDentistService.updateevent(this.user_id,userdata).then(() => {
           // console.log(res.data);
           document.getElementById("closeduser").click();
-          this.getEvents('',this.currentUser.id);
+          this.getEvents();
           //       setTimeout(function () {
           //   location.reload();
           // }, 500);

@@ -34,7 +34,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                  <label for="username">จำนวนชั่วโมงหมอนวด<span style="color: red">*</span> </label>
+                  <label for="username">จำนวนชั่วโมงหมอนวดแผนไทย<span style="color: red">*</span> </label>
                   <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
 <input v-model="data.hour" type="number" class="form-control " data-original-title="" title="">
 <div class="input-group-append">
@@ -56,13 +56,13 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการจองคิวหมอนวด<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการจองคิวหมอนวดแผนไทย<span style="color: red">*</span> </label>
 <input v-model="data.message_chiropractor" type="text" class="form-control " data-original-title="" title="">
                 </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิวหมอนวด<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิวหมอนวดแผนไทย<span style="color: red">*</span> </label>
 <input v-model="data.cancel_chiropractor" type="text" class="form-control " data-original-title="" title="">
 
                 </div>

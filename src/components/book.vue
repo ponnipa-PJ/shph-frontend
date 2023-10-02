@@ -433,7 +433,7 @@ console.log(message);
           day: 'numeric',
         })
     //     this.getid(id)
-        this.title = 'จองคิวหมอนวดวันที่ ' + breaktime.toLocaleDateString('th-TH', {
+        this.title = 'จองคิวหมอนวดแผนไทยวันที่ ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -524,7 +524,7 @@ console.log(message);
         console.log(res.data.length , this.noti.hour ,  this.event_id.length);
         
         if (res.data.length >= this.noti.hour || this.event_id.length > this.noti.hour) {
-          alert('ไม่สามารถจองคิวหมอนวดเกิน '+this.noti.hour+ ' ชั่วโมง')
+          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน '+this.noti.hour+ ' ชั่วโมง')
         }else{
       if (this.event_id.length == 0) {
         alert('กรุณาเลือกเวลา')

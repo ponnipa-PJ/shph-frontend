@@ -44,7 +44,10 @@
           <td>
             <a @click="getid(l.id)">
               <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddUser">
-                <i class="fa fa-edit"></i></button></a>
+                <i class="fa fa-edit"></i></button></a>&nbsp;
+                <a @click="getid(l.id)">
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteUser">
+                <i class="fa fa-trash"></i></button></a>
           </td>
         </tr>
       </tbody>
@@ -181,6 +184,24 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="DeleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ยืนการการลบ</h5>
+
+          </div>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-danger" @click="deleteuserid()">
+              ลบ
+            </button>
+            <button id="closeduserdelete" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              ปิด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -219,6 +240,12 @@ export default {
     this.getshph()
   },
   methods: {
+    deleteuserid(){
+UserService.deleteUser(this.user_id).then(()=>{
+  document.getElementById("closeduserdelete").click();
+            this.getUsers();
+      })
+    },
     getshph(){
       shphService.getShphs(1).then((res)=>{
         this.shphlist = res.data
