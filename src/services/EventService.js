@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class EventService {
-    getevents(name,id){
-        return http.get('/events?name='+name+'&&id='+id);
+    getevents(name,id,shphId){
+        return http.get('/events?name='+name+'&&id='+id+'&&shphId='+shphId);
     }
     getbooks(name,id,shphId){
         return http.get('/events/book?name='+name+'&&id='+id+'&&shphId='+shphId);
@@ -10,11 +10,15 @@ class EventService {
     getdoctorbydate(date,id){
         return http.get('/events/getdoctorbydate?date='+date+'&&id='+id);
     }
+    
+    createsql(name){
+        return http.get('/events/createsql?name='+name);
+    }
     gettimebydoctoranddate(date,id,userid){
         return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid);
     }
-    deleteAll(date,id){
-        return http.get('/events/deleteevent?date='+date+'&&id='+id);
+    deleteAll(date,id,shphId){
+        return http.get('/events/deleteevent?date='+date+'&&id='+id+'&&shphId='+shphId);
     }
     getquebyuserid(date,id,doctorid){
         return http.get('/events/getquebyuserid?date='+date+'&&id='+id+'&&doctorid='+doctorid);

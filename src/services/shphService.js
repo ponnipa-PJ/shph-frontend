@@ -7,6 +7,9 @@ class shphService {
     getShph(id) {
         return http.get('/shph/' + id);
     }
+    getdoctorandshphmasseuse() {
+        return http.get('/shph/getdoctorandshphmasseuse/');
+    }
     createShph(data) {
         return http.post('/shph', data);
     }

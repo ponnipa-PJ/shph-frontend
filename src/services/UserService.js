@@ -4,6 +4,9 @@ class UserService {
     getUsers(email,shphId) {
         return http.get('/user?name='+email+'&&shphId='+shphId)
     }
+    getDoctors() {
+        return http.get('/user/getdoctor')
+    }
     getdatabyrole(role,shphId) {
         return http.get('/user/getdatabyrole?role='+role+'&&shphId='+shphId)
     }

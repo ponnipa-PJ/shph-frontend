@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
+    <h5 class="mb-5" style="text-align:center">{{ shphName }}</h5>
+    
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }} </b>
@@ -134,10 +136,10 @@
                   </div>
  
                 </div>
-                <button v-if="book.userId" type="button" class="btn btn-success btn-sm" @click="sentline()">
+                <button v-if="!alltoken" type="button" class="btn btn-success btn-sm" @click="sentline()">
                   ส่งข้อความแจ้งเตือนไลน์
                 </button>
-                <div class="form-group" v-if="alltoken && allday">
+                <div class="form-group" v-if="!alltoken">
                   <label>ข้อความแจ้งเตือนไลน์</label>
                   <div class="input-group mb-3">
                     <input type="text" class="form-control" v-model="book.noti">
@@ -154,7 +156,7 @@
             <button type="button" class="btn btn-danger" @click="deletequeall()" v-if="allday">
               ลบคิวทั้งหมด
             </button>
-            <button type="button" class="btn btn-danger" @click="deletequeandsendnotify()" v-if="alltoken && allday">
+            <button type="button" class="btn btn-danger" @click="deletequeandsendnotify()" v-if="!alltoken">
               แจ้งยกเลิกคิวทั้งหมดและส่งแจ้งเตือน
             </button>
             <button type="button" class="btn btn-danger" @click="deleteque()" v-if="book.userfirst">
@@ -188,6 +190,7 @@ import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import esLocale from '@fullcalendar/core/locales/th';
 import HistorymasseuseService from '../services/HistorymasseuseService'
+import shphService from '../services/shphService';
 
 export default {
   name: "Nav",
@@ -269,15 +272,22 @@ export default {
       doctors: [],
       header: '',
       allday: true,
-      head:''
+      head:'',
+      shphId:'',
+      shphName:''
     };
   },
   mounted() {
     this.doctor_id = this.$route.query.id
-    console.log(this.doctor_id);
+    this.shphId = this.$route.query.shphId
+    
+    // console.log(this.doctor_id);
     UserService.getUser(this.doctor_id).then((res)=>{
       this.head = res.data.firstname +' '+res.data.lastname
     })
+    shphService.getShph(this.shphId).then((res)=>{
+    this.shphName = res.data.name
+    });
     this.getEvents()
     this.getUsers();
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
@@ -287,7 +297,7 @@ export default {
   },
   methods: {
     deletequeall(){
-EventService.deleteAll(this.book.date,this.doctor_id).then(()=>{
+EventService.deleteAll(this.book.date,this.doctor_id,this.shphId).then(()=>{
   // console.log(res.data);
   document.getElementById("closeduser").click();
                   this.getEvents();
@@ -371,7 +381,7 @@ return time
       return time
     },
     getEvents() {
-      EventService.getevents('',this.doctor_id).then((res) => {
+      EventService.getevents('',this.doctor_id,this.shphId).then((res) => {
         this.calendarOptions.events = res.data
         console.log(res.data);
         // this.calendarOptions.events = this.events 
@@ -386,7 +396,7 @@ return time
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
-      EventService.getevents(d,this.doctor_id).then((res) => {
+      EventService.getevents(d,this.doctor_id,this.shphId).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
           var now = new Date()
@@ -413,7 +423,8 @@ return time
           status: 1,
           backgroundColor: 'red',
           borderColor: 'red',
-          createdBy:this.currentUser.id
+          createdBy:this.currentUser.id,
+          shphId:this.shphId
         }
         EventService.createevent(newevent).then(() => {
           this.getEvents()
@@ -438,7 +449,8 @@ return time
             status: 1,
             backgroundColor: color,
             borderColor: color,
-            createdBy:this.currentUser.id
+            createdBy:this.currentUser.id,
+            shphId:this.shphId
           }
           // console.log(eventper);
           EventService.createevent(eventper).then(() => {
@@ -456,7 +468,8 @@ return time
           status: 1,
           backgroundColor: 'primary',
           borderColor: 'primary',
-          createdBy:this.currentUser.id
+          createdBy:this.currentUser.id,
+          shphId:this.shphId
         }
         EventService.createevent(event).then(() => {
           this.getEvents()
@@ -560,7 +573,7 @@ return time
           // console.log(res.data);
           this.book = res.data;
           console.log(this.book);
-          EventService.getevents(this.book.date,this.doctor_id).then((res) => {
+          EventService.getevents(this.book.date,this.doctor_id,this.shphId).then((res) => {
             // console.log(res.data);
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);

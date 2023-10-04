@@ -68,12 +68,12 @@ export default {
 UserService.getdatabyrole(4,shphId).then((res)=>{
   this.shphlist = res.data
 
-  if (this.currentUser.role_id == 4) {
-      this.$router.push('/plandoctordentist?id='+this.currentUser.id)
-    }else
-    if (this.shphlist.length == 1) {
-      this.$router.push('/plandoctordentist?id='+this.shphlist[0].id)
-    }
+  // if (this.currentUser.role_id == 4) {
+  //     this.$router.push('/plandoctordentist?id='+this.currentUser.id)
+  //   }else
+  //   if (this.shphlist.length == 1) {
+  //     this.$router.push('/plandoctordentist?id='+this.shphlist[0].id)
+  //   }
 })
     },
   },

@@ -359,7 +359,7 @@ this.saveUser()
           password: this.user.password,
           line_token: this.user.line_token,
           hash: this.hash,
-          active: 1,
+          active: 0,
           phone: this.user.phone,
           number: this.user.number,
           moo: this.user.moo,

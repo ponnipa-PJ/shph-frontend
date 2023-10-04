@@ -60,11 +60,12 @@ export default {
   },
   methods: {
     getshph(){
-shphService.getShphs(1).then((res)=>{
+shphService.getdoctorandshphmasseuse().then((res)=>{
   this.shphlist = res.data
-  if (this.shphlist.length == 1) {
-      this.$router.push('/book?id='+this.shphlist[0].id)
-    }
+  console.log(this.shphlist);
+  // if (this.shphlist.length == 1) {
+  //     this.$router.push('/book?id='+this.shphlist[0].id)
+  //   }
 })
     },
     getroles(){
