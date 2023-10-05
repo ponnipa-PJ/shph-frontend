@@ -14,8 +14,8 @@ class EventService {
     createsql(name){
         return http.get('/events/createsql?name='+name);
     }
-    gettimebydoctoranddate(date,id,userid){
-        return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid);
+    gettimebydoctoranddate(date,id,userid,shphId){
+        return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid+'&&shphId='+shphId);
     }
     deleteAll(date,id,shphId){
         return http.get('/events/deleteevent?date='+date+'&&id='+id+'&&shphId='+shphId);
