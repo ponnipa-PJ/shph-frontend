@@ -406,7 +406,7 @@ this.saveUser()
     shphId = this.currentUser.shphId
   }
   console.log(shphId);
-      UserService.getUsers('',shphId).then((res) => {
+      UserService.getUsers('','').then((res) => {
         this.list = res.data;
       });
     },

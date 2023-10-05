@@ -180,7 +180,7 @@ import NotificationService from '../services/NotificationService'
 import esLocale from '@fullcalendar/core/locales/th';
 import shphService from '../services/shphService'
 import HistorymasseuseService from '../services/HistorymasseuseService'
-import MapHistoryDentistService from '../services/MapHistoryDentistService'
+import MapHistoryMasseuseService from '../services/MapHistoryMasseuseService'
 import MapEventsService from '../services/MapEventsService'
 
 export default {
@@ -291,8 +291,9 @@ export default {
   },
   methods: {
     gethistory() {
-      MapHistoryDentistService.getmap_history_user_dentists(1).then((res) => {
+      MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
         this.history = res.data
+        console.log(this.history);
       })
     },
     deleteque() {
@@ -556,13 +557,13 @@ export default {
                     var map = {
                       date: this.date,
                       shphId: this.shphId,
-                      doctorId: this.doctorId,
+                      doctorId: this.doctor_id,
                       eventId: this.event_id,
                       userId: this.currentUser.id,
                       createdBy: this.currentUser.id,
                     }
                     MapEventsService.createmap_event(map).then((res) => {
-                      var his = 'INSERT INTO history_user_dentist (id, eventId,'
+                      var his = 'INSERT INTO history_user_masseuse (id, eventId,'
                       var value = "VALUES (NULL, " + res.data.id + ","
                       for (let h = 0; h < this.history.length; h++) {
                         his += this.history[h].historyuserdentistId + ','
@@ -620,7 +621,7 @@ export default {
 
 
                         if (ee + 1 == this.event_id.length) {
-                          var his = 'UPDATE history_user_dentist SET '
+                          var his = 'UPDATE history_user_masseuse SET '
                           for (let h = 0; h < this.history.length; h++) {
                             his += this.history[h].historyuserdentistId + " = " + "'" + this.history[h].detail + "'" + ','
                           }

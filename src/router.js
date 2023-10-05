@@ -27,6 +27,7 @@ import plandoctormasseuselist from './components/plandoctormasseuselist.vue';
 import dashboard from './components/dashboard.vue';
 import HistoryUserDentist from './components/HistoryUserDentist.vue';
 import ShphDoctor from './components/ShphDoctor.vue';
+import HistoryUserMasseuse from './components/HistoryUserMasseuse.vue';
 
 const router = new Router({
   mode: "history",
@@ -194,6 +195,12 @@ const router = new Router({
     alias: "/ShphDoctor",
     name: "ShphDoctor",
     component: ShphDoctor
+  },
+  {
+    path: "/HistoryUserMasseuse",
+    alias: "/HistoryUserMasseuse",
+    name: "HistoryUserMasseuse",
+    component: HistoryUserMasseuse
   },
   ]
 });
