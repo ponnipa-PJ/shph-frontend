@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="col mb-3 mt-3" style="text-align: right">
+    <div style="text-align: right">
       <a>
-        <button type="button" id="get_file" class="btn btn-success" @click="getid(0)" data-bs-toggle="modal"
+        <button type="button" id="get_file" class="btn btn-success mt-3 mb-3" @click="getid(0)" data-bs-toggle="modal"
           data-bs-target="#AddUser">
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>

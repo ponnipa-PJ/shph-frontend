@@ -2,11 +2,11 @@
   <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
     <h5 class="mb-5" style="text-align:center">{{ shphName }}</h5>
-    
+
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
-        <b>{{ converttime(arg.timeText) }} </b>
-        <i>{{ arg.event.title }}</i>
+        <b>{{ converttime(arg.timeText,arg.event.end) }} </b>
+        <i>{{ arg.event.title }} </i>
       </template>
     </FullCalendar>
     <div class="col mb-3 mt-3" style="text-align: right">
@@ -115,17 +115,40 @@
           <div class="modal-body">
             <form>
               <div class="card-body" style="padding:0px">
-                <div class="form-group" v-if="book.userfirst">
-                  <label>ชื่อผู้จอง</label><br/>
-                  <label>{{book.userfirst}} {{ book.userlast }}</label>
+                <div class="row" v-if="book.userId">
+<div class="col-md-6">
+  <div class="form-group">
+                  <label>ชื่อผู้จอง</label><br />
+                  <label>{{ book.userfirst }} {{ book.userlast }}</label>
 
                 </div>
+</div>
+<div class="col-md-6" style="text-align: right;">
+ <a :href="'/HistoryMasseuse?id='+mapId"> <i class="fa-regular fa-id-card fa-3x"></i></a></div>
+                </div>
+                
                 <div class="form-group" v-if="book.confirmstatus">
-                  <label>สถานะ</label><br/>
+                  <label>สถานะ</label><br />
                   <label v-if="book.confirmstatus == 1">ยืนยันการจองคิว</label>
                   <label v-if="book.confirmstatus == 0">ยกเลิกการจองคิว</label>
 
                 </div>
+                <div class="form-group" v-if="alltoken.length > 0">
+                  <label>ข้อความแจ้งเตือนไลน์</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" v-model="book.noti">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <button v-if="alltoken.length >0" type="button" class="btn btn-success btn-sm" @click="sentline()">
+                  ส่งข้อความแจ้งเตือนไลน์
+                </button>
+                
+
                 <div class="form-group" v-if="book.userId">
                   <label>ข้อความแจ้งเตือนไลน์</label>
                   <div class="input-group mb-3">
@@ -134,21 +157,13 @@
                       <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
                     </div>
                   </div>
- 
+
                 </div>
-                <button v-if="!alltoken" type="button" class="btn btn-success btn-sm" @click="sentline()">
+
+                <button v-if="book.userId" type="button" class="btn btn-success btn-sm" @click="sentline()">
                   ส่งข้อความแจ้งเตือนไลน์
                 </button>
-                <div class="form-group" v-if="!alltoken">
-                  <label>ข้อความแจ้งเตือนไลน์</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" v-model="book.noti">
-                    <div class="input-group-append">
-                      <span class="input-group-text"><i class="fa-brands fa-line"></i></span>
-                    </div>
-                  </div>
- 
-                </div>
+                
               </div>
             </form>
           </div>
@@ -274,7 +289,8 @@ export default {
       allday: true,
       head:'',
       shphId:'',
-      shphName:''
+      shphName:'',
+      mapId:''
     };
   },
   mounted() {
@@ -297,8 +313,9 @@ export default {
   },
   methods: {
     deletequeall(){
-EventService.deleteAll(this.book.date,this.doctor_id,this.shphId).then(()=>{
-  // console.log(res.data);
+      console.log(this.book.date);
+EventService.deleteAll(this.book.date,this.doctor_id,this.shphId).then((res)=>{
+  console.log(res.data);
   document.getElementById("closeduser").click();
                   this.getEvents();
 })
@@ -314,7 +331,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           userId: this.book.userId,
         };
         EventService.updateevent(this.alltoken[a].id, userdatak).then(() => {
-              LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.alltoken[a].line_token)
+              LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header + ' ที่'+ this.shphName, this.alltoken[a].line_token)
              
                 var his = {
             eventId:this.alltoken[a].id,
@@ -346,7 +363,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
             createdBy:this.currentUser.id
           }
           HistorymasseuseService.createhistorymasseus(his).then(()=>{
-            LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, this.book.line_token)
+            LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header+ ' ที่'+ this.shphName, this.book.line_token)
 
           document.getElementById("closeduser").click();
                   this.getEvents();
@@ -360,15 +377,15 @@ for (let a = 0; a < this.alltoken.length; a++) {
     sentline() {
       UserService.getUser(this.book.userId).then((res) => {
         // console.log(res.data.line_token);
-        LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header, res.data.line_token)
+        LinkImageService.sendNotify(this.book.noti + ' วันที่ ' + this.header+ ' ที่'+ this.shphName, res.data.line_token)
         this.save()
       })
     },
     converttimeend(time){
 return time
     },
-    converttime(time) {
-      // console.log(time);
+    converttime(time,end) {
+      // console.log(end);
       // console.log(time.length);
       if (time.length == 2 || time.length == 3) {
         time = time.split('a')
@@ -378,12 +395,26 @@ return time
       } else {
         time = time.replace('a', ' น.')
       }
+      if (end) {
+        var date = new Date(end)
+        // console.log(end);
+        time += " - "+date.getHours().toString().padStart(2, "0")+":"+date.getMinutes().toString().padStart(2, "0")+' น.'
+      }
+      // if (time.length == 2 || time.length == 3) {
+      //   time = time.split('a')
+      //   time = time[0] + ':00 น.'
+      // } else if (time == '') {
+      //   time = ''
+      // } else {
+      //   time = time.replace('a', ' น.')
+      // }
       return time
     },
+    
     getEvents() {
       EventService.getevents('',this.doctor_id,this.shphId).then((res) => {
         this.calendarOptions.events = res.data
-        console.log(res.data);
+        // console.log(res.data);
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
         //   title:'test',
@@ -393,20 +424,22 @@ return time
       })
     },
     handleDateClick: function (arg) {
+      // console.log(arg);
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      console.log(d);
       EventService.getevents(d,this.doctor_id,this.shphId).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         if (res.data.length == 0) {
           var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
+      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()).toString().padStart(2, "0") + 1) + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       
-      // console.log(selectdate,now);
+      console.log(selectdate,now);
 
       if (selectdate < now) {
         console.log(1);
@@ -488,15 +521,17 @@ return time
       
     },
     handleEventClick(clickInfo) {
-      console.log(clickInfo.event);
+      this.mapId = clickInfo.event.groupId
       var id = clickInfo.event.id
+
+      // console.log(this.mapId);
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1) + '-' + breaktime.getDate()
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
+      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       
@@ -565,6 +600,7 @@ return time
 
     },
     getid(id) {
+      this.alltoken = []
       // console.log(id);
       this.user_id = id;
       if (id != 0) {
@@ -574,7 +610,7 @@ return time
           this.book = res.data;
           console.log(this.book);
           EventService.getevents(this.book.date,this.doctor_id,this.shphId).then((res) => {
-            // console.log(res.data);
+            console.log(res.data);
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);
           if (res.data[a].userId != null) {

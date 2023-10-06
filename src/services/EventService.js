@@ -14,8 +14,8 @@ class EventService {
     createsql(name){
         return http.get('/events/createsql?name='+name);
     }
-    gettimebydoctoranddate(date,id,userid,shphId){
-        return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid+'&&shphId='+shphId);
+    gettimebydoctoranddate(date,id,userid,shphId,type){
+        return http.get('/events/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid+'&&shphId='+shphId+'&&type='+type);
     }
     deleteAll(date,id,shphId){
         return http.get('/events/deleteevent?date='+date+'&&id='+id+'&&shphId='+shphId);
@@ -23,8 +23,8 @@ class EventService {
     getquebyuserid(date,id,doctorid){
         return http.get('/events/getquebyuserid?date='+date+'&&id='+id+'&&doctorid='+doctorid);
     }
-    geteventbyuseranddate(date,id){
-        return http.get('/events/geteventbyuseranddate?date='+date+'&&id='+id);
+    geteventbyuseranddate(date,id,shphId){
+        return http.get('/events/geteventbyuseranddate?date='+date+'&&id='+id+'&&shphId='+shphId);
     }
     geteventbydocanddate(date,id){
         return http.get('/events/geteventbydocanddate?date='+date+'&&id='+id);

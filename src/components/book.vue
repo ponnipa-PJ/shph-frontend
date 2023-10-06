@@ -106,57 +106,193 @@
       </div>
     </div> -->
     <div class="modal fade" id="AddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{ title }} {{ docname }}</h5>
 
           </div>
           <div class="modal-body">
-            <form>
-              <div class="card-body" style="padding:0px">
-                <div class="form-group">
-                  <label>เวลา</label><br />
-                  <!-- <div class="row mt-3">
-        <div class="col-12" v-for="d in doctors" :key="d.id">
-          <div class="form-group" style="text-align: left">
-            <label>
-              <input
-                type="checkbox"
-                v-model="event_id"
-                :id="d.date"
-                :value="d.id"
-              />
-              <span> {{ timeformat(d.date) }}</span>
-            </label>
-          </div>
-        </div>
-      </div> -->
-
+            <div class="col-12 col-sm-12">
+              <div class="card card-primary card-tabs">
+                <div class="card-header p-0 pt-1">
+                  <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" @click="selectbook()" id="custom-tabs-one-home-tab" data-toggle="pill"
+                        href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
+                        aria-selected="true">จองคิว</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="booktab" data-toggle="pill"
+                        href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile"
+                        aria-selected="false">ประวัติการจอง</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                      <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
+                        href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages"
+                        aria-selected="false">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill"
+                        href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings"
+                        aria-selected="false">Settings</a>
+                    </li> -->
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-home-tab">
+                      <form>
+                        <div class="card-body" style="padding:0px">
+                          <div class="form-group mt-3">
+                  <label for="password">ประเภทการจอง</label>
                   <div class="form-group">
-                    <div class="custom-control custom-checkbox" v-for="(i, r) in doctors" :key="r">
-                      <input class="form-check-input" type="checkbox" :id="i.date" :value="i.id" v-model="event_id">
-                      <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
-                    </div>
-                  </div>
-                  <div class="form-group" v-for="(h, r) in history" :key="r">
-                    <label>{{ h.name }}</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control form-control-sm" v-model="h.detail">
+                    <div class="custom-control custom-checkbox" v-for="(i, r) in booktype" :key="r" :value="i.id">
+                      <input class="form-check-input" type="radio" name="radio1" :id="i.id"
+                        :value="i.id" v-model="typebook">
+                      <label :for="i.id" class="form-check-label">{{ i.name }}</label>
                     </div>
                   </div>
                 </div>
+                <div class="form-group mt-3" style="margin-bottom: 0px;" v-if="typebook == 2">
+                  <label for="password">UID</label>
+                </div>
+
+                <div class="input-group input-group-sm" v-if="typebook == 2">
+<input type="text" class="form-control" v-model="uid">
+<span class="input-group-append">
+<button type="button" class="btn btn-info btn-flat" @click="searchuid()">ค้นหา</button>
+</span>
+</div>
+<div class="form-group mt-3" style="margin-bottom: 0px;" v-if="cusname!={}">
+                  <label for="password">
+                    <span v-if="cusname">{{ cusname.UID }} {{cusname.firstname}} {{cusname.lastname}}</span>
+                  <span v-else>ไม่พบข้อมูล</span></label>
+                </div>
+                
+
+                          <div class="form-group mt-3">
+                            <label>เวลา</label><br />
+                            <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in doctors" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="i.date" :value="i.id"
+                                  v-model="event_id">
+                                <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
+                              </div>
+                            </div>
+                            <div class="form-group" v-for="(h, r) in history" :key="r">
+                              <label>{{ h.name }}</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" v-model="h.detail">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <button type="button" class="btn btn-success" @click="save()">
+                        จองคิว
+                      </button>
+                      <!-- <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              ปิด
+            </button> -->
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-profile-tab">
+                      <table class="table table-bordered" v-if="showbook">
+                        <thead>
+                          <tr>
+                            <th style="width: 10px">#</th>
+                            <th>ชื่อ-นามสกุล</th>
+                            <th>ประเภทการจอง</th>
+                            <th>เวลา</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(b,i) in booklist" :key="i">
+                            <td>{{ i+1 }}</td>
+                            <td>{{ b.firstname }} {{ b.lastname }}</td>
+                            <td>
+                              {{b.type}}
+                            </td>
+                            <td>
+                            {{b.time}}</td>
+                            <td><button type="button" class="btn btn-warning" @click="edit(b.id)">
+                        แก้ไข
+                      </button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div v-else>
+                        <form>
+                        <div class="card-body" style="padding:0px">
+                          <div class="form-group mt-3">
+                  <label for="password">ประเภทการจอง</label>
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox" v-for="(i, r) in booktype" :key="r" :value="i.id">
+                      <input class="form-check-input" type="radio" name="radio1" :id="i.id" disabled
+                        :value="i.id" v-model="typebookupdate">
+                      <label :for="i.id" class="form-check-label">{{ i.name }}</label>
+                    </div>
+                  </div>
+                </div>
+                          <div class="form-group">
+                            <label>เวลา</label><br />
+                            <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in doctorsupdate" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="i.date" :value="i.id"
+                                  v-model="event_id_update">
+                                <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
+                              </div>
+                            </div>
+                            <div class="form-group" v-for="(h, r) in history_update" :key="r">
+                              <label>{{ h.name }}</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" v-model="h.detail">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <button type="button" class="btn btn-success" @click="update()">
+                        บันทึก
+                      </button>&nbsp;
+                      <button type="button" class="btn btn-danger" @click="deleteque()">
+                        ยกเลิกการจอง
+                      </button>&nbsp;
+                      <button type="button" class="btn btn-info" @click="back()">
+                        ย้อนกลับ
+                      </button>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-messages-tab">
+                      Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id
+                      mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac
+                      tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit
+                      condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique.
+                      Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est
+                      libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum
+                      metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-settings-tab">
+                      Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac,
+                      ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi
+                      euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum
+                      placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc
+                      et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex
+                      sit amet facilisis.
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </form>
+            </div>
+
           </div>
           <div class="modal-footer mt-3">
-
-            <button type="button" class="btn btn-success" @click="save()">
-              ยืนยันการจอง
-            </button>
-            <button type="button" class="btn btn-danger" @click="deleteque()" v-if="!allday">
-              ยกเลิกการจอง
-            </button>
             <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
@@ -271,16 +407,29 @@ export default {
       history: [],
       eventId: 0,
       timeline: '',
-      docname: ''
+      docname: '',
+      booklist: [],
+      showbook:true,
+      booktype:[],
+      typebook:1,
+      typebookupdate:1,
+doctorsupdate:[],
+event_id_update:0,
+history_update:[],
+eventId_update:0,
+userId:0,
+uid:'',
+cusname:{}
     };
   },
   mounted() {
     this.shphId = this.$route.query.id
-    console.log(this.$route.query.id);
-
+    // console.log(this.$route.query.id);
+this.userId = this.currentUser.id
     shphService.getShph(this.shphId).then((res) => {
       this.shphName = res.data.name
     })
+    this.gettypebook()
     this.getEvents()
     this.getUsers();
     this.gethistory()
@@ -290,6 +439,68 @@ export default {
     // console.log(this.currentUser);
   },
   methods: {
+    selectbook(){
+this.getid(1,this.date)
+    },
+    searchuid(){
+      this.cusname = {}
+UserService.searchuid(this.uid).then((res)=>{
+  this.cusname = res.data
+        if (this.cusname) {
+          this.userId = res.data.id
+        }
+      })
+    },
+    gettypebook(){
+      MapEventsService.gettypesbook().then((res)=>{
+        this.booktype = res.data
+      })
+    },
+    changebook(){
+
+    },
+    back(){
+      this.showbook = true
+    },
+    edit(id){
+      this.gethistoryupdate()
+this.showbook = false
+this.getmap(id)
+    },
+    getmap(id){
+      // console.log(id);
+      this.eventIdupdate = id
+            // console.log(this.doctors);
+            // console.log(this.book);
+            MapEventsService.getmap_event(this.eventIdupdate).then((res) => {
+              if (res.data) {
+              this.userId = res.data.userId
+                this.eventId_update = res.data.eventId
+                this.event_id_update = JSON.parse(res.data.eventIdlist)
+                this.eventold = JSON.parse(res.data.eventIdlist)
+                this.allday = false
+                this.typebookupdate = res.data.typebook
+                // console.log(this.history_update);
+                for (let h = 0; h < this.history_update.length; h++) {
+                  this.history_update[h].detail = res.data[this.history_update[h].historyuserdentistId]
+                }
+              }
+              EventService.gettimebydoctoranddate(this.date, this.doctor_id, this.userId, this.shphId,2).then((res) => {
+          
+          this.doctorsupdate = res.data
+              // console.log(res.data);
+              
+            });
+            // console.log(this.allday);
+          });
+      
+    },
+    gethistoryupdate() {
+      MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
+        this.history_update = res.data
+        console.log(this.history);
+      })
+    },
     gethistory() {
       MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
         this.history = res.data
@@ -316,14 +527,21 @@ export default {
             HistorymasseuseService.createhistorymasseus(hisd).then(() => {
               var his = 'UPDATE map_events SET status = 0'
 
-              var sql = his + ` WHERE id = ${this.eventId}`
+              var sql = his + ` WHERE id = ${this.eventId_update}`
               console.log(sql);
               EventService.createsql(sql).then(() => {
 
                 var message = this.noti.cancel_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                 // console.log(message);
                 LinkImageService.sendNotify(message, this.currentUser.line_token)
-                document.getElementById("closeduser").click();
+                this.showbook = true
+                              this.getalleventbycreatedBy()
+                              EventService.gettimebydoctoranddate(this.date, this.doctor_id, this.currentUser.id, this.shphId,1).then((res) => {
+            this.getalleventbycreatedBy()
+            this.doctors = res.data
+            // console.log(this.doctors);
+          });
+                // document.getElementById("closeduser").click();
                 //  location.reload();
 
               })
@@ -369,6 +587,7 @@ export default {
         // console.log(this.calendarOptions.events);
       })
     },
+
     handleEventClick(clickInfo) {
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
@@ -465,35 +684,37 @@ export default {
       return value
 
     },
+    getalleventbycreatedBy() {
+      MapEventsService.geteventbycreatedBy(this.date, this.doctor_id, this.currentUser.id, this.shphId).then((res) => {
+        console.log(res.data);
+        this.booklist = res.data
+      })
+    },
     getid(id, date) {
       // console.log(date);
       this.date = date
       this.event_id = []
       this.eventold = []
-      this.doctor_id = id;
+
+
       this.gethistory()
       if (id != 0) {
-        EventService.gettimebydoctoranddate(date, this.doctor_id, this.currentUser.id, this.shphId).then((res) => {
-          this.doctors = res.data
-          console.log(this.doctors);
-          // console.log(this.book);
-          EventService.getquebyuserid(date, this.currentUser.id, this.doctor_id, this.shphId).then((res) => {
-            // console.log(res.data[0]);
-            if (res.data.length != 0) {
-              this.eventId = res.data[0].event_id
-              this.event_id = JSON.parse(res.data[0].eventIdlist)
-              this.eventold = JSON.parse(res.data[0].eventIdlist)
-              this.allday = false
-              console.log(this.history);
-              for (let h = 0; h < this.history.length; h++) {
-                this.history[h].detail = res.data[0][this.history[h].historyuserdentistId]
-              }
-            } else {
-              this.allday = true
-            }
+        EventService.getevent(id).then((res) => {
+          // console.log(res.data);
+          if (!this.doctor_id) {
+          this.doctor_id = res.data.doctorId;
+            
+          }
+          UserService.getUser(this.doctor_id).then((res) => {
+            this.docname = res.data.firstname + ' '+ res.data.lastname
+          })
+
+          EventService.gettimebydoctoranddate(date, this.doctor_id, this.currentUser.id, this.shphId,1).then((res) => {
+            this.getalleventbycreatedBy(date)
+            this.doctors = res.data
+            // console.log(this.doctors);
           });
-          // console.log(this.allday);
-        });
+        })
       } else {
         this.course_id = []
         this.days = []
@@ -501,6 +722,50 @@ export default {
       }
 
     },
+    // getid(id, date) {
+    //   // console.log(date);
+    //   this.date = date
+    //   this.event_id = []
+    //   this.eventold = []
+
+
+    //   this.gethistory()
+    //   if (id != 0) {
+    //     EventService.getevent(id).then((res) => {
+    //       // console.log(res.data);
+    //       this.doctor_id = res.data.doctorId;
+    //       EventService.gettimebydoctoranddate(date, this.doctor_id, this.currentUser.id, this.shphId).then((res) => {
+    //         this.getalleventbycreatedBy(date)
+    //         this.doctors = res.data
+    //         console.log(this.doctors);
+    //         // console.log(this.book);
+    //         EventService.getquebyuserid(date, this.currentUser.id, this.doctor_id, this.shphId).then((res) => {
+    //           // console.log(res.data[0]);
+    //           if (res.data.length != 0) {
+    //             this.eventId = res.data[0].event_id
+    //             this.event_id = JSON.parse(res.data[0].eventIdlist)
+    //             this.eventold = JSON.parse(res.data[0].eventIdlist)
+    //             this.allday = false
+    //             console.log(this.history);
+    //             for (let h = 0; h < this.history.length; h++) {
+    //               this.history[h].detail = res.data[0][this.history[h].historyuserdentistId]
+    //             }
+    //           } else {
+    //             this.allday = true
+    //             this.eventId = 0
+
+    //           }
+    //         });
+    //         // console.log(this.allday);
+    //       });
+    //     })
+    //   } else {
+    //     this.course_id = []
+    //     this.days = []
+    //     this.book = {};
+    //   }
+
+    // },
     save() {
       // console.log(this.history);
 
@@ -515,9 +780,9 @@ export default {
         }
       }
       // console.log(statushis);
-      EventService.geteventbyuseranddate(this.date, this.currentUser.id).then((res) => {
-        console.log(res.data.length, this.noti.hour, this.event_id.length);
-        if (this.event_id.length > this.noti.hour) {
+      EventService.geteventbyuseranddate(this.date, this.userId,this.shphId).then((res) => {
+        console.log((this.event_id.length+res.data.length) , this.noti.hour); 
+        if (this.event_id.length > this.noti.hour || (this.event_id.length+res.data.length) > this.noti.hour) {
           alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.hour + ' ชั่วโมง')
         } else
           if (this.event_id.length == 0) {
@@ -532,7 +797,7 @@ export default {
                 var userdata = {
                   bookstatus: 0,
                   title: 'จองแล้ว',
-                  userId: this.currentUser.id,
+                  userId: this.userId,
                 };
                 console.log(userdata);
                 // console.log(res.data);
@@ -559,8 +824,10 @@ export default {
                       shphId: this.shphId,
                       doctorId: this.doctor_id,
                       eventId: this.event_id,
-                      userId: this.currentUser.id,
+                      userId: this.userId,
                       createdBy: this.currentUser.id,
+                      time:this.timeline,
+                      typebook:this.typebook
                     }
                     MapEventsService.createmap_event(map).then((res) => {
                       var his = 'INSERT INTO history_user_masseuse (id, eventId,'
@@ -576,12 +843,13 @@ export default {
                       // console.log(his);
                       // console.log(value);
                       var sql = his + value
-                      console.log(sql);
+                      // console.log(sql);
                       EventService.createsql(sql).then(() => {
                         var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                         // console.log(message);
                         LinkImageService.sendNotify(message, this.currentUser.line_token)
-                        document.getElementById("closeduser").click();
+                        document.getElementById("booktab").click();
+                        this.getalleventbycreatedBy()
 
                       })
                     })
@@ -612,9 +880,9 @@ export default {
                       userdata = {
                         bookstatus: 0,
                         title: 'จองแล้ว',
-                        userId: this.currentUser.id,
+                        userId: this.userId,
                       };
-                      console.log(userdata);
+                      // console.log(userdata);
                       // console.log(res.data);
                       EventService.updateuser(this.event_id[ee], userdata).then(() => {
 
@@ -630,18 +898,18 @@ export default {
                           // console.log(his);
                           // console.log(value);
                           var sql = his + ` WHERE id = ${this.eventId}`
-                          console.log(sql);
+                          // console.log(sql);
                           EventService.createsql(sql).then(() => {
-                            var map_events = 'UPDATE map_events SET eventId = "[' + this.event_id + ']"'
-
+                            var map_events = 'UPDATE map_events SET eventId = "[' + this.event_id + ']"' + ' and time = ' + this.timeline
                             map_events = map_events + ` WHERE id = ${this.eventId}`
-                            console.log(map_events);
+                            // console.log(map_events);
                             EventService.createsql(map_events).then(() => {
 
                               var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                               // console.log(message);
                               LinkImageService.sendNotify(message, this.currentUser.line_token)
-                              document.getElementById("closeduser").click();
+                              document.getElementById("booktab").click();
+                              this.getalleventbycreatedBy()
                               //  location.reload();
 
                             })
@@ -662,6 +930,119 @@ export default {
 
 
 
+    },
+    update() {
+      this.gettimelineupdate()
+      var statushis = false
+      var txt = ''
+      for (let h = 0; h < this.history_update.length; h++) {
+        if (this.history_update[h].detail == null || this.history_update[h].detail == "") {
+          statushis = true
+          txt = this.history_update[h].name
+          break;
+        }
+      }
+      // console.log(statushis);
+      EventService.geteventbyuseranddate(this.date, this.currentUser.id).then((res) => {
+        console.log(res.data.length, this.noti.hour, this.event_id_update.length);
+        if (this.event_id_update.length > this.noti.hour) {
+          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.hour + ' ชั่วโมง')
+        } else
+          if (this.event_id_update.length == 0) {
+            alert('กรุณาเลือกเวลา')
+          }
+          else if (statushis == true) {
+            alert('กรุณากรอก' + txt)
+          } else {
+              // UPDATE `map_events` SET `status` = '1' WHERE `map_events`.`id` = 1;
+              for (let e = 0; e < this.eventold.length; e++) {
+                var updatenull = {
+                  bookstatus: 1,
+                  title: 'ว่าง',
+                  userId: null,
+                };
+                console.log(updatenull);
+                console.log(this.eventold[e]);
+                EventService.updateuser(this.eventold[e], updatenull).then(() => {
+                  console.log(e + 1, this.eventold.length);
+                  if (e + 1 == this.eventold.length) {
+                    for (let ee = 0; ee < this.event_id_update.length; ee++) {
+                      var userdata = {
+                        bookstatus: 0,
+                        title: 'จองแล้ว',
+                        userId: this.userId,
+                      };
+                      console.log(userdata);
+                      // console.log(res.data);
+                      EventService.updateuser(this.event_id_update[ee], userdata).then(() => {
+
+
+
+                        if (ee + 1 == this.event_id_update.length) {
+                          var his = 'UPDATE history_user_masseuse SET '
+                          for (let h = 0; h < this.history_update.length; h++) {
+                            his += this.history_update[h].historyuserdentistId + " = " + "'" + this.history_update[h].detail + "'" + ','
+                          }
+                          his = his.slice(0, -1)
+                          // his = his + ') '
+                          // console.log(his);
+                          // console.log(value);
+                          var sql = his + ` WHERE id = ${this.eventIdupdate}`
+                          console.log(this.event_id_update);
+                          console.log(this.timeline);
+                          EventService.createsql(sql).then(() => {
+                            var map_events = 'UPDATE map_events SET eventId = "[' + this.event_id_update + ']"' + ' , time = ' + '"'+ this.timeline+ '"'
+                            map_events = map_events + ` WHERE id = ${this.eventIdupdate}`
+                            console.log(map_events);
+                            EventService.createsql(map_events).then(() => {
+
+                              var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                              // console.log(message);
+                              LinkImageService.sendNotify(message, this.currentUser.line_token)
+                              // document.getElementById("closeduser").click();
+                              this.showbook = true
+                              this.getalleventbycreatedBy()
+                              //  location.reload();
+
+                            })
+                          })
+                        }
+                      });
+                    }
+                  }
+
+                })
+              }
+            }
+
+      });
+
+
+
+    },
+    gettimelineupdate() {
+      var time = ' เวลา '
+      // var docname = ''
+      // console.log(this.event_id);
+      for (let ee = 0; ee < this.event_id_update.length; ee++) {
+        EventService.getevent(this.event_id_update[ee]).then((res) => {
+          // console.log(res.data);
+          if (this.event_id_update.length > 1 && ee + 1 == this.event_id_update.length) {
+            time += ' - '
+          }
+          if (ee == 0 || ee + 1 == this.event_id_update.length) {
+            time += this.timeformat(res.data.date)
+            // console.log(time);
+          }
+          // docname = res.data.firstname +' '+ res.data.lastname
+          // console.log(ee+1 , this.event_id.length);
+          if (ee + 1 == this.event_id_update.length) {
+            this.timeline = time
+            this.docname = res.data.firstname + ' ' + res.data.lastname
+          }
+        });
+
+      }
     },
     gettimeline() {
       var time = ' เวลา '
@@ -738,5 +1119,4 @@ export default {
 
 body {
   background-color: gray;
-}
-</style>
+}</style>

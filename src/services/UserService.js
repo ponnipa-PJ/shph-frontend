@@ -4,6 +4,9 @@ class UserService {
     getUsers(email,shphId) {
         return http.get('/user?name='+email+'&&shphId='+shphId)
     }
+    searchuid(uid) {
+        return http.get('/user/searchUID?uid='+uid)
+    }
     getDoctors() {
         return http.get('/user/getdoctor')
     }
