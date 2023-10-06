@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class UserService {
-    getUsers(email,shphId) {
-        return http.get('/user?name='+email+'&&shphId='+shphId)
+    getUsers(email,roleId) {
+        return http.get('/user?name='+email+'&&roleId='+roleId)
     }
     searchuid(uid) {
         return http.get('/user/searchUID?uid='+uid)

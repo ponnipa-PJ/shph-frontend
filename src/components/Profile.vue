@@ -90,14 +90,6 @@
 </select>
                 </div>
                 </div>
-                <div class="col-md-6" v-if="currentUser.role_id != 5 && currentUser.role_id != 2">
-                  <div class="form-group">
-                  <label for="password">รพ.สต.<span style="color: red">*</span> </label>
-                  <select class="form-control form-control-sm" v-model="user.shphId" disabled>
-                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
-                  </select>
-                </div>
-                </div>
                </div>
                 
                 <div class="row">

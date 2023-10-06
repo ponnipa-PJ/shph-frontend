@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="col mb-3 mt-3" style="text-align: right">
+    <div style="text-align: right">
       <a>
-        <button type="button" id="get_file" class="btn btn-success" @click="getid(0)" data-bs-toggle="modal"
+        <button type="button" id="get_file" class="btn btn-success mt-3 mb-3" @click="getid(0)" data-bs-toggle="modal"
           data-bs-target="#AddUser">
           <i class="fa fa-plus"></i> เพิ่มผู้ใช้งาน
         </button></a>
@@ -75,19 +75,16 @@
                   <input v-model="user.password" type="password" class="form-control form-control-sm" id="password"
                     placeholder="กรุณากรอกรหัสผ่าน" />
                 </div>
-                <div class="form-group mt-3">
+                <div class="form-group mt-3" v-if="currentUser.role_id == 5 || currentUser.role_id == 3">
                   <label for="password">สิทธิ์การใช้งาน</label>
                   <select class="form-control form-control-sm" v-model="user.role_id">
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
-                <div class="form-group mt-3">
-                  <label for="password">รพ.สต.</label>
-                  <select class="form-control form-control-sm" v-model="user.shphId" v-if="currentUser.role_id != 5" disabled>
-                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
-                  </select>
-                  <select class="form-control form-control-sm" v-model="user.shphId" v-else >
-                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
+                <div class="form-group mt-3" v-else>
+                  <label for="password">สิทธิ์การใช้งาน</label>
+                  <select class="form-control form-control-sm" v-model="user.role_id" disabled>
+                    <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
                 <div class="form-group mt-3">
@@ -238,6 +235,7 @@ export default {
     this.getUsers();
     this.getroles()
     this.getshph()
+    
   },
   methods: {
     deleteuserid(){
@@ -309,15 +307,22 @@ UserService.deleteUser(this.user_id).then(()=>{
           this.getzipcode()
         });
       } else {
+
         this.title = "เพิ่มข้อมูลผู้ใช้งาน";
-        this.user = [];
-      }
-      if (this.currentUser.role_id != 5) {
-            this.user.shphId = this.currentUser.shphId
+        this.user = {};
+// console.log(this.currentUser.role_id);
+//       console.log(this.user.role_id);
+      if (this.currentUser.role_id != 5 && this.currentUser.role_id != 3) {
+            this.user.role_id = 7
+          }else{
+            this.user.role_id = 0
           }
+
+      }
+      
     },
     save() {
-      if (this.user.role_id == 1 || this.user.role_id == 4) {
+      // if (this.user.role_id == 1 || this.user.role_id == 4) {
         if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
@@ -325,30 +330,30 @@ UserService.deleteUser(this.user_id).then(()=>{
       }else{
 this.saveUser()
       }
-      }else if (this.user.role_id == ""|| this.user.role_id == null) {
-        alert("กรุณาเลือกสิทธิ์");
-      } else{
-      if (this.user.firstname == "" || this.user.firstname == null) {
-        alert("กรุณากรอกชื่อผู้ใช้งาน");
-      } else if (this.user.lastname == "" || this.user.lastname == null) {
-        alert("กรุณากรอกนามสกุลผู้ใช้งาน");
-      } else if (this.user.email == "" || this.user.email == null) {
-        alert("กรุณากรอกอีเมล");
-      } else if (this.user.password == "" || this.user.password == null) {
-        alert("กรุณากรอกรหัสผ่าน");
-      } else if (this.user.number == "" || this.user.number == null) {
-        alert("กรุณากรอกบ้านเลขที่");
-      } else if (this.user.provinceId == "" || this.user.provinceId == null) {
-        alert("กรุณาเลือกจังหวัด");
-      } else if (this.user.amphureId == "" || this.user.amphureId == null) {
-        alert("กรุณาเลือกอำเภอ");
-      } else if (this.user.districtsId == "" || this.user.amphureId == null) {
-        alert("กรุณาเลือกตำบล");
-      } else if (this.currentUser.role_id == 5 && (this.user.shphId == null || this.user.shphId == '')) {
-        alert("กรุณาเลือกรพ.สต.");}else{
-        this.saveUser()
-      }
-      }
+      // }else if (this.user.role_id == ""|| this.user.role_id == null) {
+      //   alert("กรุณาเลือกสิทธิ์");
+      // } else{
+      // if (this.user.firstname == "" || this.user.firstname == null) {
+      //   alert("กรุณากรอกชื่อผู้ใช้งาน");
+      // } else if (this.user.lastname == "" || this.user.lastname == null) {
+      //   alert("กรุณากรอกนามสกุลผู้ใช้งาน");
+      // } else if (this.user.email == "" || this.user.email == null) {
+      //   alert("กรุณากรอกอีเมล");
+      // } else if (this.user.password == "" || this.user.password == null) {
+      //   alert("กรุณากรอกรหัสผ่าน");
+      // } else if (this.user.number == "" || this.user.number == null) {
+      //   alert("กรุณากรอกบ้านเลขที่");
+      // } else if (this.user.provinceId == "" || this.user.provinceId == null) {
+      //   alert("กรุณาเลือกจังหวัด");
+      // } else if (this.user.amphureId == "" || this.user.amphureId == null) {
+      //   alert("กรุณาเลือกอำเภอ");
+      // } else if (this.user.districtsId == "" || this.user.amphureId == null) {
+      //   alert("กรุณาเลือกตำบล");
+      // } else if (this.currentUser.role_id == 5 && (this.user.shphId == null || this.user.shphId == '')) {
+      //   alert("กรุณาเลือกรพ.สต.");}else{
+      //   this.saveUser()
+      // }
+      // }
     },
     saveUser(){
       var userdata = {
@@ -400,13 +405,7 @@ this.saveUser()
         }
     }
 ,    getUsers() {
-  console.log(this.currentUser.role_id);
-  var shphId = ''
-  if (this.currentUser.role_id !=5) {
-    shphId = this.currentUser.shphId
-  }
-  console.log(shphId);
-      UserService.getUsers('','').then((res) => {
+      UserService.getUsers('',this.currentUser.role_id).then((res) => {
         this.list = res.data;
       });
     },

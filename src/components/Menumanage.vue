@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <div class="container">
+  <div class="row">
+    <div class="container mt-3 mb-5">
       <table class="table table-bordered">
         <thead>
           <tr class="table-active">
@@ -31,10 +31,7 @@
           </tr>
         </tbody>
       </table>
-    </div>    
-      <div class="row">
-        <div class="col-4"></div>
-        <div class="col-2" style="text-align: center">
+      <div class="col-12" style="text-align: center">
           <button
             class="btn btn btn-success btn-sm"
             style="color: white; text-align: center"
@@ -43,9 +40,7 @@
             บันทึก
           </button>
         </div>
-        <div class="col-2"></div>
-        <div class="col-4"></div>
-      </div>
+    </div> 
     <!-- Modal -->
     <div
       class="modal fade"

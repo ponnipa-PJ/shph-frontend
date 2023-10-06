@@ -1,4 +1,5 @@
 <template>
+  <div class="row">
   <div class="container">
     <div class="col mb-3 mt-3" style="text-align: right">
     </div>
@@ -40,6 +41,7 @@
     </table>
    
   </div>
+</div>
 </template>
 
 <script>

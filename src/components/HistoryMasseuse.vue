@@ -45,7 +45,7 @@
                       <div class="form-group row" v-for="(h, r) in history_doctor" :key="r">
                         <label for="inputName" class="col-sm-4 col-form-label">{{ h.name }}</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="inputName" placeholder="Name" v-model="h.detail">
+                          <input type="text" class="form-control" id="inputName" :placeholder="h.name" v-model="h.detail">
                         </div>
                       </div>
 

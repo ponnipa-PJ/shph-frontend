@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="row">
     <div class="container mt-3 mb-3">
-      <div class="row mt-5">
+      <div class="row mt-3">
         <div class="form-group col-md-6">
           <label for="exampleFormControlSelect1">สิทธิ์การใช้งาน</label>
           <select
