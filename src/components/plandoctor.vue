@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <div class="row">
+    <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
     <h5 class="mb-5" style="text-align:center">{{ shphName }}</h5>
 
@@ -191,6 +192,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script src='../assets/locale/th'></script>
 

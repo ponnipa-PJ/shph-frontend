@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class EventDentistService {
-    getevents(name,id){
-        return http.get('/eventsdentist?name='+name+'&&id='+id);
+    getevents(name,id,shphId){
+        return http.get('/eventsdentist?name='+name+'&&id='+id+name+'&&shphId='+shphId);
     }
     getbooks(name,id,shphId){
         return http.get('/eventsdentist/book?name='+name+'&&id='+id+'&&shphId='+shphId);
@@ -38,8 +38,8 @@ class EventDentistService {
     updateuser(id, data) {
         return http.put(`/eventsdentist/updateuser/${id}`, data);
     }
-    deleteevent(id) {
-        return http.delete('/eventsdentist/' + id);
+    deleteevent(id,shphId) {
+        return http.delete('/eventsdentist/' + id+'?shphId='+shphId);
     }
     updateconfirm(id, data) {
         return http.put(`/eventsdentist/updateconfirm/${id}`, data);

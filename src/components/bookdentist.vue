@@ -252,7 +252,7 @@ export default {
       limitdoc:[],
       date:'',
       shphId:0,
-      shphName:''
+      shphName:'',
     };
   },
   mounted() {
@@ -315,7 +315,7 @@ this.shphName = res.data.name
       return time
     },
     getEvents() {
-      EventDentistService.getbooks('',this.currentUser.id,this.shphId).then((res) => {
+      EventDentistService.getbooks('',this.doctorId,this.shphId).then((res) => {
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({

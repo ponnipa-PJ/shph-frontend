@@ -1,6 +1,8 @@
 <template>
+  <div class="row">
   <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ head }}</h5>
+    <h5 class="mb-5" style="text-align:center">{{ shphName }}</h5>
     
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
@@ -172,6 +174,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 <script src='../assets/locale/th'></script>
 
@@ -186,6 +189,7 @@ import UserService from '../services/UserService'
 import LinkImageService from '../services/LinkImageService'
 import esLocale from '@fullcalendar/core/locales/th';
 import HistorydentistService from '../services/HistorydentistService'
+import shphService from '../services/shphService';
 
 export default {
   name: "Nav",
@@ -267,15 +271,22 @@ export default {
       doctors: [],
       header: '',
       allday: true,
-      head:''
+      head:'',
+      shphId:'',
+      shphName:'',
+      mapId:''
     };
   },
   mounted() {
     this.doctor_id = this.$route.query.id
-    console.log(this.doctor_id);
+    this.shphId = this.$route.query.shphId
+    // console.log(this.doctor_id);
     UserService.getUser(this.doctor_id).then((res)=>{
       this.head = res.data.firstname +' '+res.data.lastname
     })
+    shphService.getShph(this.shphId).then((res)=>{
+    this.shphName = res.data.name
+    });
     this.getEvents()
     this.getUsers();
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
@@ -372,7 +383,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       return time
     },
     getEvents() {
-      EventDentistService.getevents('',this.doctor_id).then((res) => {
+      EventDentistService.getevents('',this.doctor_id,this.shphId).then((res) => {
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -383,16 +394,17 @@ for (let a = 0; a < this.alltoken.length; a++) {
       })
     },
     handleDateClick: function (arg) {
+      // console.log(arg);
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
-      EventDentistService.getevents(d,this.doctor_id).then((res) => {
+      EventDentistService.getevents(d,this.doctor_id,this.shphId).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
                 var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
+      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       
@@ -414,7 +426,8 @@ for (let a = 0; a < this.alltoken.length; a++) {
           status: 1,
           backgroundColor: 'red',
           borderColor: 'red',
-          createdBy:this.currentUser.id
+          createdBy:this.currentUser.id,
+          shphId:this.shphId
         }
         EventDentistService.createevent(newevent).then(() => {
           this.getEvents()
@@ -439,7 +452,8 @@ for (let a = 0; a < this.alltoken.length; a++) {
             status: 1,
             backgroundColor: color,
             borderColor: color,
-            createdBy:this.currentUser.id
+            createdBy:this.currentUser.id,
+            shphId:this.shphId
           }
           // console.log(eventper);
           EventDentistService.createevent(eventper).then(() => {
@@ -457,7 +471,8 @@ for (let a = 0; a < this.alltoken.length; a++) {
           status: 1,
           backgroundColor: 'primary',
           borderColor: 'primary',
-          createdBy:this.currentUser.id
+          createdBy:this.currentUser.id,
+          shphId:this.shphId
         }
         EventDentistService.createevent(event).then(() => {
           this.getEvents()
@@ -475,7 +490,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       });
     },
     handleEventClick(clickInfo) {
-      // console.log(clickInfo.event.id);
+      console.log(clickInfo.event.id);
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
@@ -561,7 +576,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           // console.log(res.data);
           this.book = res.data;
           // console.log(this.book);
-          EventDentistService.getevents(this.book.date,this.doctor_id).then((res) => {
+          EventDentistService.getevents(this.book.date,this.doctor_id,this.shphId).then((res) => {
 
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);
@@ -585,7 +600,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
         //   title: this.book.title,
         //   userId: this.book.userId,
         // };
-        EventDentistService.deleteevent(this.user_id).then(() => {
+        EventDentistService.deleteevent(this.user_id,this.shphId).then(() => {
           // console.log(res.data);
           var his = {
             eventId:this.user_id,

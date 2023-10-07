@@ -1,9 +1,7 @@
 <template>
-  <div class="row">
   <div class="container">
-    <div class="col mb-3 mt-3" style="text-align: right">
-    </div>
-    <div class="col-md-6" v-if="currentUser.role_id == 5">
+    <div class="row">
+    <div class="mt-3 col-md-6" v-if="currentUser.role_id == 5">
                   <div class="form-group">
                   <label for="password">หมอ<span style="color: red">*</span> </label>
                   <select class="form-control form-control-sm" v-model="doctorid" @change="getshph()">
@@ -39,9 +37,8 @@
         </tr>
       </tbody>
     </table>
-   
   </div>
-</div>
+  </div>
 </template>
 
 <script>

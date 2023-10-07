@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       
-      <div class="col-md-12">
+      <div class="col-md-12" style="padding:0px">
 
 <div class="card card-widget widget-user-2">
 
@@ -14,13 +14,32 @@
 <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
+</div> 
+<div class="col-md-12" style="background-color:#F4F6F9"  v-if="currentUser.role_id == 5">
+          <div class="card mt-3" v-for="u in shphlist" :key="u.id">
+<div class="card-header" >
+<h3 class="card-title" >{{ u.firstname }} {{ u.lastname }}</h3>
+<div class="card-tools">
 </div>
-<div class="card-footer p-0">
-<ul class="nav flex-column">
-<li class="nav-item" v-for="s in shphlist" :key="s.id">
-  
-<a :href="'/plandoctordentist?id='+s.id" target="_blank" class="nav-link">
-{{s.firstname}}  {{s.lastname}} 
+</div>
+<div class="card-body p-0" style="display: block;">
+<ul class="nav nav-pills flex-column">
+<li class="nav-item active" v-for="s in u.shph" :key="s.id"> 
+  <a :href="'/plandoctordentist?id=' + u.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+    <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
+</a>
+</li>
+</ul>
+</div>
+
+</div>
+        </div>
+
+        <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 1">
+<ul class="nav nav-pills flex-column">
+<li class="nav-item active" v-for="s in shphlist" :key="s.id"> 
+  <a :href="'/plandoctordentist?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+    <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
 </a>
 </li>
 </ul>
@@ -32,7 +51,7 @@
 </template>
 
 <script>
-import UserService from "../services/UserService";
+import DoctorShphService from "../services/DoctorShphService";
 
 export default {
   name: "Nav",
@@ -61,20 +80,23 @@ export default {
   },
   methods: {
     getshph(){
-      var shphId = ''
-      if (this.currentUser.role_id == 3) {
-        shphId = this.currentUser.shphId
-    }
-UserService.getdatabyrole(4,shphId).then((res)=>{
-  this.shphlist = res.data
+      if (this.currentUser.role_id == 5) {
+        // shphId = this.currentUser.shphId
+        DoctorShphService.getdoctorandshpdentist(this.currentUser.role_id, '').then((res) => {
+          this.shphlist = res.data
+          console.log(this.shphlist);
 
-  // if (this.currentUser.role_id == 4) {
-  //     this.$router.push('/plandoctordentist?id='+this.currentUser.id)
-  //   }else
-  //   if (this.shphlist.length == 1) {
-  //     this.$router.push('/plandoctordentist?id='+this.shphlist[0].id)
-  //   }
-})
+        })
+      }
+      if (this.currentUser.role_id == 4 || this.currentUser.role_id == 7) {
+        // shphId = this.currentUser.shphId
+        DoctorShphService.getdoctorandshpdentist('', this.currentUser.id).then((res) => {
+          this.shphlist = res.data
+          console.log(this.shphlist);
+
+        })
+      }
+
     },
   },
   computed: {

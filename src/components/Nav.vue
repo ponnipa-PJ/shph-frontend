@@ -37,11 +37,20 @@
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <a href="index3.html" class="brand-link">
+      <a href="index3.html" class="brand-link"> 
 <img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
 <span class="brand-text font-weight-light">รพ.สต.</span>
 </a>
       <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex" v-if="currentUser">
+<div class="image">
+  <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+<!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> -->
+</div>
+<div class="info">
+<a href="#" class="d-block">{{ currentUser.firstname }}</a>
+</div>
+</div>
         <nav class="mt-3">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"
             v-if="currentUser">
@@ -84,9 +93,7 @@
 
 
       <div class="content">
-        <div class="container-fluid">
-          <router-view />
-        </div>
+<router-view />
 
       </div>
 

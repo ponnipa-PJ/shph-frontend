@@ -1,7 +1,7 @@
 <template>
   <div class="row">
 
-    <div class="col-md-12">
+    <div class="col-md-12" style="padding:0px">
 
       <div class="card card-widget widget-user-2">
 
@@ -15,42 +15,35 @@
           <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
         </div>
-        <div class="card-footer p-0" v-if="currentUser.role_id == 5">
-          <ul class="nav flex-column">
-            <li class="nav-item" v-for="u in shphlist" :key="u.id">
+        <div class="col-md-12" style="background-color:#F4F6F9"  v-if="currentUser.role_id == 5">
+          <div class="card mt-3" v-for="u in shphlist" :key="u.id">
+<div class="card-header" >
+<h3 class="card-title" >{{ u.firstname }} {{ u.lastname }}</h3>
+<div class="card-tools">
+</div>
+</div>
+<div class="card-body p-0" style="display: block;">
+<ul class="nav nav-pills flex-column">
+<li class="nav-item active" v-for="s in u.shph" :key="s.id"> 
+  <a :href="'/plandoctor?id=' + u.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+    <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
+</a>
+</li>
+</ul>
+</div>
 
-              <a class="nav-link" style="color:black">
-                {{ u.firstname }} {{ u.lastname }}
-              </a>
-              <ul style="list-style-type: circle;" class="mb-3">
-                <li class="nav-item" v-for="s in u.shph" :key="s.id">
-                  <a :href="'/plandoctor?id=' + u.id + '&&shphId=' + s.id" target="_blank" class="nav-link" style="margin: 0px;
-    padding: 0px;">
-                    {{ s.name }}
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+</div>
         </div>
-        <div class="card-footer p-0" v-if="currentUser.role_id == 1">
-          <ul class="nav flex-column">
-            <li class="nav-item">
 
-              <a class="nav-link" style="color:black">
-              </a>
-              <ul style="list-style-type: circle;" class="mb-3">
-                <li class="nav-item mb-3" v-for="s in shphlist" :key="s.id">
-                  <a :href="'/plandoctor?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link" style="margin: 0px;
-    padding: 0px;">
-                    {{ s.name }}
-                  </a>
-                  <hr>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 1">
+<ul class="nav nav-pills flex-column">
+<li class="nav-item active" v-for="s in shphlist" :key="s.id"> 
+  <a :href="'/plandoctor?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+    <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
+</a>
+</li>
+</ul>
+</div>
       </div>
     </div>
   </div>

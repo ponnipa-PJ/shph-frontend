@@ -7,7 +7,7 @@
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>
     </div>
-    <h6>ฟอร์มซักประวัติของหมอ</h6>
+    <h6>ฟอร์มซักประวัติของหมอนวดแผนไทย</h6>
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">

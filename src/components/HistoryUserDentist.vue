@@ -7,6 +7,8 @@
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>
     </div>
+    <h6>ฟอร์มซักประวัติของลูกค้าหมอฟัน</h6>
+
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
@@ -54,6 +56,7 @@
         <div class="col-2"></div>
         <div class="col-4"></div>
       </div>
+      <HistoryDoctorDentist/>
     <!-- Modal -->
     <div class="modal fade" id="AddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -78,7 +81,7 @@
             <button type="button" class="btn btn-success" @click="save()">
               บันทึก
             </button>
-            <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button id="closedusermasseuse" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
           </div>
@@ -96,7 +99,7 @@
             <button type="button" class="btn btn-danger" @click="deleteshphid()">
               ลบ
             </button>
-            <button id="closedshph" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button id="closedusermasseusemasseuse" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
           </div>
@@ -113,6 +116,7 @@ import AmphuresService from "../services/AmphuresService";
 import shphService from "../services/shphService";
 import MapHistoryDentistService from "../services/MapHistoryDentistService";
 import draggable from "vuedraggable";
+import HistoryDoctorDentist from "../components/HistoryDoctorDentist.vue";
 
 export default {
   name: "Nav",
@@ -121,6 +125,7 @@ export default {
   },
   components: {
     draggable,
+    HistoryDoctorDentist
   },
   data() {
     return {
@@ -168,7 +173,7 @@ MapHistoryDentistService.updatestatus(id,data).then(()=>{
     },
     deleteshphid(){
 shphService.deleteShph(this.user_id).then(()=>{
-  document.getElementById("closedshph").click();
+  document.getElementById("closedusermasseusemasseuse").click();
             this.getUsers();
       })
     },
@@ -256,7 +261,7 @@ this.saveUser()
           console.log(no);
 MapHistoryDentistService.createhistory_user_dentist(no).then(()=>{
           MapHistoryDentistService.createmap_history_user_dentist(userdata).then(() => {
-                document.getElementById("closeduser").click();
+                document.getElementById("closedusermasseuse").click();
                 this.getshph();
                 //       setTimeout(function () {
                 //   location.reload();
@@ -268,7 +273,7 @@ MapHistoryDentistService.createhistory_user_dentist(no).then(()=>{
           // console.log(this.user_id);
           MapHistoryDentistService.updatemap_history_user_dentist(this.user_id, userdata).then(() => {
             // console.log(res.data);
-            document.getElementById("closeduser").click();
+            document.getElementById("closedusermasseuse").click();
             this.getshph();
             //       setTimeout(function () {
             //   location.reload();

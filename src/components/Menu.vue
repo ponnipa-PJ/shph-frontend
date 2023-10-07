@@ -1,7 +1,6 @@
 <template>
   <div class="row">
-    <div class="container mt-3 mb-3">
-      <div class="row mt-3">
+    <div class="container-fluid mt-3 mb-3">
         <div class="form-group col-md-6">
           <label for="exampleFormControlSelect1">สิทธิ์การใช้งาน</label>
           <select
@@ -16,7 +15,7 @@
           </select>
         </div>
       </div>
-      <div class="row mt-3">
+      <div class="container-fluid mt-3">
         <div class="col-12" v-for="m in menus" :key="m.menu_id">
           <div class="form-group" style="text-align: left">
             <label>
@@ -44,7 +43,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>

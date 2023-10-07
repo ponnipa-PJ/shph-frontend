@@ -10,6 +10,9 @@ class shphService {
     getdoctorandshphmasseuse() {
         return http.get('/shph/getdoctorandshphmasseuse/');
     }
+    getdoctorandshphdentist() {
+        return http.get('/shph/getdoctorandshphdentist/');
+    }
     createShph(data) {
         return http.post('/shph', data);
     }

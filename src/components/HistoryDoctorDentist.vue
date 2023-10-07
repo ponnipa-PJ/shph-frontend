@@ -2,12 +2,12 @@
   <div class="container">
     <div style="text-align: right">
       <a>
-        <button type="button" id="get_file" class="btn btn-success mb-3 mt-3" @click="getid(0)" data-bs-toggle="modal"
-          data-bs-target="#AddUser">
+        <button type="button" id="get_file" class="btn btn-success mb-3 mt-3" @click="getiddoc(0)" data-bs-toggle="modal"
+          data-bs-target="#AddDoctorHis">
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>
     </div>
-    <h6>ฟอร์มซักประวัติของลูกค้าหมอนวดแผนไทย</h6>
+    <h6>ฟอร์มซักประวัติของหมอฟัน</h6>
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
@@ -17,8 +17,8 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody is="draggable" :list="list" tag="tbody">
-        <tr  style="cursor: move" v-for="(l, i) in list" :key="i">
+      <tbody is="draggable" :list="listdoctor" tag="tbody">
+        <tr  style="cursor: move" v-for="(l, i) in listdoctor" :key="i">
           <td>
             {{ i + 1 }}
           </td>
@@ -28,14 +28,14 @@
           <td>
             <div class="form-group">
 <div class="custom-control custom-switch">
-<input type="checkbox" class="custom-control-input" :id="l.id" v-model="l.status" @change="savestatus(l.id,l.status)">
-<label class="custom-control-label" :for="l.id"></label>
+<input type="checkbox" class="custom-control-input" :id="l.id+l.name" v-model="l.status" @change="savestatusdoctor(l.id,l.status)">
+<label class="custom-control-label" :for="l.id+l.name"></label>
 </div>
 </div>
           </td>
           <td>
-            <a @click="getid(l.id)">
-              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddUser">
+            <a @click="getiddoc(l.id)">
+              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddDoctorHis">
                 <i class="fa fa-edit"></i></button></a>
           </td>
         </tr>
@@ -55,9 +55,9 @@
         <div class="col-2"></div>
         <div class="col-4"></div>
       </div>
-<HistoryDoctorMasseuse/>
+
     <!-- Modal -->
-    <div class="modal fade" id="AddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AddDoctorHis" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -98,7 +98,7 @@
             <button type="button" class="btn btn-danger" @click="deleteshphid()">
               ลบ
             </button>
-            <button id="closedshph" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button id="closeddoctorhis" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
           </div>
@@ -109,13 +109,9 @@
 </template>
 
 <script>
-import DistrictService from "../services/DistrictService";
-import ProvinceService from "../services/ProvinceService";
-import AmphuresService from "../services/AmphuresService";
 import shphService from "../services/shphService";
-import MapHistoryMasseuseService from "../services/MapHistoryMasseuseService";
+import MapHistoryDoctorDentistService from "../services/MapHistoryDoctorDentistService";
 import draggable from "vuedraggable";
-import HistoryDoctorMasseuse from "../components/HistoryDoctorMasseuse.vue";
 
 export default {
   name: "Nav",
@@ -124,12 +120,11 @@ export default {
   },
   components: {
     draggable,
-    HistoryDoctorMasseuse
   },
   data() {
     return {
       concert_id: 0,
-      list: [],
+      listdoctor: [],
       user: {},
       user_id: 0,
       hash: 0,
@@ -152,7 +147,7 @@ export default {
         var list = {
           no: l + 1,
         };
-        MapHistoryMasseuseService.updateno(this.list[l].id, list).then(() => {
+        MapHistoryDoctorDentistService.updateno(this.list[l].id, list).then(() => {
           if (l + 1 == this.list.length) {
             alert("บันทึกสำเร็จ");
             setTimeout(function () {
@@ -162,69 +157,31 @@ export default {
         });
       }
     },
-    savestatus(id,status){
+    savestatusdoctor(id,status){
 var data={
   status:status
 }
-MapHistoryMasseuseService.updatestatus(id,data).then(()=>{
+MapHistoryDoctorDentistService.updatestatus(id,data).then(()=>{
   // console.log(res.data);
 })
     },
     deleteshphid(){
 shphService.deleteShph(this.user_id).then(()=>{
-  document.getElementById("closedshph").click();
+  document.getElementById("closeddoctorhis").click();
             this.getUsers();
       })
     },
     getshph(){
-      MapHistoryMasseuseService.getmap_history_user_masseuses('').then((res)=>{
-        this.list = res.data
+      MapHistoryDoctorDentistService.getmap_history_doctor_dentists('').then((res)=>{
+        this.listdoctor = res.data
       })
     },
-    onChangeProvince() {
-      // console.log(evt.target.value);
-      this.getamphurs()
-    },
-    onChangeAmphur() {
-      // console.log(evt.target.value);
-      this.getdistricts()
-    },
-    onChangeDistrict() {
-      // console.log(evt.target.value);
-      this.getzipcode()
-    },
-    getprovinces() {
-      ProvinceService.getprovinces().then((res) => {
-        this.provinces = res.data
-        // console.log(res.data);
-      })
-    },
-    getamphurs() {
-      AmphuresService.getamphures(this.user.provinceId).then((res) => {
-        this.amphurs = res.data
-        this.districts = {}
-        this.zipcode = ''
-        // console.log(res.data);
-      })
-    },
-    getdistricts() {
-      DistrictService.getdistricts(this.user.amphureId).then((res) => {
-        this.districts = res.data
-        // console.log(res.data);
-      })
-    },
-    getzipcode() {
-      DistrictService.getdistrict(this.user.districtsId).then((res) => {
-        this.zipcode = res.data.zip_code
-        // console.log(res.data);
-      })
-    },
-    getid(id) {
+    getiddoc(id) {
       this.user_id = id;
       if (this.user_id != 0) {
         this.title = "แก้ไขชื่อหัวข้อ";
         // console.log(this.user_id);
-        MapHistoryMasseuseService.getmap_history_user_masseuse(this.user_id).then((res) => {
+        MapHistoryDoctorDentistService.getmap_history_doctor_dentist(this.user_id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
         });
@@ -242,7 +199,7 @@ this.saveUser()
     },
     saveUser(){
       var no = ''
-      MapHistoryMasseuseService.getmap_history_user_masseuses('').then((res)=>{
+      MapHistoryDoctorDentistService.getmap_history_doctor_dentists('').then((res)=>{
         console.log(res.data.length);
         if (this.user.historyuserdentistId == null) {
            no = parseInt(res.data.length) + 1
@@ -258,8 +215,8 @@ this.saveUser()
         console.log(userdata);
         if (this.user_id == 0) {
           console.log(no);
-MapHistoryMasseuseService.createhistory_user_dentist(no).then(()=>{
-          MapHistoryMasseuseService.createmap_history_user_masseuse(userdata).then(() => {
+MapHistoryDoctorDentistService.createhistory_doctor_dentist(no).then(()=>{
+  MapHistoryDoctorDentistService.createmap_history_doctor_dentist(userdata).then(() => {
                 document.getElementById("closeduser").click();
                 this.getshph();
                 //       setTimeout(function () {
@@ -270,7 +227,7 @@ MapHistoryMasseuseService.createhistory_user_dentist(no).then(()=>{
 });
         } else {
           // console.log(this.user_id);
-          MapHistoryMasseuseService.updatemap_history_user_masseuse(this.user_id, userdata).then(() => {
+          MapHistoryDoctorDentistService.updatemap_history_doctor_dentist(this.user_id, userdata).then(() => {
             // console.log(res.data);
             document.getElementById("closeduser").click();
             this.getshph();
