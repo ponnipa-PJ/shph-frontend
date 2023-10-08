@@ -7,6 +7,12 @@ class HistorydentistService {
     gethistoryhistorydentist(id) {
         return http.get('/historydentist/' + id);
     }
+    getuserhistory(id) {
+        return http.get('/history_user_dentist/' + id);
+    }
+    getdoctorhistory(id) {
+        return http.get('/history_doctor_dentist/' + id);
+    }
     createhistoryhistorydentist(data) {
         return http.post('/historydentist', data);
     }

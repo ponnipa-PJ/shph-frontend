@@ -116,15 +116,16 @@
           <div class="modal-body">
             <form>
               <div class="card-body" style="padding:0px">
-                <div class="form-group" v-if="book.userfirst">
-                  <label>ชื่อผู้จอง</label><br/>
-                  <label>{{book.userfirst}} {{ book.userlast }}</label>
+                <div class="row" v-if="book.userId">
+<div class="col-md-6">
+  <div class="form-group">
+                  <label>ชื่อผู้จอง</label><br />
+                  <label>{{ book.userfirst }} {{ book.userlast }}</label>
 
                 </div>
-                <div class="form-group" v-if="book.userfirst">
-                  <label>อาการ</label><br/>
-                  <label>{{book.remark}}</label>
-
+</div>
+<div class="col-md-6" style="text-align: right;">
+ <a :href="'/HistoryDentist?id='+mapId"> <i class="fa-regular fa-id-card fa-3x"></i></a></div>
                 </div>
                 <div class="form-group" v-if="book.confirmstatus">
                   <label>สถานะ</label><br/>
@@ -490,7 +491,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       });
     },
     handleEventClick(clickInfo) {
-      console.log(clickInfo.event.id);
+      this.mapId = clickInfo.event.groupId
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
@@ -600,7 +601,8 @@ for (let a = 0; a < this.alltoken.length; a++) {
         //   title: this.book.title,
         //   userId: this.book.userId,
         // };
-        EventDentistService.deleteevent(this.user_id,this.shphId).then(() => {
+        // console.log(this.user_id);
+        EventDentistService.deleteevent(this.user_id).then(() => {
           // console.log(res.data);
           var his = {
             eventId:this.user_id,

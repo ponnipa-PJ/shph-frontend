@@ -7,8 +7,8 @@ class EventDentistService {
     getbooks(name,id,shphId){
         return http.get('/eventsdentist/book?name='+name+'&&id='+id+'&&shphId='+shphId);
     }
-    getdoctorbydate(date,id,doctor,shphId){
-        return http.get('/eventsdentist/getdoctorbydate?date='+date+'&&id='+id+'&&doctor='+doctor+'&&shphId='+shphId);
+    getdoctorbydate(date,id,doctor,shphId,type){
+        return http.get('/eventsdentist/getdoctorbydate?date='+date+'&&id='+id+'&&doctor='+doctor+'&&shphId='+shphId+'&&type='+type);
     }
     deleteAll(date,id){
         return http.get('/eventsdentist/deleteevent?date='+date+'&&id='+id);
@@ -19,10 +19,12 @@ class EventDentistService {
     geteventbyuseranddate(date,id,shphId){
         return http.get('/eventsdentist/geteventbyuseranddate?date='+date+'&&id='+id+'&&shphId='+shphId);
     }
-    geteventbydocanddate(date,id){
-        return http.get('/eventsdentist/geteventbydocanddate?date='+date+'&&id='+id);
+    geteventbydocanddate(date,id,shphId){
+        return http.get('/eventsdentist/geteventbydocanddate?date='+date+'&&id='+id +'&&shphId='+shphId);
     }
-    
+    createsql(name){
+        return http.get('/eventsdentist/createsql?name='+name);
+    }
     getevent(id) {
         return http.get('/eventsdentist/' + id);
     }
@@ -38,8 +40,8 @@ class EventDentistService {
     updateuser(id, data) {
         return http.put(`/eventsdentist/updateuser/${id}`, data);
     }
-    deleteevent(id,shphId) {
-        return http.delete('/eventsdentist/' + id+'?shphId='+shphId);
+    deleteevent(id) {
+        return http.delete('/eventsdentist/' + id);
     }
     updateconfirm(id, data) {
         return http.put(`/eventsdentist/updateconfirm/${id}`, data);

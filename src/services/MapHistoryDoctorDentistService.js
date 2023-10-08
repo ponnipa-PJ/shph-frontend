@@ -8,7 +8,7 @@ class MapHistoryDoctorMasseuseService {
         return http.get('/map_history_doctor_dentist/' + id);
     }
     createhistory_doctor_dentist(name) {
-        return http.get('/events/createcolumn?name=' + name);
+        return http.get('/eventsdentist/createcolumn?name=' + name);
     }
     createmap_history_doctor_dentist(data) {
         return http.post('/map_history_doctor_dentist', data);

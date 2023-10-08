@@ -112,6 +112,7 @@
 import shphService from "../services/shphService";
 import MapHistoryDoctorDentistService from "../services/MapHistoryDoctorDentistService";
 import draggable from "vuedraggable";
+import EventDentistService from '../services/EventDentistService';
 
 export default {
   name: "Nav",
@@ -214,8 +215,11 @@ this.saveUser()
         };
         console.log(userdata);
         if (this.user_id == 0) {
-          console.log(no);
-MapHistoryDoctorDentistService.createhistory_doctor_dentist(no).then(()=>{
+          // console.log(no);
+          var sql = `ALTER TABLE history_doctor_dentist ADD ID${no} varchar(255) NULL`
+          // console.log(sql);
+          EventDentistService.createsql(sql).then(()=>{
+// MapHistoryDoctorDentistService.createhistory_doctor_dentist(no).then(()=>{
   MapHistoryDoctorDentistService.createmap_history_doctor_dentist(userdata).then(() => {
                 document.getElementById("closeduser").click();
                 this.getshph();

@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     getshph(){
-shphService.getShphs(1).then((res)=>{
+shphService.getdoctorandshphdentist().then((res)=>{
   this.shphlist = res.data
 
   if (this.shphlist.length == 1) {

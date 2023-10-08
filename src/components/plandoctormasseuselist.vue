@@ -35,7 +35,7 @@
 </div>
         </div>
 
-        <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 1">
+        <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 1 || currentUser.role_id == 7">
 <ul class="nav nav-pills flex-column">
 <li class="nav-item active" v-for="s in shphlist" :key="s.id"> 
   <a :href="'/plandoctor?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
