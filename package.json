@@ -24,6 +24,7 @@
     "express-useragent": "^1.0.15",
     "fullcalendar": "^6.1.9",
     "hddserial": "^0.0.7",
+    "html-to-image": "^1.11.11",
     "html2pdf.js": "^0.9.1",
     "jw-vue-pagination": "^1.0.3",
     "longdo-map-vue": "^2.0.0",

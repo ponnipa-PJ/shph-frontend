@@ -15,7 +15,7 @@
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
 </div>
-<div class="card-footer p-0">
+<div class="card-footer p-0" v-if="shphlist">
 <ul class="nav flex-column">
 <li class="nav-item" v-for="s in shphlist" :key="s.id">
 <a :href="'/book?id='+s.id" target="_blank" class="nav-link">
@@ -24,6 +24,7 @@
 </li>
 </ul>
 </div>
+<div style="text-align:center" v-else>ไม่พบข้อมูล</div>
 
 </div>
     </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row mt-5">
         <div
-          class="col-md-6"
+          class="col-md-4"
           style="width: 100%; overflow-y: scroll; height: 600px"
         >
           <div class="card">
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div
-          class="col-md-6"
+          class="col-md-8"
           style="width: 100%; overflow-y: scroll; height: 600px"
         >
           <div class="card">
@@ -93,115 +93,39 @@
 
                   <div class="tab-pane" id="timeline">
                     <div id="accordion">
-                      <div class="card">
-                        <div class="card-header" id="headingOne">
-                          <h5 class="mb-0">
-                            <button
-                              class="btn btn-link"
+                      <div class="card" v-for="(h,i) in hiscases" :key="i">
+                        <div class="card-header" :id="h.idtab">
+                          <div class="modal-header">
+                            <!-- <button
+                              class="btn btn-link show"
                               data-toggle="collapse"
-                              data-target="#collapseOne"
+                              :data-target="h.target"
                               aria-expanded="true"
-                              aria-controls="collapseOne"
+                              :aria-controls="h.controls"
                             >
-                              Collapsible Group Item #1
-                            </button>
-                          </h5>
+                           <div style="text-align:left">{{changedate(h.date)}} </div> 
+                           <div style="text-align:left">{{h.time}}</div>
+                            </button> -->
+                            <h5 class="modal-title"><div style="text-align:left">{{changedate(h.date)}} {{h.time}} </div> </h5>
+
+                            <button type="button" class="close" data-toggle="collapse" :data-target="h.target" aria-expanded="true"  :aria-controls="h.controls">
+          <i class="fa fa-angle-down"></i>
+        </button>
+      </div>
                         </div>
 
                         <div
-                          id="collapseOne"
-                          class="collapse show"
-                          aria-labelledby="headingOne"
-                          data-parent="#accordion"
-                        >
-                          <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod
-                            high life accusamus terry richardson ad squid. 3
-                            wolf moon officia aute, non cupidatat skateboard
-                            dolor brunch. Food truck quinoa nesciunt laborum
-                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
-                            a bird on it squid single-origin coffee nulla
-                            assumenda shoreditch et. Nihil anim keffiyeh
-                            helvetica, craft beer labore wes anderson cred
-                            nesciunt sapiente ea proident. Ad vegan excepteur
-                            butcher vice lomo. Leggings occaecat craft beer
-                            farm-to-table, raw denim aesthetic synth nesciunt
-                            you probably haven't heard of them accusamus labore
-                            sustainable VHS.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="headingTwo">
-                          <h5 class="mb-0">
-                            <button
-                              class="btn btn-link collapsed"
-                              data-toggle="collapse"
-                              data-target="#collapseTwo"
-                              aria-expanded="false"
-                              aria-controls="collapseTwo"
-                            >
-                              Collapsible Group Item #2
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseTwo"
+                          :id="h.controls"
                           class="collapse"
-                          aria-labelledby="headingTwo"
+                          :aria-labelledby="h.idtab"
                           data-parent="#accordion"
                         >
-                          <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod
-                            high life accusamus terry richardson ad squid. 3
-                            wolf moon officia aute, non cupidatat skateboard
-                            dolor brunch. Food truck quinoa nesciunt laborum
-                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
-                            a bird on it squid single-origin coffee nulla
-                            assumenda shoreditch et. Nihil anim keffiyeh
-                            helvetica, craft beer labore wes anderson cred
-                            nesciunt sapiente ea proident. Ad vegan excepteur
-                            butcher vice lomo. Leggings occaecat craft beer
-                            farm-to-table, raw denim aesthetic synth nesciunt
-                            you probably haven't heard of them accusamus labore
-                            sustainable VHS.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="headingThree">
-                          <h5 class="mb-0">
-                            <button
-                              class="btn btn-link collapsed"
-                              data-toggle="collapse"
-                              data-target="#collapseThree"
-                              aria-expanded="false"
-                              aria-controls="collapseThree"
-                            >
-                              Collapsible Group Item #3
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseThree"
-                          class="collapse"
-                          aria-labelledby="headingThree"
-                          data-parent="#accordion"
-                        >
-                          <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod
-                            high life accusamus terry richardson ad squid. 3
-                            wolf moon officia aute, non cupidatat skateboard
-                            dolor brunch. Food truck quinoa nesciunt laborum
-                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
-                            a bird on it squid single-origin coffee nulla
-                            assumenda shoreditch et. Nihil anim keffiyeh
-                            helvetica, craft beer labore wes anderson cred
-                            nesciunt sapiente ea proident. Ad vegan excepteur
-                            butcher vice lomo. Leggings occaecat craft beer
-                            farm-to-table, raw denim aesthetic synth nesciunt
-                            you probably haven't heard of them accusamus labore
-                            sustainable VHS.
+                          <div>
+                            <ul class="list-group mb-3">
+<li class="list-group-item" v-for="(m, r) in mapcase" :key="r">
+  <b>{{ m.name }}</b> <a class="float-right">{{h.case[m.historyuserdentistId]}}</a>
+</li>
+</ul>
                           </div>
                         </div>
                       </div>
@@ -237,15 +161,59 @@ export default {
       data: {},
       history_doctor: [],
       doctor: false,
+      hiscases:[],
+      mapcase:[],
+      userId:0
     };
   },
   async mounted() {
     this.mapId = this.$route.query.id;
+    MapEventsDentistService.getmap_events_dentist(this.mapId).then((res) => {
+        this.userId = res.data.userId
+
+        this.gethistorycases()
+    });
+
     // console.log(this.$route.query.id);
     this.gethistoryuser();
   },
   methods: {
+    changedate(date){
+      var d = new Date(date)
+      var result = d.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      return result
+    },
+    gethistorycases(){
+      console.log(this.userId);
+      MapHistoryDoctorDentistService.gethistory_doctor_dentist(this.userId,'').then((res)=>{
+        console.log(res.data);
+        this.hiscases = res.data
+      })
+    },
+    getmapcases() {
+      MapHistoryDoctorDentistService.getmap_history_doctor_dentists(1).then((res) => {
+        this.mapcase = res.data
+        // console.log(this.mapcase);
+        // this.getmap()
+      })
+    },
     save() {
+      var txt = ''
+      var statushis = false
+      for (let h = 0; h < this.history_doctor.length; h++) {
+        if (this.history_doctor[h].detail == null || this.history_doctor[h].detail == "") {
+          statushis = true
+          txt = this.history_doctor[h].name
+          break;
+        }
+      }
+      if (statushis == true) {
+            alert('กรุณากรอก' + txt)
+          }else{
       HistorydentistService.getdoctorhistory(this.mapId).then((res) => {
         var his = "UPDATE history_doctor_dentist SET ";
         for (let h = 0; h < this.history_doctor.length; h++) {
@@ -277,7 +245,9 @@ export default {
           location.reload();
         });
       });
-    },
+   
+     }
+     },
     convertdate(date) {
       var d = new Date(date);
       var result = "";
@@ -307,7 +277,8 @@ export default {
     },
     getmap() {
       MapEventsDentistService.getmap_events_dentist(this.mapId).then((res) => {
-        // console.log(res.data);
+
+    this.getmapcases()
         // console.log(this.history_users);
         if (res.data) {
           this.data = res.data;
@@ -332,14 +303,27 @@ export default {
               // console.log(value);
               var sql = his + value;
               console.log(sql);
-              EventDentistService.createsql(sql).then(() => {});
+              EventDentistService.createsql(sql).then(() => {
+                HistorydentistService.getdoctorhistory(this.mapId).then((res) => {
+                for (let h = 0; h < this.history_doctor.length; h++) {
+                this.history_doctor[h].detail =
+                  res.data[this.history_doctor[h].historyuserdentistId];
+              if (h+1 == this.history_doctor.length) {
+          this.doctor = true
+              
+            }
+          }
+              });
+            });
             } else {
               for (let h = 0; h < this.history_doctor.length; h++) {
                 this.history_doctor[h].detail =
                   res.data[this.history_doctor[h].historyuserdentistId];
+              if (h+1 == this.history_doctor.length) {
+          this.doctor = true
+              
+            }
               }
-              this.doctor = true;
-              console.log(this.history_doctor);
             }
           });
         }

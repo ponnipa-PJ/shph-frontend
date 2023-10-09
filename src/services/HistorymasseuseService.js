@@ -7,8 +7,11 @@ class HistorymasseuseService {
     gethistorymasseus(id) {
         return http.get('/historymasseuse/' + id);
     }
-    getdoctorhistory(id) {
+    getuserhistory(id) {
         return http.get('/history_user_masseuse/' + id);
+    }
+    getdoctorhistory(id) {
+        return http.get('/history_doctor_masseuse/' + id);
     }
     createhistorymasseus(data) {
         return http.post('/historymasseuse', data);

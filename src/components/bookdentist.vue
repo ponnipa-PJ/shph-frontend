@@ -220,6 +220,7 @@
                               <th style="width: 10px">#</th>
                               <th>ชื่อ-นามสกุล</th>
                               <th>ประเภทการจอง</th>
+                              <th>หมอ</th>
                               <th>เวลา</th>
                               <th></th>
                             </tr>
@@ -230,6 +231,9 @@
                               <td>{{ b.firstname }} {{ b.lastname }}</td>
                               <td>
                                 {{ b.type }}
+                              </td>
+                              <td>
+                                {{ b.docfirstname }} {{ b.doclastname }}
                               </td>
                               <td>
                                 {{ b.time }}
@@ -400,6 +404,7 @@
             </button> -->
 
               <button
+              @click="close()"
                 id="closeduser"
                 type="button"
                 class="btn btn-secondary"
@@ -556,6 +561,9 @@ export default {
     });
   },
   methods: {
+    close(){
+      this.getEvents();
+    },
     selecthistory() {
       this.gethistory();
       this.getalleventbycreatedBy();
@@ -563,6 +571,9 @@ export default {
       this.showbook = true;
     },
     update() {
+      UserService.getUser(this.doctor_id).then((res)=>{
+        this.docname = res.data.firstname +' '+res.data.lastname
+      })
       var statushis = false;
       var txt = "";
       for (let h = 0; h < this.history_update.length; h++) {
@@ -608,17 +619,23 @@ export default {
           // console.log(userdata);
           // console.log(res.data);
           EventDentistService.updateuser(this.eventIdupdate, userdatanull).then(
-            () => {}
+            () => {
+              UserService.getUser(this.book.doctorId).then((res)=>{
+
+  var message = this.noti.cancel_dentist + ' หมอ' + res.data.firstname + ' '+ res.data.lastname + ' วันที่ ' + this.header + ' ที่' + this.shphName
+      // console.log(message);
+      LinkImageService.sendNotify(message, this.currentUser.line_token)
+})
+            }
           );
           //             console.log(this.eventIdupdate);
           // console.log(this.event_id_update);
-
           EventDentistService.updateuser(this.event_id_update, userdata).then(
             () => {
               // console.log(res.data);
               // UserService.getUser(this.event_id)
               var his = {
-                eventId: this.event_id_update,
+                eventId: this.eventIdupdate,
                 title: "ลบคิว",
                 createdBy: this.currentUser.id,
               };
@@ -661,11 +678,10 @@ export default {
                         this.docname +
                         " วันที่ " +
                         this.header +
-                        this.timelineupdate +
                         " ที่" +
                         this.shphName;
-                      // console.log(message);
-                      // LinkImageService.sendNotify(message, this.currentUser.line_token)
+                      console.log(message);
+                      LinkImageService.sendNotify(message, this.currentUser.line_token)
                       // document.getElementById("closeduser").click();
                       this.showbook = true;
                       this.getalleventbycreatedBy();
@@ -802,7 +818,7 @@ export default {
         this.currentUser.id,
         this.shphId
       ).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         this.booklist = res.data;
       });
     },
@@ -819,8 +835,14 @@ export default {
         remark: null,
       };
       // console.log(this.eventId_update);
-      EventDentistService.updateuser(this.eventId_update, userdatak).then(
-        () => {
+      EventDentistService.updateuser(this.eventId_update, userdatak).then (() => {
+        // UserService.getUser(this.book.doctorId).then((res)=>{
+
+        //   var message = this.noti.cancel_dentist + ' หมอ' + res.data.firstname + ' '+ res.data.lastname + ' วันที่ ' + this.header + ' ที่' + this.shphName
+        //       // console.log(message);
+        //       LinkImageService.sendNotify(message, this.currentUser.line_token)
+        // })
+       
           var his = {
             eventId: this.eventId_update,
             title: "ลบคิว",
@@ -832,9 +854,9 @@ export default {
             var sql = his + ` WHERE id = ${this.mapId}`;
             // console.log(sql);
             EventDentistService.createsql(sql).then(() => {
-              // var message = this.noti.cancel_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+              var message = this.noti.cancel_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + ' ที่' + this.shphName
               // console.log(message);
-              // LinkImageService.sendNotify(this.noti.cancel_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
+              LinkImageService.sendNotify(message, this.currentUser.line_token)
               this.showbook = true;
               this.getalleventbycreatedBy();
             });
@@ -1100,8 +1122,8 @@ export default {
                 var sql = his + value;
                 // console.log(sql);
                 EventDentistService.createsql(sql).then(() => {
-                  // var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
-                  // LinkImageService.sendNotify(this.noti.message_dentist+' หมอ'+ res.data.firstname +' '+ res.data.lastname+' วันที่ ' + this.header, this.currentUser.line_token)
+                  var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                  LinkImageService.sendNotify(message, this.currentUser.line_token)
                   document.getElementById("booktab").click();
 
                   // this.getalleventbycreatedBy()

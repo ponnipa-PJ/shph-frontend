@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
 
     <div class="row mt-5">
-      <div class="col-md-6" style="width: 100%; overflow-y: scroll; height: 600px">
+      <div class="col-md-4" style="width: 100%; overflow-y: scroll; height: 600px">
         <div class="card">
           <div class="card-body">
             <h5 style="text-align: center" class="mt-3">
@@ -27,20 +27,20 @@
 
         </div>
       </div>
-      <div class="col-md-6" style="width: 100%; overflow-y: scroll; height: 600px">
+      <div class="col-md-8" style="width: 100%; overflow-y: scroll; height: 600px">
         <div class="card">
           <div class="card-body">
             <h5 style="text-align: center" class="mt-3">
               ส่วนของหมอ
             </h5>
-              <div class="card-header p-2" v-if="doctor">
+              <div class="card-header p-2">
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">รายละเอียด</a></li>
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">ประวัติการตรวจ</a></li>
                 </ul>
               </div>
               <div class="card-body">
-                <div class="tab-content">
+                <div class="tab-content" v-if="doctor">
                   <div class="tab-pane active" id="activity">
                       <div class="form-group row" v-for="(h, r) in history_doctor" :key="r">
                         <label for="inputName" class="col-sm-4 col-form-label">{{ h.name }}</label>
@@ -58,76 +58,39 @@
                   </div>
 
                   <div class="tab-pane" id="timeline">
-                    <div class="card">
-  <div class="card-header">
-    <h3 class="card-title">Collapsible Card Example</h3>
-    <div class="card-tools">
-      <!-- Collapse Button -->
-      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-    </div>
-    <!-- /.card-tools -->
-  </div>
-  <!-- /.card-header -->
-  <div class="card-body">
-    The body of the card
-  </div>
-  <!-- /.card-body -->
-</div>
-<!-- /.card -->
+                    <div id="accordion">
+                      <div class="card" v-for="(h,i) in hiscases" :key="i">
+                        <div class="card-header" :id="h.idtab">
+                          <h5 class="mb-0">
+                            <button
+                              class="btn btn-link show"
+                              data-toggle="collapse"
+                              :data-target="h.target"
+                              aria-expanded="true"
+                              :aria-controls="h.controls"
+                            >
+                           <div style="text-align:left">{{changedate(h.date)}} </div> 
+                           <div style="text-align:left">{{h.time}}</div>
+                            </button>
+                          </h5>
+                        </div>
 
-<table class="table table-striped">
-<thead>
-<tr>
-<th style="width: 10px">#</th>
-<th>Task</th>
-<th>Progress</th>
-<th style="width: 40px">Label</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1.</td>
-<td>Update software</td>
-<td>
-<div class="progress progress-xs">
-<div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-</div>
-</td>
-<td><span class="badge bg-danger">55%</span></td>
-</tr>
-<tr>
-<td>2.</td>
-<td>Clean database</td>
-<td>
-<div class="progress progress-xs">
-<div class="progress-bar bg-warning" style="width: 70%"></div>
-</div>
-</td>
-<td><span class="badge bg-warning">70%</span></td>
-</tr>
-<tr>
-<td>3.</td>
-<td>Cron job running</td>
-<td>
-<div class="progress progress-xs progress-striped active">
-<div class="progress-bar bg-primary" style="width: 30%"></div>
-</div>
-</td>
-<td><span class="badge bg-primary">30%</span></td>
-</tr>
-<tr>
-<td>4.</td>
-<td>Fix and squish bugs</td>
-<td>
-<div class="progress progress-xs progress-striped active">
-<div class="progress-bar bg-success" style="width: 90%"></div>
-</div>
-</td>
-<td><span class="badge bg-success">90%</span></td>
-</tr>
-</tbody>
-</table>
-
+                        <div
+                          :id="h.controls"
+                          class="collapse"
+                          :aria-labelledby="h.idtab"
+                          data-parent="#accordion"
+                        >
+                          <div>
+                            <ul class="list-group mb-3">
+<li class="list-group-item" v-for="(m, r) in mapcase" :key="r">
+  <b>{{ m.name }}</b> <a class="float-right">{{h.case[m.historyuserdentistId]}}</a>
+</li>
+</ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
 
@@ -162,29 +125,79 @@ export default {
       history_users: [],
       data: {},
       history_doctor:[],
-      doctor:true
+      doctor:false,
+      mapdata:{},
+      hiscases:[],
+      mapcase:[],
+      userId:0
     };
   },
   async mounted() {
     this.mapId = this.$route.query.id
     // console.log(this.$route.query.id);
     this.gethistoryuser()
+    MapEventsService.getmap_event(this.mapId).then((res) => {
+        this.userId = res.data.userId
+
+        this.gethistorycases()
+    });
+    this.getmapcases()
 
   },
   methods: {
+    changedate(date){
+      var d = new Date(date)
+      var result = d.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      return result
+    },
+    gethistorycases(){
+      MapHistoryDoctorMasseuseService.gethistory_doctor_masseuse(this.userId,'').then((res)=>{
+        // console.log(res.data);
+        this.hiscases = res.data
+      })
+    },
     save(){
-      var his = 'UPDATE history_doctor_masseuse SET '
+      var txt = ''
+      var statushis = false
+      for (let h = 0; h < this.history_doctor.length; h++) {
+        if (this.history_doctor[h].detail == null || this.history_doctor[h].detail == "") {
+          statushis = true
+          txt = this.history_doctor[h].name
+          break;
+        }
+      }
+      if (statushis == true) {
+            alert('กรุณากรอก' + txt)
+          }else{
+      HistorymasseuseService.getdoctorhistory(this.mapId).then((res) => {
+      var his = 'UPDATE history_doctor_masseuse SET status = 1 ,'
                           for (let h = 0; h < this.history_doctor.length; h++) {
                             his += this.history_doctor[h].historyuserdentistId + " = " + "'" + this.history_doctor[h].detail + "'" + ','
                           }
                           his = his.slice(0, -1)
-                          // his = his + ') '
-                          // console.log(his);
-                          // console.log(value);
-                          var sql = his + ` WHERE id = ${this.mapId}`
+                          var sql = his + ` WHERE id = ${res.data.id}`
                           console.log(sql);
                           EventService.createsql(sql).then(() => {
+                            
+                              var eventId = JSON.parse(this.mapdata.eventIdlist)
+                              for (let m = 0; m < eventId.length; m++) {
+                              var updateevent = 'UPDATE events SET title = "ตรวจแล้ว" where id = '+ eventId[m]
+                              EventService.createsql(updateevent).then(() => {
+                                var le = JSON.parse(this.mapdata.eventIdlist).length
+                                if (m+1 == le) {
+                                  alert('บันทึกสำเร็จ')
+                                  this.gethistorycases()
+                                }
+                              });
+                              
+                            }
                           });
+                        });
+                      }
     },
     convertdate(date) {
       var d = new Date(date)
@@ -196,12 +209,20 @@ export default {
       })
       return result
     },
+    
     gethistoryuser() {
       this.gethistorydoctor()
       MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
         this.history_users = res.data
         console.log(this.history_users);
         this.getmap()
+      })
+    },
+    getmapcases() {
+      MapHistoryDoctorMasseuseService.getmap_history_doctor_masseuses(1).then((res) => {
+        this.mapcase = res.data
+        // console.log(this.history_doctor);
+        // this.getmap()
       })
     },
     gethistorydoctor() {
@@ -213,8 +234,9 @@ export default {
     },
     getmap() {
       MapEventsService.getmap_event(this.mapId).then((res) => {
-        console.log(res.data);
-        console.log(this.history_users);
+        // console.log(res.data);
+        // console.log(this.history_users);
+        this.mapdata = res.data
         if (res.data) {
           this.data = res.data
           for (let h = 0; h < this.history_users.length; h++) {
@@ -242,8 +264,11 @@ export default {
             }else{
               for (let h = 0; h < this.history_doctor.length; h++) {
             this.history_doctor[h].detail = res.data[this.history_doctor[h].historyuserdentistId]
+            if (h+1 == this.history_doctor.length) {
+          this.doctor = true
+              
+            }
           }
-          this.doctor = false
           console.log(this.history_doctor);
             }
           })
@@ -253,9 +278,6 @@ export default {
     },
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
     currentUser() {
       return this.$store.state.auth.user;
     },

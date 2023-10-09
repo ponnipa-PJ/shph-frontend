@@ -30,6 +30,10 @@ import ShphDoctor from './components/ShphDoctor.vue';
 import HistoryUserMasseuse from './components/HistoryUserMasseuse.vue';
 import HistoryMasseuse from './components/HistoryMasseuse.vue';
 import HistoryDentist from './components/HistoryDentist.vue';
+import HistoryUser from './components/HistoryUser.vue';
+import HistoryDoctor from './components/HistoryDoctor.vue';
+import DetailHistoryDoctorDentist from './components/DetailHistoryDoctorDentist.vue';
+import DetailHistoryDoctorMesseuse from './components/DetailHistoryDoctorMesseuse.vue';
 
 const router = new Router({
   mode: "history",
@@ -215,6 +219,30 @@ const router = new Router({
     alias: "/HistoryDentist",
     name: "HistoryDentist",
     component: HistoryDentist
+  },
+  {
+    path: "/HistoryUser",
+    alias: "/HistoryUser",
+    name: "HistoryUser",
+    component: HistoryUser
+  },
+  {
+    path: "/HistoryDoctor",
+    alias: "/HistoryDoctor",
+    name: "HistoryDoctor",
+    component: HistoryDoctor
+  },
+  {
+    path: "/DetailHistoryDoctorDentist",
+    alias: "/DetailHistoryDoctorDentist",
+    name: "DetailHistoryDoctorDentist",
+    component: DetailHistoryDoctorDentist
+  },
+  {
+    path: "/DetailHistoryDoctorMesseuse",
+    alias: "/DetailHistoryDoctorMesseuse",
+    name: "DetailHistoryDoctorMesseuse",
+    component: DetailHistoryDoctorMesseuse
   }
   ]
 });

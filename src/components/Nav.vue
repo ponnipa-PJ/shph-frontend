@@ -119,13 +119,21 @@ export default {
     },
   },
   mounted() {
+    // console.log(this.$route.path);
     if (this.currentUser) {
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res) => {
         this.menu = res.data
         for (let m = 0; m < this.menu.length; m++) {
           this.menu[m].class = ''
+          // console.log(this.menu[m]);
           if (this.menu[m].url == this.$route.path) {
             this.menu[m].class = 'active'
+          }
+          if (this.$route.path == '/DetailHistoryDoctorMesseuse' && this.menu[m].url =='/HistoryDoctor') {
+              this.menu[m].class = 'active'
+          }
+          if (this.$route.path == '/DetailHistoryDoctorDentist' && this.menu[m].url =='/HistoryDoctor') {
+              this.menu[m].class = 'active'
           }
         }
       })

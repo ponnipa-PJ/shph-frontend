@@ -1,4 +1,6 @@
 <template>
+    <div class="row">
+
   <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ shphName }}</h5>
     <h5 class="mb-5" style="text-align:center">จองคิวหมอนวดแผนไทยประจำเดือน</h5>
@@ -123,7 +125,7 @@
                         aria-selected="true">จองคิว</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="booktab" data-toggle="pill"
+                      <a class="nav-link" id="booktab" data-toggle="pill" @click="selecthis()" 
                         href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile"
                         aria-selected="false">ประวัติการจอง</a>
                     </li>
@@ -301,6 +303,7 @@
       </div>
     </div>
   </div>
+    </div>
 </template>
 
 <script>
@@ -439,6 +442,9 @@ this.userId = this.currentUser.id
     // console.log(this.currentUser);
   },
   methods: {
+    selecthis(){
+      this.showbook = true
+    },
     selectbook(){
 this.getid(1,this.date)
     },
@@ -498,13 +504,13 @@ this.getmap(id)
     gethistoryupdate() {
       MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
         this.history_update = res.data
-        console.log(this.history);
+        // console.log(this.history);
       })
     },
     gethistory() {
       MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
         this.history = res.data
-        console.log(this.history);
+        // console.log(this.history);
       })
     },
     deleteque() {
@@ -515,9 +521,9 @@ this.getmap(id)
           userId: null,
         };
         // console.log(userdata);
-        console.log(this.eventold[e]);
+        // console.log(this.eventold[e]);
         EventService.updateuser(this.eventold[e], updatenull).then(() => {
-          console.log(e + 1, this.eventold.length);
+          // console.log(e + 1, this.eventold.length);
           if (e + 1 == this.eventold.length) {
             var hisd = {
               eventId: this.eventId,

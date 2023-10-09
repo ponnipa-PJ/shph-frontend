@@ -7,6 +7,12 @@ class MapHistoryDoctorMasseuseService {
     getmap_history_doctor_dentist(id) {
         return http.get('/map_history_doctor_dentist/' + id);
     }
+    gethistory_doctor_dentist(name,doctorId){
+        return http.get('/history_doctor_dentist?name='+name+'&&doctorId='+doctorId);
+    }
+    getreportdoctor(userId,doctorId){
+        return http.get('/history_doctor_dentist/getreportdoctor?userId='+userId+'&&doctorId='+doctorId);
+    }
     createhistory_doctor_dentist(name) {
         return http.get('/eventsdentist/createcolumn?name=' + name);
     }
