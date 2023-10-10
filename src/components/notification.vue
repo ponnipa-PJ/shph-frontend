@@ -54,6 +54,28 @@
 </div>
                 </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                  <label for="username">จำนวนชั่วโมงหมอนวดแผนไทยของอสม.<span style="color: red">*</span> </label>
+                  <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
+<input v-model="data.no_masseuse_worker" type="number" class="form-control " data-original-title="" title="">
+<div class="input-group-append">
+<span class="input-group-text">ชั่วโมง</span>
+</div>
+</div>
+                </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                  <label for="username">จำนวนคนต่อวันหมอฟันของอสม.<span style="color: red">*</span> </label>
+                  <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
+<input v-model="data.no_dentist_worker" type="number" class="form-control " data-original-title="" title="">
+<div class="input-group-append">
+<span class="input-group-text">ชั่วโมง</span>
+</div>
+</div>
+                </div>
+                  </div>
                   <div class="col-md-12">
                     <div class="form-group">
                   <label for="username">ข้อความแจ้งเตือนการจองคิวหมอนวดแผนไทย<span style="color: red">*</span> </label>

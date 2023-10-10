@@ -24,8 +24,9 @@
 </li>
 </ul>
 </div>
-<div style="text-align:center" v-else>ไม่พบข้อมูล</div>
-
+<div class="col-md-12 mt-5" v-else>
+  <h4 style="text-align:center">ไม่พบคิวบริการนวดแผนไทย</h4>
+        </div>
 </div>
     </div>
   </div>
@@ -126,7 +127,7 @@ shphService.getdoctorandshphmasseuse().then((res)=>{
       }
     },
     getUsers() {
-      UserService.getUsers().then((res) => {
+      UserService.getUsers('','').then((res) => {
         this.list = res.data;
       });
     },

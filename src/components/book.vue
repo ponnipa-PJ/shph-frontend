@@ -788,7 +788,10 @@ this.getmap(id)
       // console.log(statushis);
       EventService.geteventbyuseranddate(this.date, this.userId,this.shphId).then((res) => {
         console.log((this.event_id.length+res.data.length) , this.noti.hour); 
-        if (this.event_id.length > this.noti.hour || (this.event_id.length+res.data.length) > this.noti.hour) {
+        if (this.currentUser.role_id == 6 && this.event_id.length > this.noti.no_masseuse_worker || (this.event_id.length+res.data.length) > this.noti.no_masseuse_worker) {
+          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.no_masseuse_worker + ' ชั่วโมง')
+        }
+        else if (this.currentUser.role_id != 6 && this.event_id.length > this.noti.hour || (this.event_id.length+res.data.length) > this.noti.hour) {
           alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.hour + ' ชั่วโมง')
         } else
           if (this.event_id.length == 0) {

@@ -15,7 +15,7 @@
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
 </div>
-<div class="card-footer p-0">
+<div class="card-footer p-0" v-if="shphlist.length > 0">
 <ul class="nav flex-column">
 <li class="nav-item" v-for="s in shphlist" :key="s.id">
 <a :href="'/bookdentist?id='+s.id" target="_blank" class="nav-link">
@@ -24,7 +24,9 @@
 </li>
 </ul>
 </div>
-
+<div class="col-md-12 mt-5" v-else>
+  <h4 style="text-align:center">ไม่พบคิวบริการทันตกรรม</h4>
+        </div>
 </div>
     </div>
   </div>
@@ -124,7 +126,7 @@ shphService.getdoctorandshphdentist().then((res)=>{
       }
     },
     getUsers() {
-      UserService.getUsers().then((res) => {
+      UserService.getUsers('','').then((res) => {
         this.list = res.data;
       });
     },

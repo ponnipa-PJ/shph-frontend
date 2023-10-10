@@ -1069,10 +1069,12 @@ export default {
         // console.log(res.data);
         if (this.doctor_id == "" || this.doctor_id == null) {
           alert("กรุณาเลือกหมอฟัน");
-        } else if (1 + res.data.length > this.no_dentist) {
-          alert(
-            "ไม่สามารถจองคิวหมอฟันเกิน " + this.no_dentist + " ครั้งต่อวัน"
-          );
+        } 
+        if (this.currentUser.role_id == 6 && res.data.length.length > this.noti.no_dentist_worker || (res.data.length.length+1) > this.noti.no_dentist_worker) {
+          alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist_worker + ' ชั่วโมงต่อวัน')
+        }
+        else if (this.currentUser.role_id != 6 && res.data.length.length > this.noti.no_dentist || (res.data.length.length+1) > this.noti.no_dentist) {
+          alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist + ' ชั่วโมงต่อวัน')
         } else if (statushis == true) {
           alert("กรุณากรอก" + txt);
         } else {
@@ -1122,7 +1124,7 @@ export default {
                 var sql = his + value;
                 // console.log(sql);
                 EventDentistService.createsql(sql).then(() => {
-                  var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                  var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + ' ที่' + this.shphName
                   LinkImageService.sendNotify(message, this.currentUser.line_token)
                   document.getElementById("booktab").click();
 

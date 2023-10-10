@@ -80,7 +80,7 @@
             <button type="button" class="btn btn-success" @click="save()">
               บันทึก
             </button>
-            <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button id="closedusermasseuse" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               ปิด
             </button>
           </div>
@@ -260,7 +260,7 @@ this.saveUser()
           console.log(no);
 MapHistoryMasseuseService.createhistory_user_dentist(no).then(()=>{
           MapHistoryMasseuseService.createmap_history_user_masseuse(userdata).then(() => {
-                document.getElementById("closeduser").click();
+                document.getElementById("closedusermasseuse").click();
                 this.getshph();
                 //       setTimeout(function () {
                 //   location.reload();
@@ -272,7 +272,7 @@ MapHistoryMasseuseService.createhistory_user_dentist(no).then(()=>{
           // console.log(this.user_id);
           MapHistoryMasseuseService.updatemap_history_user_masseuse(this.user_id, userdata).then(() => {
             // console.log(res.data);
-            document.getElementById("closeduser").click();
+            document.getElementById("closedusermasseuse").click();
             this.getshph();
             //       setTimeout(function () {
             //   location.reload();

@@ -1,8 +1,16 @@
 <template>
   <div class="container">
-    <!-- <div v-if="printstatus"> -->
-    <div ref="printMe" id="my-node" style="width:100px;height:100px;" :name="user.UID">user.UID</div>
-  <!-- </div> -->
+    <div v-if="printstatus">
+      <div class="row">
+        <div class="col-md-12">
+    <div ref="printMe" id="my-node" style="width:200px;height:120px;" :name="user.UID">
+      <br>
+      <div style="text-align:left">&nbsp;{{user.UID}}</div><br>
+      <div style="text-align:center">{{user.firstname}} {{user.lastname}}</div>
+    </div>
+  </div>
+</div>
+  </div>
     <div style="text-align: right">
       <a>
         <button type="button" id="get_file" class="btn btn-success mt-3 mb-3" @click="getid(0)" data-bs-toggle="modal"
@@ -14,6 +22,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
+          <th scope="col">UID</th>
           <th scope="col">ชื่อ-นามสกุล</th>
           <th scope="col">อีเมล</th>
           <th scope="col">เบอร์โทรศัพท์</th>
@@ -25,6 +34,9 @@
         <tr v-for="(l, i) in list" :key="i">
           <td>
             {{ i + 1 }}
+          </td>
+          <td>
+            {{ l.UID }}
           </td>
           <td>
             {{ l.firstname }} {{ l.lastname }}
@@ -211,8 +223,8 @@ import DistrictService from "../services/DistrictService";
 import ProvinceService from "../services/ProvinceService";
 import AmphuresService from "../services/AmphuresService";
 import shphService from "../services/shphService";
-// import html2canvas from "html2canvas";
-import * as htmlToImage from 'html-to-image';
+import html2canvas from "html2canvas";
+// import * as htmlToImage from 'html-to-image';
 // import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 export default {
@@ -243,29 +255,50 @@ export default {
     this.getUsers();
     this.getroles()
     this.getshph()
-    
+    this.user.UID = 'UID0000001'
+    this.user.firstname = 'UID0000001'
+    this.user.lastname = 'UID0000001'
   },
   methods: {
     print(id){
+          this. printstatus = true
       UserService.getUser(id).then((res) => {
           console.log(res.data);
-          this.user = res.data;
           this. printstatus = true
+          this.user = res.data;
       this.printThis()
       });
     },
     async printThis() {
-      var node = document.getElementById('my-node');
+      console.log("printing..");
 
-htmlToImage.toPng(node)
-  .then(function (dataUrl) {
-    var img = new Image();
-    img.src = dataUrl;
-    document.body.appendChild(img);
-  })
-  .catch(function (error) {
-    console.error('oops, something went wrong!', error);
-  });
+      this. printstatus = true
+      const el = this.$refs.printMe;
+
+      const options = {
+        type: "dataURL",
+        width :"500px"
+      };
+      const printCanvas = await this.$html2canvas(el, options);
+      this.image = printCanvas;
+      //   var a = document.createElement("a"); //Create <a>
+      // a.href = printCanvas; //Image Base64 Goes here
+      // a.download = this.concert_name+ ".jpg"; //File name Here
+      // a.target = '_blank';
+      // a.click(); //Downloaded file
+
+      html2canvas(document.getElementById("my-node")).then(function (canvas) {
+        var link = document.createElement("a");
+        document.body.appendChild(link); 
+        var c = document.getElementById("my-node").getAttribute("name") + ".jpg";
+        link.download = c;
+        link.href = canvas.toDataURL();
+        link.target = "_blank";
+        link.click();
+      location.reload();
+      });
+
+      // this. printstatus = false
     },
     deleteuserid(){
 UserService.deleteUser(this.user_id).then(()=>{
@@ -351,7 +384,8 @@ UserService.deleteUser(this.user_id).then(()=>{
       
     },
     save() {
-      // if (this.user.role_id == 1 || this.user.role_id == 4) {
+      
+      if (this.user.role_id == 1 || this.user.role_id == 4 || this.user.role_id == 7) {
         if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
@@ -359,32 +393,59 @@ UserService.deleteUser(this.user_id).then(()=>{
       }else{
 this.saveUser()
       }
-      // }else if (this.user.role_id == ""|| this.user.role_id == null) {
-      //   alert("กรุณาเลือกสิทธิ์");
-      // } else{
-      // if (this.user.firstname == "" || this.user.firstname == null) {
-      //   alert("กรุณากรอกชื่อผู้ใช้งาน");
-      // } else if (this.user.lastname == "" || this.user.lastname == null) {
-      //   alert("กรุณากรอกนามสกุลผู้ใช้งาน");
-      // } else if (this.user.email == "" || this.user.email == null) {
-      //   alert("กรุณากรอกอีเมล");
-      // } else if (this.user.password == "" || this.user.password == null) {
-      //   alert("กรุณากรอกรหัสผ่าน");
-      // } else if (this.user.number == "" || this.user.number == null) {
-      //   alert("กรุณากรอกบ้านเลขที่");
-      // } else if (this.user.provinceId == "" || this.user.provinceId == null) {
-      //   alert("กรุณาเลือกจังหวัด");
-      // } else if (this.user.amphureId == "" || this.user.amphureId == null) {
-      //   alert("กรุณาเลือกอำเภอ");
-      // } else if (this.user.districtsId == "" || this.user.amphureId == null) {
-      //   alert("กรุณาเลือกตำบล");
-      // } else if (this.currentUser.role_id == 5 && (this.user.shphId == null || this.user.shphId == '')) {
-      //   alert("กรุณาเลือกรพ.สต.");}else{
-      //   this.saveUser()
-      // }
-      // }
+      } else if (this.user.email == "" || this.user.email == null) {
+        alert("กรุณากรอกอีเมล");
+      } else if (this.user.password == "" || this.user.password == null) {
+        alert("กรุณากรอกรหัสผ่าน");
+      } else if (this.user.role_id == ""|| this.user.role_id == null) {
+        alert("กรุณาเลือกสิทธิ์");
+      } else{
+      if (this.user.firstname == "" || this.user.firstname == null) {
+        alert("กรุณากรอกชื่อผู้ใช้งาน");
+      } else if (this.user.lastname == "" || this.user.lastname == null) {
+        alert("กรุณากรอกนามสกุลผู้ใช้งาน");
+      } else if (this.user.phone == "" || this.user.phone == null) {
+        alert("กรุณากรอกเบอร์โทรศัพท์");
+      }
+      else if (this.user.number == "" || this.user.number == null) {
+        alert("กรุณากรอกบ้านเลขที่");
+      } else if (this.user.provinceId == "" || this.user.provinceId == null) {
+        alert("กรุณาเลือกจังหวัด");
+      } else if (this.user.amphureId == "" || this.user.amphureId == null) {
+        alert("กรุณาเลือกอำเภอ");
+      } else if (this.user.districtsId == "" || this.user.amphureId == null) {
+        alert("กรุณาเลือกตำบล");
+      } else{
+        this.saveUser()
+      }
+      }
     },
     saveUser(){
+      var uid = ''
+      UserService.getdatabyrole(2,'').then((res)=>{
+
+      if (this.user.role_id == 2 && this.user.UID == null) {
+        uid += 'UID'
+var num = res.data.length
+var coun = String(num).length
+// console.log(coun);
+// console.log(num);
+// 1 000000
+// 10 00000
+// 100 0000
+var zero = 7-coun
+console.log(zero);
+  for (let z = 0; z < zero; z++) {
+    uid += '0'
+    // console.log(uid);
+    if (z+1 == zero) {
+uid += num+1
+      
+    }
+}
+// console.log(uid);
+        }
+      
       var userdata = {
           firstname: this.user.firstname,
           lastname: this.user.lastname,
@@ -393,7 +454,7 @@ this.saveUser()
           password: this.user.password,
           line_token: this.user.line_token,
           hash: this.hash,
-          active: 0,
+          active: 1,
           phone: this.user.phone,
           number: this.user.number,
           moo: this.user.moo,
@@ -401,12 +462,12 @@ this.saveUser()
           provinceId: this.user.provinceId,
           amphureId: this.user.amphureId,
           districtsId: this.user.districtsId,
-          shphId:this.user.shphId,
+          // shphId:this.user.shphId,
+          UID:uid
         };
         if (this.user_id == 0) {
-
-          UserService.getUsers(this.user.email).then((res) => {
-            // console.log(res.data);
+          UserService.getUsers(this.user.email,'').then((res) => {
+            console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
                 document.getElementById("closeduser").click();
@@ -432,6 +493,8 @@ this.saveUser()
             // window.scrollTo(0, 0);
           });
         }
+
+      })
     }
 ,    getUsers() {
       UserService.getUsers('',this.currentUser.role_id).then((res) => {

@@ -278,6 +278,28 @@ export default {
         )
     },
     signIn() {
+      var uid = ''
+      UserService.getdatabyrole(2,'').then((res)=>{
+
+        uid += 'UID'
+var num = res.data.length
+var coun = String(num).length
+// console.log(coun);
+// console.log(num);
+// 1 000000
+// 10 00000
+// 100 0000
+var zero = 7-coun
+console.log(zero);
+  for (let z = 0; z < zero; z++) {
+    uid += '0'
+    // console.log(uid);
+    if (z+1 == zero) {
+uid += num+1
+      
+    }
+// console.log(uid);
+        }
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
       } else if (this.user.lastname == "" || this.user.lastname == null) {
@@ -286,7 +308,9 @@ export default {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
-      } else if (this.user.number == "" || this.user.number == null) {
+      } else if (this.user.phone == "" || this.user.phone == null) {
+        alert("กรุณากรอกเบอร์โทรศัพท์");
+      }else if (this.user.number == "" || this.user.number == null) {
         alert("กรุณากรอกบ้านเลขที่");
       } else if (this.user.provinceId == "" || this.user.provinceId == null) {
         alert("กรุณาเลือกจังหวัด");
@@ -295,7 +319,7 @@ export default {
       } else if (this.user.districtsId == "" || this.user.amphureId == null) {
         alert("กรุณาเลือกตำบล");
       }  else {
-        UserService.getUsers(this.user.email).then((res) => {
+        UserService.getUsers(this.user.email,'').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -313,7 +337,8 @@ export default {
               provinceId: this.user.provinceId,
               amphureId: this.user.amphureId,
               districtsId: this.user.districtsId,
-            };
+              UID:uid
+            }; 
             // console.log(user);
             UserService.createUser(user).then(() => {
               // console.log(res.data);
@@ -325,6 +350,7 @@ export default {
           }
         });
       }
+    })
     },
   },
   computed: {
