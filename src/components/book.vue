@@ -183,6 +183,14 @@
                                 <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
                               </div>
                             </div>
+                            <label>ประเภทการนวดแผนไทย</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="masseusetype">
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
                             <div class="form-group" v-for="(h, r) in history" :key="r">
                               <label>{{ h.name }}</label>
                               <div class="input-group">
@@ -190,6 +198,7 @@
                               </div>
                             </div>
                           </div>
+                         
                         </div>
                       </form>
                       <button type="button" class="btn btn-success" @click="save()">
@@ -246,6 +255,14 @@
                                 <input class="form-check-input" type="checkbox" :id="i.date" :value="i.id"
                                   v-model="event_id_update">
                                 <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
+                              </div>
+                            </div>
+                            <label>ประเภทการนวดแผนไทย</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="'checkboxupdate' + i.id" :value="i.id" :name="'checkboxupdate' + i.id"
+                                  v-model="masseusetypeupdate">
+                                <label :for="'checkboxupdate' + i.id" class="form-check-label">{{ i.name }}</label>
                               </div>
                             </div>
                             <div class="form-group" v-for="(h, r) in history_update" :key="r">
@@ -321,6 +338,7 @@ import shphService from '../services/shphService'
 import HistorymasseuseService from '../services/HistorymasseuseService'
 import MapHistoryMasseuseService from '../services/MapHistoryMasseuseService'
 import MapEventsService from '../services/MapEventsService'
+import MasseuseTypeService from '../services/MasseuseTypeService'
 
 export default {
   name: "Nav",
@@ -422,9 +440,13 @@ history_update:[],
 eventId_update:0,
 userId:0,
 uid:'',
-cusname:{}
+cusname:{},
+masseusetypes:[],
+masseusetype:[],
+masseusetypeupdate:[]
     };
   },
+  
   mounted() {
     this.shphId = this.$route.query.id
     // console.log(this.$route.query.id);
@@ -436,12 +458,18 @@ this.userId = this.currentUser.id
     this.getEvents()
     this.getUsers();
     this.gethistory()
+    this.getmasseusetypes()
     NotificationService.getnotification(1).then((res) => {
       this.noti = res.data
     })
     // console.log(this.currentUser);
   },
   methods: {
+    getmasseusetypes(){
+      MasseuseTypeService.getmasseusetypes(1).then((res) => {
+      this.masseusetypes = res.data
+    })
+    },
     selecthis(){
       this.showbook = true
     },
@@ -486,6 +514,7 @@ this.getmap(id)
                 this.eventold = JSON.parse(res.data.eventIdlist)
                 this.allday = false
                 this.typebookupdate = res.data.typebook
+                this.masseusetypeupdate = JSON.parse(res.data.type)
                 // console.log(this.history_update);
                 for (let h = 0; h < this.history_update.length; h++) {
                   this.history_update[h].detail = res.data[this.history_update[h].historyuserdentistId]
@@ -797,6 +826,10 @@ this.getmap(id)
           if (this.event_id.length == 0) {
             alert('กรุณาเลือกเวลา')
           }
+          else if (this.masseusetype.length == 0) {
+            alert('กรุณาประเภทการนวด')
+          }
+          
           else if (statushis == true) {
             alert('กรุณากรอก' + txt)
           } else {
@@ -836,7 +869,8 @@ this.getmap(id)
                       userId: this.userId,
                       createdBy: this.currentUser.id,
                       time:this.timeline,
-                      typebook:this.typebook
+                      typebook:this.typebook,
+                      type:this.masseusetype
                     }
                     MapEventsService.createmap_event(map).then((res) => {
                       var his = 'INSERT INTO history_user_masseuse (id, eventId,'
@@ -981,7 +1015,7 @@ this.getmap(id)
                         title: 'จองแล้ว',
                         userId: this.userId,
                       };
-                      console.log(userdata);
+                      // console.log(userdata);
                       // console.log(res.data);
                       EventService.updateuser(this.event_id_update[ee], userdata).then(() => {
 
@@ -997,12 +1031,12 @@ this.getmap(id)
                           // console.log(his);
                           // console.log(value);
                           var sql = his + ` WHERE id = ${this.eventIdupdate}`
-                          console.log(this.event_id_update);
-                          console.log(this.timeline);
+                          // console.log(this.event_id_update);
+                          // console.log(this.timeline);
                           EventService.createsql(sql).then(() => {
-                            var map_events = 'UPDATE map_events SET eventId = "[' + this.event_id_update + ']"' + ' , time = ' + '"'+ this.timeline+ '"'
+                            var map_events = 'UPDATE map_events SET eventId = "[' + this.event_id_update + ']"' + ', type = "[' + this.masseusetypeupdate + ']"' + ' , time = ' + '"'+ this.timeline+ '"'
                             map_events = map_events + ` WHERE id = ${this.eventIdupdate}`
-                            console.log(map_events);
+                            // console.log(map_events);
                             EventService.createsql(map_events).then(() => {
 
                               var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName

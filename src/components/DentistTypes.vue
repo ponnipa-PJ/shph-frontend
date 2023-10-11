@@ -1,5 +1,5 @@
 <template>
-   <div class="row">
+  <div class="row">
     <div class="container">
     <div class=" mb-3 mt-3" style="text-align: right">
       <a>
@@ -12,7 +12,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">ประเภทการนวด</th>
+          <th scope="col">ประเภททันตกรรม</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -49,9 +49,9 @@
               <div class="card-body mt-3">
 
                 <div class="form-group mt-3">
-                  <label for="username">ประเภทหมอนวด</label>
+                  <label for="username">ประเภททันตกรรม</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
-                    placeholder="กรุณากรอกประเภทหมอนวด" />
+                    placeholder="กรุณากรอกประเภททันตกรรม" />
                 </div>
               </div>
             </form>
@@ -86,11 +86,11 @@
       </div>
     </div>
   </div>
-   </div>
+  </div>
 </template>
 
 <script>
-import MasseuseTypeService from "../services/MasseuseTypeService";
+import DentistTypeService from "../services/DentistTypeService";
 
 export default {
   name: "Nav",
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     deleteshphid(){
-      MasseuseTypeService.deletemasseusetype(this.user_id).then(()=>{
+      DentistTypeService.deletedentisttype(this.user_id).then(()=>{
   document.getElementById("closedshph").click();
             this.getUsers();
       })
@@ -126,20 +126,20 @@ export default {
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
-        this.title = "แก้ไขประเภทหมอนวด";
+        this.title = "แก้ไขประเภททันตกรรม";
         // console.log(this.user_id);
-        MasseuseTypeService.getmasseusetype(this.user_id).then((res) => {
+        DentistTypeService.getdentisttype(this.user_id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
         });
       } else {
-        this.title = "เพิ่มประเภทหมอนวด";
+        this.title = "เพิ่มประเภททันตกรรม";
         this.user = [];
       }
     },
     save() {
       if (this.user.name == "" || this.user.name == null) {
-        alert("กรุณากรอกประเภทหมอนวด");
+        alert("กรุณากรอกประเภททันตกรรม");
       }else{
 this.saveUser()
       }
@@ -151,7 +151,7 @@ this.saveUser()
         };
         if (this.user_id == 0) {
 
-          MasseuseTypeService.createmasseusetype(userdata).then(() => {
+          DentistTypeService.createdentisttype(userdata).then(() => {
                 document.getElementById("closeduser").click();
                 this.getUsers();
                 //       setTimeout(function () {
@@ -162,7 +162,7 @@ this.saveUser()
             
         } else {
           // console.log(this.user_id);
-          MasseuseTypeService.updatemasseusetype(this.user_id, userdata).then(() => {
+          DentistTypeService.updatedentisttype(this.user_id, userdata).then(() => {
             // console.log(res.data);
             document.getElementById("closeduser").click();
             this.getUsers();
@@ -174,7 +174,7 @@ this.saveUser()
         }
     }
 ,    getUsers() {
-  MasseuseTypeService.getmasseusetypes(1).then((res) => {
+  DentistTypeService.getdentisttypes(1).then((res) => {
         this.list = res.data;
       });
     },

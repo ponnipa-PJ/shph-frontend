@@ -4,23 +4,23 @@
       <HistoryDoctorDentistAll />
     </div>
     <div class="col-md-12" v-if="currentUser.role_id == 1 || currentUser.role_id == 7">
-      <HistoryDoctorMesseuseAll />
+      <HistoryDoctorMasseuseAll />
     </div>
     <div class="col-md-12" v-if="currentUser.role_id == 5 || currentUser.role_id == 3">
-      <HistoryDoctorMesseuseAll />
+      <HistoryDoctorMasseuseAll />
       <HistoryDoctorDentistAll />
     </div>
   </div>
 </template>
 
 <script>
-import HistoryDoctorMesseuseAll from "./HistoryDoctorMesseuseAll.vue";
+import HistoryDoctorMasseuseAll from "./HistoryDoctorMasseuseAll.vue";
 import HistoryDoctorDentistAll from "./HistoryDoctorDentistAll.vue";
 
 export default {
   name: "Carlist",
   components: {
-    HistoryDoctorMesseuseAll,
+    HistoryDoctorMasseuseAll,
     HistoryDoctorDentistAll,
   },
   props: {

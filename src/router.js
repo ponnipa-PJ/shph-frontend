@@ -33,7 +33,10 @@ import HistoryDentist from './components/HistoryDentist.vue';
 import HistoryUser from './components/HistoryUser.vue';
 import HistoryDoctor from './components/HistoryDoctor.vue';
 import DetailHistoryDoctorDentist from './components/DetailHistoryDoctorDentist.vue';
-import DetailHistoryDoctorMesseuse from './components/DetailHistoryDoctorMesseuse.vue';
+import DetailHistoryDoctorMasseuse from './components/DetailHistoryDoctorMasseuse.vue';
+import DentistTypes from './components/DentistTypes.vue';
+import MasseuseType from './components/MasseuseType.vue';
+
 
 const router = new Router({
   mode: "history",
@@ -239,10 +242,22 @@ const router = new Router({
     component: DetailHistoryDoctorDentist
   },
   {
-    path: "/DetailHistoryDoctorMesseuse",
-    alias: "/DetailHistoryDoctorMesseuse",
-    name: "DetailHistoryDoctorMesseuse",
-    component: DetailHistoryDoctorMesseuse
+    path: "/DetailHistoryDoctorMasseuse",
+    alias: "/DetailHistoryDoctorMasseuse",
+    name: "DetailHistoryDoctorMasseuse",
+    component: DetailHistoryDoctorMasseuse
+  },
+  {
+    path: "/DentistType",
+    alias: "/DentistType",
+    name: "DentistType",
+    component: DentistTypes
+  },
+  {
+    path: "/MasseuseType",
+    alias: "/MasseuseType",
+    name: "MasseuseType",
+    component: MasseuseType
   }
   ]
 });

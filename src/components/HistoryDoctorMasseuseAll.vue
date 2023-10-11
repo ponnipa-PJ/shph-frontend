@@ -22,7 +22,7 @@
                 <td>{{ h.UID }}</td>
                 <td>{{ h.userfirstname }} {{ h.userlastname }}</td>
                 <td>
-                  <a :href="'DetailHistoryDoctorMesseuse?id=' + h.userId"
+                  <a :href="'DetailHistoryDoctorMasseuse?id=' + h.userId"
                     ><button type="button" class="btn btn-success">
                       <i class="fa-solid fa-file-lines"></i></button
                   ></a>

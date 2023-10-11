@@ -7,6 +7,9 @@ class DoctorShphService {
     getdoctorandshphmasseuse(roleId,userId){
         return http.get('/doctorshph/getdoctorandshphmasseuse?roleId='+roleId+'&&userId='+userId);
     }
+    getnotdoctors(doctorId,userId){
+        return http.get('/doctorshph/getnotdoctors?doctorId='+doctorId+'&&userId='+userId);
+    }
     getdoctorandshpdentist(roleId,userId){
         return http.get('/doctorshph/getdoctorandshpdentist?roleId='+roleId+'&&userId='+userId);
     }

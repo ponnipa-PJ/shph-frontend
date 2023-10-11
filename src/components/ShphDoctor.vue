@@ -60,15 +60,19 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.currentUser.role_id);
     this.doctorid = this.currentUser.id
     if (this.currentUser.role_id == 5) {
       UserService.getDoctors().then((res)=>{
         this.doctors = res.data
         this.doctorid = this.doctors[0].id
+    this.createdoctorshph();
       });
+    }else{
+
+      this.createdoctorshph();
     }
 
-    this.getshph();
   },
   methods: {
     savestatus(id,status){
@@ -85,64 +89,39 @@ shphService.deleteShph(this.user_id).then(()=>{
             this.getUsers();
       })
     },
-    getdoctorshph(){
-      var list = []
-      var shph = []
-      DoctorShphService.getdoctorshphs(this.doctorid).then((res)=>{
-        this.list = res.data
-        for (let li = 0; li < this.list.length; li++) {
-          list.push(this.list[li].shphId)
-          
-        }
-        for (let ss = 0; ss < this.shphlist.length; ss++) {
-          shph.push(this.shphlist[ss].id)
-          
-        }
-        if (this.list.length == 0) {
-          for (let s = 0; s < this.shphlist.length; s++) {
+    createdoctorshph(){
+      // var list = []
+      // var shph = []
+      DoctorShphService.getnotdoctors(this.doctorid).then((res)=>{
+        console.log(res.data);
+        if (res.data.length > 0) {
+          for (let r = 0; r < res.data.length; r++) {
             var doc = {
               docrtorId:this.doctorid,
-              shphId:this.shphlist[s].id,
+              shphId:res.data[r],
               status:0
             }
             DoctorShphService.createdoctorshph(doc).then(()=>{
-              if (s+1 == this.shphlist.length) {
+              if (r+1 == res.data.length) {
                 this.getdoctorshph()
               }
             })
           }
-        }else if(this.list.length != this.shphlist.length){
-          console.log(shph);
-          console.log(list);
-          var resultArr = shph.filter(function(val){
-    return !list.find(function(obj){
-        return val===obj;
-    });
-});
-console.log(resultArr);
-         for (let r = 0; r < resultArr.length; r++) {
-          var docnew = {
-              docrtorId:this.doctorid,
-              shphId:resultArr[r],
-              status:0
-            }
-            DoctorShphService.createdoctorshph(docnew).then(()=>{
-              if (r+1 == resultArr.length) {
-                this.getshph()
-              }
-            })
-         }
+          
+        }else{
+          this.getdoctorshph()
         }
+      });
+      
+    },
+    getdoctorshph(){
+      DoctorShphService.getdoctorshphs(this.doctorid,'').then((res)=>{
+        this.list = res.data
               });
     },
     getshph(){
-      shphService.getShphs(1).then((res)=>{
-        this.shphlist = res.data
-        console.log(this.shphlist);
-        this.getdoctorshph()
-        
-    });
-    },
+      this.createdoctorshph()
+    }
   },
   computed: {
     loggedIn() {

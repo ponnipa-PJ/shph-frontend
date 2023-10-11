@@ -1,5 +1,5 @@
 <template>
-  <div><HistoryUserMesseuseAll/>
+  <div><HistoryUserMasseuseAll/>
   
     <HistoryUserDentistAll/></div>
 
@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import HistoryUserMesseuseAll from '../components/HistoryUserMesseuseAll.vue'
+import HistoryUserMasseuseAll from '../components/HistoryUserMasseuseAll.vue'
 import HistoryUserDentistAll from '../components/HistoryUserDentistAll.vue'
 
 export default {
   name: "Carlist",
   components: {
-    HistoryUserMesseuseAll,
+    HistoryUserMasseuseAll,
     HistoryUserDentistAll
   },
   props: {

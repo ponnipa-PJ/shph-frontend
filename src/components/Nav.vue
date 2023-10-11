@@ -37,7 +37,7 @@
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <a href="index3.html" class="brand-link"> 
+      <a href="#" class="brand-link"> 
 <img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
 <span class="brand-text font-weight-light">รพ.สต.</span>
 </a>
@@ -129,7 +129,7 @@ export default {
           if (this.menu[m].url == this.$route.path) {
             this.menu[m].class = 'active'
           }
-          if (this.$route.path == '/DetailHistoryDoctorMesseuse' && this.menu[m].url =='/HistoryDoctor') {
+          if (this.$route.path == '/DetailHistoryDoctorMasseuse' && this.menu[m].url =='/HistoryDoctor') {
               this.menu[m].class = 'active'
           }
           if (this.$route.path == '/DetailHistoryDoctorDentist' && this.menu[m].url =='/HistoryDoctor') {

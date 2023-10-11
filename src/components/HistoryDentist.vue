@@ -63,6 +63,16 @@
               <div class="card-body" v-if="doctor">
                 <div class="tab-content">
                   <div class="tab-pane active" id="activity">
+                    <div class="form-group">
+                            <label>&nbsp;&nbsp;&nbsp;ประเภททันตกรรม</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttypes" :key="r">
+                                &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="dentisttype" disabled>
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
+                            </div>
                     <div
                       class="form-group row"
                       v-for="(h, r) in history_doctor"
@@ -93,6 +103,7 @@
 
                   <div class="tab-pane" id="timeline">
                     <div id="accordion">
+                      <div v-if="hiscases.length > 0">
                       <div class="card" v-for="(h,i) in hiscases" :key="i">
                         <div class="card-header" :id="h.idtab">
                           <div class="modal-header">
@@ -121,6 +132,16 @@
                           data-parent="#accordion"
                         >
                           <div>
+                            <div class="form-group mt-3">
+                            <label>&nbsp;&nbsp;&nbsp;ประเภททันตกรรม</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttypes" :key="r">
+                                &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="h.case.type" disabled>
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
+                            </div>
                             <ul class="list-group mb-3">
 <li class="list-group-item" v-for="(m, r) in mapcase" :key="r">
   <b>{{ m.name }}</b> <a class="float-right">{{h.case[m.historyuserdentistId]}}</a>
@@ -129,6 +150,10 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                      <div class="col-md-12 mt-5" v-else>
+  <h5 style="text-align:center">ไม่พบประวัติการรับบริการทันตกรรม</h5>
+        </div>
                     </div>
                   </div>
                 </div>
@@ -148,6 +173,7 @@ import MapEventsDentistService from "../services/MapEventsDentistService";
 import HistorydentistService from "../services/HistorydentistService";
 import EventDentistService from "../services/EventDentistService";
 import MapHistoryDoctorDentistService from "../services/MapHistoryDoctorDentistService";
+import DentistTypeService from "../services/DentistTypeService";
 
 export default {
   name: "Nav",
@@ -163,7 +189,9 @@ export default {
       doctor: false,
       hiscases:[],
       mapcase:[],
-      userId:0
+      userId:0,
+      dentisttypes:[],
+      dentisttype:[],
     };
   },
   async mounted() {
@@ -173,11 +201,17 @@ export default {
 
         this.gethistorycases()
     });
+    this.getDentisttypes()
 
     // console.log(this.$route.query.id);
     this.gethistoryuser();
   },
   methods: {
+    getDentisttypes(){
+      DentistTypeService.getdentisttypes(1).then((res) => {
+      this.dentisttypes = res.data;
+    });
+    },
     changedate(date){
       var d = new Date(date)
       var result = d.toLocaleDateString('th-TH', {
@@ -215,7 +249,7 @@ export default {
             alert('กรุณากรอก' + txt)
           }else{
       HistorydentistService.getdoctorhistory(this.mapId).then((res) => {
-        var his = "UPDATE history_doctor_dentist SET ";
+        var his = "UPDATE history_doctor_dentist SET status = 1 , ";
         for (let h = 0; h < this.history_doctor.length; h++) {
           if (!this.history_doctor[h].detail) {
             this.history_doctor[h].detail = "";
@@ -234,6 +268,7 @@ export default {
               ",";
           }
         }
+
         his = his.slice(0, -1);
         // his = his + ') '
         // console.log(his);
@@ -277,9 +312,9 @@ export default {
     },
     getmap() {
       MapEventsDentistService.getmap_events_dentist(this.mapId).then((res) => {
-
+this.dentisttype = JSON.parse(res.data.type)
     this.getmapcases()
-        // console.log(this.history_users);
+        console.log(res.data);
         if (res.data) {
           this.data = res.data;
           for (let h = 0; h < this.history_users.length; h++) {

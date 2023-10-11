@@ -42,6 +42,14 @@
               <div class="card-body">
                 <div class="tab-content" v-if="doctor">
                   <div class="tab-pane active" id="activity">
+                <label>ประเภทการนวดแผนไทย</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="masseusetype" disabled>
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
                       <div class="form-group row" v-for="(h, r) in history_doctor" :key="r">
                         <label for="inputName" class="col-sm-4 col-form-label">{{ h.name }}</label>
                         <div class="col-sm-8">
@@ -59,6 +67,7 @@
 
                   <div class="tab-pane" id="timeline">
                     <div id="accordion">
+                      <div v-if="hiscases.length > 0">
                       <div class="card" v-for="(h,i) in hiscases" :key="i">
                         <div class="card-header" :id="h.idtab">
                           <h5 class="mb-0">
@@ -82,6 +91,16 @@
                           data-parent="#accordion"
                         >
                           <div>
+                            <div class="form-group mt-3">
+                            <label>&nbsp;&nbsp;&nbsp;ประเภทการนวดแผนไทย</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
+                                &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="h.case.type" disabled>
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
+                            </div>
                             <ul class="list-group mb-3">
 <li class="list-group-item" v-for="(m, r) in mapcase" :key="r">
   <b>{{ m.name }}</b> <a class="float-right">{{h.case[m.historyuserdentistId]}}</a>
@@ -90,6 +109,10 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                      <div class="col-md-12 mt-5" v-else>
+  <h5 style="text-align:center">ไม่พบประวัติการรับบริการนวด</h5>
+        </div>
                     </div>
                   </div>
 
@@ -113,6 +136,7 @@ import MapEventsService from '../services/MapEventsService.js'
 import HistorymasseuseService from '../services/HistorymasseuseService'
 import EventService from '../services/EventService'
 import MapHistoryDoctorMasseuseService from '../services/MapHistoryDoctorMasseuseService'
+import MasseuseTypeService from '../services/MasseuseTypeService'
 
 export default {
   name: "Nav",
@@ -129,7 +153,9 @@ export default {
       mapdata:{},
       hiscases:[],
       mapcase:[],
-      userId:0
+      userId:0,
+      masseusetypes:[],
+      masseusetype:[]
     };
   },
   async mounted() {
@@ -142,9 +168,16 @@ export default {
         this.gethistorycases()
     });
     this.getmapcases()
+    this.getmasseusetypes()
 
   },
   methods: {
+    getmasseusetypes(){
+      MasseuseTypeService.getmasseusetypes(1).then((res) => {
+        // console.log(res.data);
+      this.masseusetypes = res.data
+    })
+    },
     changedate(date){
       var d = new Date(date)
       var result = d.toLocaleDateString('th-TH', {
@@ -234,9 +267,10 @@ export default {
     },
     getmap() {
       MapEventsService.getmap_event(this.mapId).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         // console.log(this.history_users);
         this.mapdata = res.data
+        this.masseusetype = res.data.type
         if (res.data) {
           this.data = res.data
           for (let h = 0; h < this.history_users.length; h++) {
@@ -260,6 +294,16 @@ export default {
                       var sql = his + value
                       console.log(sql);
                       EventService.createsql(sql).then(() => {
+                        HistorymasseuseService.getdoctorhistory(this.mapId).then((res) => {
+                for (let h = 0; h < this.history_doctor.length; h++) {
+                this.history_doctor[h].detail =
+                  res.data[this.history_doctor[h].historyuserdentistId];
+              if (h+1 == this.history_doctor.length) {
+          this.doctor = true
+              
+            }
+          }
+              });
                       })
             }else{
               for (let h = 0; h < this.history_doctor.length; h++) {

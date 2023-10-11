@@ -180,6 +180,14 @@
                                   ไม่พบหมอที่ให้บริการวันที่เลือก
                                 </div>
                               </div>
+                              <label>ประเภททันตกรรม</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttype" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="dentisttypeuser">
+                                <label :for="'checkbox' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
                               <div
                                 class="form-group"
                                 v-for="(h, r) in history"
@@ -313,6 +321,14 @@
                                     ไม่พบหมอที่ให้บริการวันที่เลือก
                                   </div>
                                 </div>
+                                <label>ประเภททันตกรรม</label><br />
+                              <div class="form-group">
+                              <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttype" :key="r">
+                                <input class="form-check-input" type="checkbox" :id="'checkboxupdate' + i.id" :value="i.id" :name="'checkbox' + i.id"
+                                  v-model="dentisttypeuserupdate">
+                                <label :for="'checkboxupdate' + i.id" class="form-check-label">{{ i.name }}</label>
+                              </div>
+                            </div>
                                 <div
                                   class="form-group"
                                   v-for="(h, r) in history_update"
@@ -436,6 +452,7 @@ import shphService from "../services/shphService";
 import HistorydentistService from "../services/HistorydentistService";
 import MapEventsDentistService from "../services/MapEventsDentistService";
 import MapHistoryDentistService from "../services/MapHistoryDentistService";
+import DentistTypeService from "../services/DentistTypeService";
 
 export default {
   name: "Nav",
@@ -541,7 +558,10 @@ export default {
       timeline: "",
       timelineupdate: "",
       mapId: 0,
-      docname:''
+      docname:'',
+      dentisttype:[],
+      dentisttypeuser:[],
+      dentisttypeuserupdate:[]
     };
   },
   mounted() {
@@ -556,11 +576,17 @@ export default {
     this.getUsers();
     this.gettypebook();
     this.gethistory();
+    this.getDentisttypes()
     NotificationService.getnotification(1).then((res) => {
       this.noti = res.data;
     });
   },
   methods: {
+    getDentisttypes(){
+      DentistTypeService.getdentisttypes(1).then((res) => {
+      this.dentisttype = res.data;
+    });
+    },
     close(){
       this.getEvents();
     },
@@ -620,12 +646,12 @@ export default {
           // console.log(res.data);
           EventDentistService.updateuser(this.eventIdupdate, userdatanull).then(
             () => {
-              UserService.getUser(this.book.doctorId).then((res)=>{
+              // UserService.getUser(this.book.doctorId).then((res)=>{
 
-  var message = this.noti.cancel_dentist + ' หมอ' + res.data.firstname + ' '+ res.data.lastname + ' วันที่ ' + this.header + ' ที่' + this.shphName
+  // var message = this.noti.cancel_dentist + ' หมอ' + res.data.firstname + ' '+ res.data.lastname + ' วันที่ ' + this.header + ' ที่' + this.shphName
       // console.log(message);
-      LinkImageService.sendNotify(message, this.currentUser.line_token)
-})
+      // LinkImageService.sendNotify(message, this.currentUser.line_token)
+// })
             }
           );
           //             console.log(this.eventIdupdate);
@@ -668,7 +694,9 @@ export default {
                       " , doctorId = " +
                       '"' +
                       this.doctor_id +
-                      '"';
+                      '"' 
+                      +', type = '+
+                      "'[" + this.dentisttypeuserupdate + "]'"
                     map_events = map_events + ` WHERE id = ${this.mapId}`;
                     // console.log(map_events);
                     EventDentistService.createsql(map_events).then(() => {
@@ -680,7 +708,7 @@ export default {
                         this.header +
                         " ที่" +
                         this.shphName;
-                      console.log(message);
+                      // console.log(message);
                       LinkImageService.sendNotify(message, this.currentUser.line_token)
                       // document.getElementById("closeduser").click();
                       this.showbook = true;
@@ -725,6 +753,7 @@ export default {
           this.eventId_update = res.data.eventIdlist;
           this.allday = false;
           this.typebookupdate = res.data.typebook;
+          this.dentisttypeuserupdate = JSON.parse(res.data.type)
           // console.log(this.typebookupdate);
           for (let h = 0; h < this.history_update.length; h++) {
             this.history_update[h].detail =
@@ -818,7 +847,7 @@ export default {
         this.currentUser.id,
         this.shphId
       ).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.booklist = res.data;
       });
     },
@@ -911,7 +940,7 @@ export default {
     },
     handleEventClick(clickInfo) {
       this.limitdoc = [];
-      console.log(clickInfo.event);
+      // console.log(clickInfo.event);
       // if (clickInfo.event.groupId == false) {
         var id = clickInfo.event.id;
       var breaktime = new Date(clickInfo.event.start);
@@ -1030,7 +1059,7 @@ export default {
             this.date,
             this.currentUser.id,
             this.shphId
-          ).then((res) => {
+          ).then(() => {
             // if (res.data.length !=0) {
             //   this.doctor_id = res.data.doctorId
             // }
@@ -1067,15 +1096,18 @@ export default {
       ).then((res) => {
         this.event_id = res.data.id;
         // console.log(res.data);
-        if (this.doctor_id == "" || this.doctor_id == null) {
-          alert("กรุณาเลือกหมอฟัน");
-        } 
-        if (this.currentUser.role_id == 6 && res.data.length.length > this.noti.no_dentist_worker || (res.data.length.length+1) > this.noti.no_dentist_worker) {
+        if (this.currentUser.role_id == 6 && res.data.length > this.noti.no_dentist_worker || (res.data.length+1) > this.noti.no_dentist_worker) {
           alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist_worker + ' ชั่วโมงต่อวัน')
         }
-        else if (this.currentUser.role_id != 6 && res.data.length.length > this.noti.no_dentist || (res.data.length.length+1) > this.noti.no_dentist) {
+        else if (this.currentUser.role_id != 6 && res.data.length > this.noti.no_dentist || (res.data.length+1) > this.noti.no_dentist) {
           alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist + ' ชั่วโมงต่อวัน')
-        } else if (statushis == true) {
+        }  else if (this.doctor_id == "" || this.doctor_id == null) {
+          alert("กรุณาเลือกหมอฟัน");
+        } 
+        else if(this.dentisttypeuser.length == 0){
+          alert("กรุณาเลือกประเภททันตกรรม");
+        }
+        else if (statushis == true) {
           alert("กรุณากรอก" + txt);
         } else {
           var userdata = {
@@ -1106,6 +1138,7 @@ export default {
                 createdBy: this.currentUser.id,
                 time: this.timeline,
                 typebook: this.typebook,
+                type:this.dentisttypeuser
               };
               // console.log(map);
               MapEventsDentistService.createmap_event(map).then((res) => {
