@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h5 class="mt-5 mb-5" style="text-align:center">จองคิวหมอนวดประจำเดือน</h5>
+    <h5 class="mt-5 mb-5" style="text-align:center">จองคิว{{nametype}}ประจำเดือน</h5>
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
         <b>{{ converttime(arg.timeText) }}</b>
@@ -229,10 +229,14 @@ export default {
       doctors: [],
       header: '',
       allday: true,
-      noti:{}
+      noti:{},
+      nametype:''
     };
   },
   mounted() {
+
+    var types = JSON.parse(localStorage.getItem('types'));
+    this.nametype = types.masseuse
     this.getEvents()
     this.getUsers();
     NotificationService.getnotification(1).then((res)=>{

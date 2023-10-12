@@ -2,7 +2,7 @@
   <div class="row">
     <div class="container">
       <h5 class="mt-5" style="text-align: center">{{ shphName }}</h5>
-      <h5 class="mb-5" style="text-align: center">จองคิวหมอฟันประจำเดือน</h5>
+      <h5 class="mb-5" style="text-align: center">จองคิวหมอ{{nametype.dentist}}ประจำเดือน</h5>
       <FullCalendar class="demo-app-calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
           <b>{{ converttime(arg.timeText) }}</b>
@@ -120,7 +120,7 @@
                               style="margin-bottom: 0px"
                               v-if="typebook == 2"
                             >
-                              <label for="password">UID</label>
+                              <label for="password">เลขบัตรประชาชน</label>
                             </div>
 
                             <div
@@ -157,7 +157,7 @@
                             </div>
 
                             <div class="form-group">
-                              <label>หมอฟัน</label><br />
+                              <label>หมอ{{nametype.dentist}}</label><br />
                               <div class="form-group">
                                 <div
                                   class="custom-control custom-checkbox"
@@ -298,7 +298,7 @@
                                 >
                               </div>
                               <div class="form-group">
-                                <label>หมอฟัน</label><br />
+                                <label>หมอ{{nametype.dentist}}</label><br />
                                 <div class="form-group">
                                   <div
                                     class="custom-control custom-checkbox"
@@ -561,10 +561,13 @@ export default {
       docname:'',
       dentisttype:[],
       dentisttypeuser:[],
-      dentisttypeuserupdate:[]
+      dentisttypeuserupdate:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.shphId = this.$route.query.id;
     // console.log(this.$route.query.id);
     this.userId = this.currentUser.id;
@@ -622,10 +625,10 @@ export default {
         this.gettimelineupdate();
         // console.log(res.data);
         if (this.doctor_id == "" || this.doctor_id == null) {
-          alert("กรุณาเลือกหมอฟัน");
+          alert("กรุณาเลือกหมอ"+this.nametype.dentist);
         } else if (1 + res.data.length > this.no_dentist) {
           alert(
-            "ไม่สามารถจองคิวหมอฟันเกิน " + this.no_dentist + " ครั้งต่อวัน"
+            "ไม่สามารถจองคิวหมอ"+this.nametype.dentist+"เกิน " + this.no_dentist + " ครั้งต่อวัน"
           );
         } else if (statushis == true) {
           alert("กรุณากรอก" + txt);
@@ -980,7 +983,7 @@ export default {
           });
           this.getid();
           this.title =
-            "จองคิวหมอฟันวันที่ " +
+            "จองคิวหมอ"+this.nametype.dentist+" วันที่ " +
             breaktime.toLocaleDateString("th-TH", {
               year: "numeric",
               month: "long",
@@ -1097,12 +1100,12 @@ export default {
         this.event_id = res.data.id;
         // console.log(res.data);
         if (this.currentUser.role_id == 6 && res.data.length > this.noti.no_dentist_worker || (res.data.length+1) > this.noti.no_dentist_worker) {
-          alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist_worker + ' ชั่วโมงต่อวัน')
+          alert('ไม่สามารถจองคิวหมอ'+this.nametype.dentist+'เกิน ' + this.noti.no_dentist_worker + ' ชั่วโมงต่อวัน')
         }
         else if (this.currentUser.role_id != 6 && res.data.length > this.noti.no_dentist || (res.data.length+1) > this.noti.no_dentist) {
-          alert('ไม่สามารถจองคิวหมอฟันเกิน ' + this.noti.no_dentist + ' ชั่วโมงต่อวัน')
+          alert('ไม่สามารถจองคิวหมอ'+this.nametype.dentist+'เกิน ' + this.noti.no_dentist + ' ชั่วโมงต่อวัน')
         }  else if (this.doctor_id == "" || this.doctor_id == null) {
-          alert("กรุณาเลือกหมอฟัน");
+          alert("กรุณาเลือกหมอ"+this.nametype.dentist);
         } 
         else if(this.dentisttypeuser.length == 0){
           alert("กรุณาเลือกประเภททันตกรรม");

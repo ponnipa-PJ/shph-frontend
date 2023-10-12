@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="container" v-if="hiscases.length > 0">
-      <h4 class="mt-5 mb-3">ประวัติการบริการนวดแผนไทย</h4>
+      <h4 class="mt-5 mb-3">ประวัติการบริการ{{nametype.masseuse}}</h4>
       <h5>{{ user.UID }}</h5>
       <h5 class="mb-5">{{ user.firstname }} {{ user.lastname }}</h5>
       <div class="accordion" id="accordionExample">
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="col-md-12 mt-5" v-else>
-      <h4 style="text-align: center">ไม่พบประวัติการรับบริการนวด</h4>
+      <h4 style="text-align: center">ไม่พบประวัติการรับบริการ{{nametype.masseuse}}</h4>
     </div>
   </div>
 </template>
@@ -66,6 +66,7 @@ export default {
       hiscases: [],
       mapcase: [],
       user: {},
+      nametype:{}
     };
   },
   methods: {
@@ -98,6 +99,8 @@ export default {
     },
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.userId = this.$route.query.id;
     UserService.getUser(this.userId).then((res) => {
       this.user = res.data;

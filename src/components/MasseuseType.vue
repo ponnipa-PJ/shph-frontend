@@ -12,7 +12,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">ประเภทการนวด</th>
+          <th scope="col">ประเภท{{nametype.masseuse}}</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -49,9 +49,9 @@
               <div class="card-body mt-3">
 
                 <div class="form-group mt-3">
-                  <label for="username">ประเภทหมอนวด</label>
+                  <label for="username">ประเภท{{nametype.masseuse}}</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
-                    placeholder="กรุณากรอกประเภทหมอนวด" />
+                    :placeholder="'กรุณากรอกประเภท'+nametype.masseuse" />
                 </div>
               </div>
             </form>
@@ -110,11 +110,14 @@ export default {
       amphurs: [],
       districts: [],
       zipcode: '',
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
     this.getUsers();
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
   },
   methods: {
     deleteshphid(){
@@ -126,20 +129,20 @@ export default {
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
-        this.title = "แก้ไขประเภทหมอนวด";
+        this.title = "แก้ไขประเภท"+this.nametype.masseuse;
         // console.log(this.user_id);
         MasseuseTypeService.getmasseusetype(this.user_id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
         });
       } else {
-        this.title = "เพิ่มประเภทหมอนวด";
+        this.title = "เพิ่มประเภท"+this.nametype.masseuse;
         this.user = [];
       }
     },
     save() {
       if (this.user.name == "" || this.user.name == null) {
-        alert("กรุณากรอกประเภทหมอนวด");
+        alert("กรุณากรอกประเภท"+this.nametype.masseuse);
       }else{
 this.saveUser()
       }

@@ -6,8 +6,8 @@ class LinkImageService {
     return 'https://api.shphQueue.ponnipa.in.th/uploadimage?name='
   } 
   getLink() {
-    // return 'http://localhost:8081'
-    return 'https://api.shphQueue.ponnipa.in.th'
+    return 'http://localhost:8081'
+    // return 'https://api.shphQueue.ponnipa.in.th'
   } 
   getLinkFrontend(){
     // return 'http://localhost:8082'

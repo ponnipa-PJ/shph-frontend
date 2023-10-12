@@ -22,6 +22,9 @@ class UserService {
     getUser(id) {
         return http.get('/user/' + id);
     }
+    findByadminshphId(id) {
+        return http.get('/user/findByadminshphId/' + id);
+    }
     createUser(data) {
         return http.post('/user', data);
     }

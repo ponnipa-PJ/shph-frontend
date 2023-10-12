@@ -33,7 +33,7 @@
           >
     <!-- <ul class="list-group mb-3 mt-3" style="margin: 20px !important">
               <li class="">
-                <b>UID</b>
+                <b>เลขบัตรประชาชน</b>
                 <a class="float-right">{{h.case.UID}}</a>
               </li>
               <li class="">

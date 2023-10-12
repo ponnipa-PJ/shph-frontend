@@ -22,7 +22,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">UID</th>
+          <th scope="col">เลขบัตรประชาชน</th>
           <th scope="col">ชื่อ-นามสกุล</th>
           <th scope="col">อีเมล</th>
           <th scope="col">เบอร์โทรศัพท์</th>
@@ -102,6 +102,12 @@
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
+                <div class="form-group mt-3" v-if="user.role_id == 3">
+                  <label for="password">รพ.สต.</label>
+                  <select class="form-control form-control-sm" v-model="user.shphId">
+                    <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
+                  </select>
+                </div>
                 <div class="form-group mt-3">
                   <label for="username">ชื่อ</label>
                   <input v-model="user.firstname" type="text" min="1" class="form-control form-control-sm" id="username"
@@ -112,6 +118,11 @@
                   <input v-model="user.lastname" type="text" min="1" class="form-control form-control-sm" id="username"
                     placeholder="กรุณากรอกนามสกุล" />
                 </div>
+                    <div class="form-group mt-3">
+                  <label for="username">หมายเลขบัตรประชาชน<span style="color: red">*</span> </label>
+                  <input v-model="user.UID" v-on:keyup.enter="signIn()" type="text" min="1"
+                    class="form-control form-control-sm" id="username" />
+                </div> 
                 <div class="form-group mt-3">
                   <label for="username">เบอร์โทรศัพท์</label>
                   <input v-model="user.phone" type="text" min="1" class="form-control form-control-sm" id="username"
@@ -251,6 +262,9 @@ export default {
     };
   },
   mounted() {
+    if(this.currentUser.role_id == 3){
+      this.$router.push('/ShphUsers')
+    }
     this.getprovinces()
     this.getUsers();
     this.getroles()
@@ -261,10 +275,10 @@ export default {
   },
   methods: {
     print(id){
-          this. printstatus = true
+          this.printstatus = true
       UserService.getUser(id).then((res) => {
           console.log(res.data);
-          this. printstatus = true
+          this.printstatus = true
           this.user = res.data;
       this.printThis()
       });
@@ -272,7 +286,7 @@ export default {
     async printThis() {
       console.log("printing..");
 
-      this. printstatus = true
+      this.printstatus = true
       const el = this.$refs.printMe;
 
       const options = {
@@ -354,6 +368,16 @@ UserService.deleteUser(this.user_id).then(()=>{
         this.roles = res.data
       })
     },
+    Script_checkID(id) {
+      var i =0
+      var sum = 0
+      if (id.substring(0, 1) == 0) return false;
+      if (id.length != 13) return false;
+      for (i = 0, sum = 0; i < 12; i++)
+        sum += parseFloat(id.charAt(i)) * (13 - i);
+      if ((11 - (sum % 11)) % 10 != parseFloat(id.charAt(12))) return false;
+      return true;
+    },
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
@@ -385,20 +409,27 @@ UserService.deleteUser(this.user_id).then(()=>{
     },
     save() {
       
-      if (this.user.role_id == 1 || this.user.role_id == 4 || this.user.role_id == 7) {
-        if (this.user.email == "" || this.user.email == null) {
+//       if (this.user.role_id == 1 || this.user.role_id == 4 || this.user.role_id == 7) {
+//         if (this.user.email == "" || this.user.email == null) {
+//         alert("กรุณากรอกอีเมล");
+//       } else if (this.user.password == "" || this.user.password == null) {
+//         alert("กรุณากรอกรหัสผ่าน");
+//       }else{
+// this.saveUser()
+//       }
+//       } else 
+if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
-      }else{
-this.saveUser()
-      }
-      } else if (this.user.email == "" || this.user.email == null) {
-        alert("กรุณากรอกอีเมล");
-      } else if (this.user.password == "" || this.user.password == null) {
-        alert("กรุณากรอกรหัสผ่าน");
-      } else if (this.user.role_id == ""|| this.user.role_id == null) {
+      } else if (this.user.UID == "" || this.user.UID == null) {
+        alert("กรุณากรอกเลขบัตรประชาชน");
+      }else if(!this.Script_checkID(this.user.UID)){
+        alert("กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง");
+      }else if (this.user.role_id == ""|| this.user.role_id == null) {
         alert("กรุณาเลือกสิทธิ์");
+      } else if (this.user.role_id == 3 && this.user.shphId == ""|| this.user.shphId == null) {
+        alert("กรุณาเลือกรพ.สต.");
       } else{
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
@@ -421,30 +452,30 @@ this.saveUser()
       }
     },
     saveUser(){
-      var uid = ''
-      UserService.getdatabyrole(2,'').then((res)=>{
+//       var uid = ''
+//       UserService.getdatabyrole(2,'').then((res)=>{
 
-      if (this.user.role_id == 2 && this.user.UID == null) {
-        uid += 'UID'
-var num = res.data.length
-var coun = String(num).length
-// console.log(coun);
-// console.log(num);
-// 1 000000
-// 10 00000
-// 100 0000
-var zero = 7-coun
-console.log(zero);
-  for (let z = 0; z < zero; z++) {
-    uid += '0'
-    // console.log(uid);
-    if (z+1 == zero) {
-uid += num+1
+//       if (this.user.role_id == 2 && this.user.UID == null) {
+//         uid += 'UID'
+// var num = res.data.length
+// var coun = String(num).length
+// // console.log(coun);
+// // console.log(num);
+// // 1 000000
+// // 10 00000
+// // 100 0000
+// var zero = 7-coun
+// console.log(zero);
+//   for (let z = 0; z < zero; z++) {
+//     uid += '0'
+//     // console.log(uid);
+//     if (z+1 == zero) {
+// uid += num+1
       
-    }
-}
-// console.log(uid);
-        }
+//     }
+// }
+// // console.log(uid);
+//         }
       
       var userdata = {
           firstname: this.user.firstname,
@@ -463,7 +494,8 @@ uid += num+1
           amphureId: this.user.amphureId,
           districtsId: this.user.districtsId,
           // shphId:this.user.shphId,
-          UID:uid
+          UID:this.user.UID,
+          shphId:this.user.shphId
         };
         if (this.user_id == 0) {
           UserService.getUsers(this.user.email,'').then((res) => {
@@ -494,7 +526,7 @@ uid += num+1
           });
         }
 
-      })
+      // })
     }
 ,    getUsers() {
       UserService.getUsers('',this.currentUser.role_id).then((res) => {

@@ -10,7 +10,7 @@
   <img src="../assets/icon.png" alt="">
 </div>
 
-<h5 class="widget-user-desc">จัดการคิวหมอฟันประจำเดือน</h5>
+<h5 class="widget-user-desc">จัดการคิวหมอ{{nametype.dentist}}ประจำเดือน</h5>
 <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
@@ -67,10 +67,13 @@ export default {
       hash: 0,
       title: "",
       roles:[],
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getshph()
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
       alert('กรุณากรอกข้อมูลส่วนตัวให้ครบ')

@@ -76,7 +76,7 @@ for (let r = 0; r < res.data.length; r++) {
 }
       // var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
       
-this.title = 'คุณได้จองคิวหมอนวดแผนไทย หมอ'+ this.user.firstname+ ' '+ this.user.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
+this.title = 'คุณได้จองคิว'+this.nametype+' หมอ'+ this.user.firstname+ ' '+ this.user.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',

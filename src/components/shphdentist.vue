@@ -10,7 +10,7 @@
   <img src="../assets/icon.png" alt="">
 </div>
 
-<h5 class="widget-user-desc">จองคิวหมอฟันประจำเดือน</h5>
+<h5 class="widget-user-desc">จองคิวหมอ{{nametype.dentist}}ประจำเดือน</h5>
 <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
@@ -50,14 +50,15 @@ export default {
       hash: 0,
       title: "",
       roles:[],
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
     this.getUsers();
     this.getroles()
     this.getshph()
-
+    this.nametype = JSON.parse(localStorage.getItem('types'));
   },
   methods: {
     getshph(){

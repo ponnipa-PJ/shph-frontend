@@ -14,7 +14,7 @@
                 <b>วันที่เข้ารับการบริการ</b> <a class="float-right">{{ convertdate(data.date) }} {{ data.time }}</a>
               </li>
               <li class="list-group-item">
-                <b>UID</b> <a class="float-right">{{ data.UID }}</a>
+                <b>เลขบัตรประชาชน</b> <a class="float-right">{{ data.UID }}</a>
               </li>
               <li class="list-group-item">
                 <b>ชื่อ-นามสกุล</b> <a class="float-right">{{ data.firstname }} {{ data.lastname }}</a>
@@ -42,7 +42,7 @@
               <div class="card-body">
                 <div class="tab-content" v-if="doctor">
                   <div class="tab-pane active" id="activity">
-                <label>ประเภทการนวดแผนไทย</label><br />
+                <label>ประเภทการ{{nametype.masseuse}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
                                 <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -92,7 +92,7 @@
                         >
                           <div>
                             <div class="form-group mt-3">
-                            <label>&nbsp;&nbsp;&nbsp;ประเภทการนวดแผนไทย</label><br />
+                            <label>&nbsp;&nbsp;&nbsp;ประเภทการ{{nametype.masseuse}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
                                 &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -111,7 +111,7 @@
                       </div>
                     </div>
                       <div class="col-md-12 mt-5" v-else>
-  <h5 style="text-align:center">ไม่พบประวัติการรับบริการนวด</h5>
+  <h5 style="text-align:center">ไม่พบประวัติการรับบริการ{{nametype.masseuse}}</h5>
         </div>
                     </div>
                   </div>
@@ -155,10 +155,13 @@ export default {
       mapcase:[],
       userId:0,
       masseusetypes:[],
-      masseusetype:[]
+      masseusetype:[],
+      nametype:{}
     };
   },
   async mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.mapId = this.$route.query.id
     // console.log(this.$route.query.id);
     this.gethistoryuser()

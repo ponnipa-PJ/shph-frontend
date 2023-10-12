@@ -10,7 +10,7 @@
             <input
               v-model="user.email"
               v-on:keyup.enter="signIn()"
-              type="text"
+              type="email"
               min="1"
               class="form-control form-control-sm"
               id="email"
@@ -55,6 +55,7 @@
 <script>
 import UserService from '../services/UserService.js'
 import LinkImageService from "../services/LinkImageService";
+import AdminshphService from '../services/AdminshphService'
 
 export default {
   name: "Nav",  
@@ -102,6 +103,22 @@ export default {
           email: this.user.email,
           password: this.user.password,
         };
+        // console.log(this.user.email.includes('@'));
+        if (!this.user.email.includes('@')) {
+          AdminshphService.signin(user).then((res)=>{
+            console.log(res.data);
+            if (res.data.status == false) {
+              alert("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง");
+            }else if(res.data.status == 2){
+              UserService.findByadminshphId(res.data.id).then((res)=>{
+                alert("ชื่อผู้ใช้งานนี้สมัครสมาชิกเรียบร้อยแล้ว ด้วยอีเมล " +res.data.email);
+              })
+            }else{
+              this.$router.push('/register?id='
+              +res.data.id)
+            }
+          })
+        }else{
         this.$store.dispatch("auth/login", user).then(
           () => {
             // this.loading = true;
@@ -138,6 +155,7 @@ export default {
           }
         );
       }
+    }
     },
   },
   computed: {

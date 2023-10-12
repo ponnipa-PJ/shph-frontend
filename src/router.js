@@ -36,6 +36,10 @@ import DetailHistoryDoctorDentist from './components/DetailHistoryDoctorDentist.
 import DetailHistoryDoctorMasseuse from './components/DetailHistoryDoctorMasseuse.vue';
 import DentistTypes from './components/DentistTypes.vue';
 import MasseuseType from './components/MasseuseType.vue';
+import ShphUsers from './components/ShphUsers.vue';
+import evaluation from './components/evaluation.vue';
+import Evaluationlist from './components/Evaluationlist.vue';
+import ShphMasseuseTime from './components/ShphMasseuseTime.vue';
 
 
 const router = new Router({
@@ -258,7 +262,32 @@ const router = new Router({
     alias: "/MasseuseType",
     name: "MasseuseType",
     component: MasseuseType
-  }
+  },
+  {
+    path: "/ShphUsers",
+    alias: "/ShphUsers",
+    name: "ShphUsers",
+    component: ShphUsers
+  },
+  {
+    path: "/evaluation",
+    alias: "/evaluation",
+    name: "evaluation",
+    component: evaluation
+  },
+  {
+    path: "/evaluationlist",
+    alias: "/evaluationlist",
+    name: "evaluationlist",
+    component: Evaluationlist
+  },
+  {
+    path: "/ShphMasseuseTime",
+    alias: "/ShphMasseuseTime",
+    name: "ShphMasseuseTime",
+    component: ShphMasseuseTime
+  },
+  
   ]
 });
 
@@ -267,7 +296,7 @@ Vue.use(Router);
 router.beforeEach((to, from, next) => {
   var page = to.path.split("/")
   var qrcode = ''
-  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'Confirmdentist' || page[1] ==  'Confirmmasseuse') {
+  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'Confirmdentist' || page[1] ==  'Confirmmasseuse' || page[1] ==  'evaluation') {
     qrcode = to.path
   }
   // console.log(page[1]);

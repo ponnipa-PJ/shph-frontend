@@ -7,7 +7,7 @@
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>
     </div>
-    <h6>ฟอร์มซักประวัติของหมอฟัน</h6>
+    <h6>ฟอร์มซักประวัติของหมอ{{nametype.dentist}}</h6>
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
@@ -135,21 +135,24 @@ export default {
       amphurs: [],
       districts: [],
       zipcode: '',
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getshph();
   },
   methods: {
     saveorderlist() {
-      for (let l = 0; l < this.list.length; l++) {
+      for (let l = 0; l < this.listdoctor.length; l++) {
         // console.log(l+1);
         var list = {
           no: l + 1,
         };
-        MapHistoryDoctorDentistService.updateno(this.list[l].id, list).then(() => {
-          if (l + 1 == this.list.length) {
+        MapHistoryDoctorDentistService.updateno(this.listdoctor[l].id, list).then(() => {
+          if (l + 1 == this.listdoctor.length) {
             alert("บันทึกสำเร็จ");
             setTimeout(function () {
               location.reload();

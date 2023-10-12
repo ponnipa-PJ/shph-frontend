@@ -7,7 +7,7 @@
           <i class="fa fa-plus"></i> เพิ่ม
         </button></a>
     </div>
-    <h6>ฟอร์มซักประวัติของลูกค้าหมอฟัน</h6>
+    <h6>ฟอร์มซักประวัติของลูกค้าหมอ{{nametype.dentist}}</h6>
 
     <table class="table table-bordered">
       <thead>
@@ -140,10 +140,13 @@ export default {
       amphurs: [],
       districts: [],
       zipcode: '',
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getshph();
   },
   methods: {

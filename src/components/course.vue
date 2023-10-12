@@ -6,7 +6,7 @@
     <table class="table table-bordered mt-3">
       <thead>
         <tr class="table-active">
-          <th scope="col" colspan="6" style="text-align: center;">รอบการบริการของหมอฟัน</th>
+          <th scope="col" colspan="6" style="text-align: center;">รอบการบริการของหมอ{{nametype.dentist}}</th>
         </tr>
       </thead>
       <thead>
@@ -134,10 +134,13 @@ export default {
       user_id: 0,
       hash: 0,
       title: "",
-      roles:[]
+      roles:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getUsers();
     this.getroles()
   },
@@ -150,14 +153,14 @@ export default {
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
-        this.title = "แก้ไขรอบการบริการของหมอฟัน";
+        this.title = "แก้ไขรอบการบริการของหมอ"+this.nametype.dentist;
         // console.log(this.user_id);
         CourseService.getcourse(this.user_id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
         });
       } else {
-        this.title = "เพิ่มรอบการบริการของหมอฟัน";
+        this.title = "เพิ่มรอบการบริการของหมอ"+this.nametype.dentist;
         this.user = [];
       }
     },

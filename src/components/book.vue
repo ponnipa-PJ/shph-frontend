@@ -3,7 +3,7 @@
 
   <div class="container">
     <h5 class="mt-5" style="text-align:center">{{ shphName }}</h5>
-    <h5 class="mb-5" style="text-align:center">จองคิวหมอนวดแผนไทยประจำเดือน</h5>
+    <h5 class="mb-5" style="text-align:center">จองคิว{{nametype.masseuse}}ประจำเดือน</h5>
 
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
@@ -183,7 +183,7 @@
                                 <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
                               </div>
                             </div>
-                            <label>ประเภทการนวดแผนไทย</label><br />
+                            <label>ประเภทการ{{nametype.masseuse}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
                                 <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -257,7 +257,7 @@
                                 <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
                               </div>
                             </div>
-                            <label>ประเภทการนวดแผนไทย</label><br />
+                            <label>ประเภทการ{{nametype.masseuse}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in masseusetypes" :key="r">
                                 <input class="form-check-input" type="checkbox" :id="'checkboxupdate' + i.id" :value="i.id" :name="'checkboxupdate' + i.id"
@@ -443,25 +443,28 @@ uid:'',
 cusname:{},
 masseusetypes:[],
 masseusetype:[],
-masseusetypeupdate:[]
+masseusetypeupdate:[],
+nametype:{}
     };
   },
   
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+    // console.log(this.nametype);
     this.shphId = this.$route.query.id
     // console.log(this.$route.query.id);
 this.userId = this.currentUser.id
     shphService.getShph(this.shphId).then((res) => {
       this.shphName = res.data.name
     })
-    this.gettypebook()
+    NotificationService.getnotification(1).then((res) => {
+      this.noti = res.data
     this.getEvents()
+    })
+    this.gettypebook()
     this.getUsers();
     this.gethistory()
     this.getmasseusetypes()
-    NotificationService.getnotification(1).then((res) => {
-      this.noti = res.data
-    })
     // console.log(this.currentUser);
   },
   methods: {
@@ -611,7 +614,8 @@ this.getmap(id)
       return time
     },
     getEvents() {
-      EventService.getbooks('', this.currentUser.id, this.shphId).then((res) => {
+      console.log(this.noti);
+      EventService.getbooks('', this.noti.hour, this.shphId).then((res) => {
         console.log(res.data);
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
@@ -663,7 +667,7 @@ this.getmap(id)
         day: 'numeric',
       })
       //     this.getid(id)
-      this.title = 'จองคิวหมอนวดแผนไทยวันที่ ' + breaktime.toLocaleDateString('th-TH', {
+      this.title = 'จองคิว'+this.nametype.masseuse+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -818,16 +822,16 @@ this.getmap(id)
       EventService.geteventbyuseranddate(this.date, this.userId,this.shphId).then((res) => {
         console.log((this.event_id.length+res.data.length) , this.noti.hour); 
         if (this.currentUser.role_id == 6 && this.event_id.length > this.noti.no_masseuse_worker || (this.event_id.length+res.data.length) > this.noti.no_masseuse_worker) {
-          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.no_masseuse_worker + ' ชั่วโมง')
+          alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.no_masseuse_worker + ' ชั่วโมง')
         }
         else if (this.currentUser.role_id != 6 && this.event_id.length > this.noti.hour || (this.event_id.length+res.data.length) > this.noti.hour) {
-          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.hour + ' ชั่วโมง')
+          alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.hour + ' ชั่วโมง')
         } else
           if (this.event_id.length == 0) {
             alert('กรุณาเลือกเวลา')
           }
           else if (this.masseusetype.length == 0) {
-            alert('กรุณาประเภทการนวด')
+            alert('กรุณาประเภทการ'+this.nametype.masseuse)
           }
           
           else if (statushis == true) {
@@ -989,7 +993,7 @@ this.getmap(id)
       EventService.geteventbyuseranddate(this.date, this.currentUser.id).then((res) => {
         console.log(res.data.length, this.noti.hour, this.event_id_update.length);
         if (this.event_id_update.length > this.noti.hour) {
-          alert('ไม่สามารถจองคิวหมอนวดแผนไทยเกิน ' + this.noti.hour + ' ชั่วโมง')
+          alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.hour + ' ชั่วโมง')
         } else
           if (this.event_id_update.length == 0) {
             alert('กรุณาเลือกเวลา')

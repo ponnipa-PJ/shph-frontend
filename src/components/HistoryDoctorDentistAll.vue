@@ -11,7 +11,7 @@
             <thead>
               <tr>
                 <th style="width: 10px"></th>
-                <th>UID</th>
+                <th>เลขบัตรประชาชน</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th style="width: 40px"></th>
               </tr>

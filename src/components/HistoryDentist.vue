@@ -17,7 +17,7 @@
                   >
                 </li>
                 <li class="list-group-item">
-                  <b>UID</b> <a class="float-right">{{ data.UID }}</a>
+                  <b>เลขบัตรประชาชน</b> <a class="float-right">{{ data.UID }}</a>
                 </li>
                 <li class="list-group-item">
                   <b>ชื่อ-นามสกุล</b>

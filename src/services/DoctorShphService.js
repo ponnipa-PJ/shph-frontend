@@ -16,6 +16,9 @@ class DoctorShphService {
     getdoctorshph(id) {
         return http.get('/doctorshph/' + id);
     }
+    getshphbydoc(id) {
+        return http.get('/doctorshph/getshphbydoc?doctorId=' + id);
+    }
     createdoctorshph(data) {
         return http.post('/doctorshph', data);
     }

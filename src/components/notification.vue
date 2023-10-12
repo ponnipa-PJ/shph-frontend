@@ -34,7 +34,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                  <label for="username">จำนวนชั่วโมงหมอนวดแผนไทย<span style="color: red">*</span> </label>
+                  <label for="username">จำนวนชั่วโมง{{nametype.masseuse}}<span style="color: red">*</span> </label>
                   <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
 <input v-model="data.hour" type="number" class="form-control " data-original-title="" title="">
 <div class="input-group-append">
@@ -45,7 +45,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                  <label for="username">จำนวนคนต่อวันหมอฟัน<span style="color: red">*</span> </label>
+                  <label for="username">จำนวนคนต่อวันหมอ{{nametype.dentist}}<span style="color: red">*</span> </label>
                   <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
 <input v-model="data.no_dentist" type="number" class="form-control " data-original-title="" title="">
 <div class="input-group-append">
@@ -56,7 +56,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                  <label for="username">จำนวนชั่วโมงหมอนวดแผนไทยของอสม.<span style="color: red">*</span> </label>
+                  <label for="username">จำนวนชั่วโมง{{nametype.masseuse}}ของอสม.<span style="color: red">*</span> </label>
                   <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
 <input v-model="data.no_masseuse_worker" type="number" class="form-control " data-original-title="" title="">
 <div class="input-group-append">
@@ -67,7 +67,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                  <label for="username">จำนวนคนต่อวันหมอฟันของอสม.<span style="color: red">*</span> </label>
+                  <label for="username">จำนวนคนต่อวันหมอ{{nametype.dentist}}ของอสม.<span style="color: red">*</span> </label>
                   <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
 <input v-model="data.no_dentist_worker" type="number" class="form-control " data-original-title="" title="">
 <div class="input-group-append">
@@ -78,13 +78,13 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการจองคิวหมอนวดแผนไทย<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการจองคิว{{nametype.masseuse}}<span style="color: red">*</span> </label>
 <input v-model="data.message_chiropractor" type="text" class="form-control " data-original-title="" title="">
                 </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิวหมอนวดแผนไทย<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิว{{nametype.masseuse}}<span style="color: red">*</span> </label>
 <input v-model="data.cancel_chiropractor" type="text" class="form-control " data-original-title="" title="">
 
                 </div>
@@ -92,13 +92,13 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการจองคิวหมอฟัน<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการจองคิวหมอ{{nametype.dentist}}<span style="color: red">*</span> </label>
 <input v-model="data.message_dentist" type="text" class="form-control " data-original-title="" title="">
                 </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิวหมอฟัน<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการยกเลิกคิวหมอ{{nametype.dentist}}<span style="color: red">*</span> </label>
 <input v-model="data.cancel_dentist" type="text" class="form-control " data-original-title="" title="">
 
                 </div>
@@ -136,11 +136,14 @@ export default {
   },
   data() {
     return {
-      data:{}
+      data:{},
+      nametype:{}
     };
   },
   mounted() {
     this.getNoti();
+    var types = JSON.parse(localStorage.getItem('types'));
+    this.nametype = types.masseuse
   },
   methods: {
     getNoti(){

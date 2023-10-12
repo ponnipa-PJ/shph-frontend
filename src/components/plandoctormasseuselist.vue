@@ -10,7 +10,7 @@
             <img src="../assets/icon.png" alt="">
           </div>
 
-          <h5 class="widget-user-desc">จัดการคิวหมอนวดแผนไทยประจำเดือน</h5>
+          <h5 class="widget-user-desc">จัดการคิว{{nametype.masseuse}}ประจำเดือน</h5>
           <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
           <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
@@ -66,10 +66,13 @@ export default {
       hash: 0,
       title: "",
       roles: [],
-      shphlist: []
+      shphlist: [],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+    // console.log(this.currentUser.role_id);
     this.getshph()
     if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
       alert('กรุณากรอกข้อมูลส่วนตัวให้ครบ')
@@ -82,18 +85,49 @@ export default {
         // shphId = this.currentUser.shphId
         DoctorShphService.getdoctorandshphmasseuse(this.currentUser.role_id, '').then((res) => {
           this.shphlist = res.data
-          console.log(this.shphlist);
+          // console.log(this.shphlist);
 
         })
       }
       if (this.currentUser.role_id == 1) {
-        // shphId = this.currentUser.shphId
+        // shphId = this.currentUser.shphId 
         DoctorShphService.getdoctorandshphmasseuse('', this.currentUser.id).then((res) => {
+          this.shphlist = res.data
+          // console.log(this.shphlist);
+
+        })
+      }
+      if (this.currentUser.role_id == 7) {
+          DoctorShphService.getnotdoctors(this.currentUser.id).then((res)=>{
+        // console.log(res.data);
+        if (res.data.length > 0) {
+          for (let r = 0; r < res.data.length; r++) {
+            var doc = {
+              docrtorId:this.currentUser.id,
+              shphId:res.data[r],
+              status:1
+            }
+            DoctorShphService.createdoctorshph(doc).then(()=>{
+              if (r+1 == res.data.length) {
+                DoctorShphService.getdoctorandshphmasseuse('', this.currentUser.id).then((res) => {
           this.shphlist = res.data
           console.log(this.shphlist);
 
         })
-      }
+              }
+            })
+          }
+          
+        }else{
+          DoctorShphService.getdoctorandshphmasseuse('', this.currentUser.id).then((res) => {
+          this.shphlist = res.data
+          console.log(this.shphlist);
+
+        })
+        }
+      });
+      
+        }
       //   if (this.currentUser.role_id == 1) {
       //       this.$router.push('/plandoctor?id='+this.currentUser.id)
       //     }else if (this.shphlist.length == 1) {

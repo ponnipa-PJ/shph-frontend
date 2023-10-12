@@ -3,7 +3,7 @@
     <div class="container" v-if="hiscases.length > 0">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">ประวัติการบริการนวดแผนไทย</h3>
+          <h3 class="card-title">ประวัติการบริการ{{nametype.masseuse}}</h3>
         </div>
 
         <div class="card-body">
@@ -11,7 +11,7 @@
             <thead>
               <tr>
                 <th style="width: 10px"></th>
-                <th>UID</th>
+                <th>เลขบัตรประชาชน</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th style="width: 40px"></th>
               </tr>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="col-md-12 mt-5" v-else>
-      <h4 style="text-align: center">ไม่พบประวัติการรับบริการนวด</h4>
+      <h4 style="text-align: center">ไม่พบประวัติการรับบริการ{{nametype.masseuse}}</h4>
     </div>
   </div>
 </template>
@@ -55,6 +55,7 @@ export default {
     return {
       hiscases: [],
       mapcase: [],
+      nametype:{}
     };
   },
   methods: {
@@ -90,6 +91,8 @@ export default {
     },
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getmapcases();
     this.gethistorycases();
   },

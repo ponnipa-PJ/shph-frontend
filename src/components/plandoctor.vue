@@ -208,6 +208,7 @@ import LinkImageService from '../services/LinkImageService'
 import esLocale from '@fullcalendar/core/locales/th';
 import HistorymasseuseService from '../services/HistorymasseuseService'
 import shphService from '../services/shphService';
+import shphmasseusetimeService from '../services/shphmasseusetimeService';
 
 export default {
   name: "Nav",
@@ -292,13 +293,21 @@ export default {
       head:'',
       shphId:'',
       shphName:'',
-      mapId:''
+      mapId:'',
+      time:{}
     };
   },
   mounted() {
+    
     this.doctor_id = this.$route.query.id
     this.shphId = this.$route.query.shphId
-    
+    shphmasseusetimeService.getshph_masseuse_time(this.shphId).then((res)=>{
+      var start = res.data.start.split(":")
+      var finish = res.data.finish.split(":")
+      this.time.start = parseInt(start)
+      this.time.finish = parseInt(finish)
+      // console.log(this.time);
+    })
     // console.log(this.doctor_id);
     UserService.getUser(this.doctor_id).then((res)=>{
       this.head = res.data.firstname +' '+res.data.lastname
@@ -464,7 +473,12 @@ return time
         EventService.createevent(newevent).then(() => {
           this.getEvents()
         })
-        var time = [8, 9, 10, 11, 12, 13, 14, 15, 16]
+        var time = []
+        for (let t = this.time.start; t < this.time.finish; t++) {
+          time.push(t)
+          
+        }
+        // var time = [8, 9, 10, 11, 12, 13, 14, 15, 16]
         for (let t = 0; t < time.length; t++) {
           var strtime = String((time[t]).toString().padStart(2, "0"));
           var datepertime = date + 'T' + strtime + ':00:00+07:00'

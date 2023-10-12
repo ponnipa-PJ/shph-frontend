@@ -10,7 +10,7 @@
   <img src="../assets/icon.png" alt="">
 </div>
 
-<h5 class="widget-user-desc">จองคิวหมอนวดแผนไทยประจำเดือน</h5>
+<h5 class="widget-user-desc">จองคิว{{nametype.masseuse}}ประจำเดือน</h5>
 <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
@@ -25,7 +25,7 @@
 </ul>
 </div>
 <div class="col-md-12 mt-5" v-else>
-  <h4 style="text-align:center">ไม่พบคิวบริการนวดแผนไทย</h4>
+  <h4 style="text-align:center">ไม่พบคิวบริการ{{nametype.masseuse}}</h4>
         </div>
 </div>
     </div>
@@ -50,10 +50,12 @@ export default {
       hash: 0,
       title: "",
       roles:[],
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
     this.getUsers();
     this.getroles()
     this.getshph()

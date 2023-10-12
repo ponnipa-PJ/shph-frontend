@@ -57,7 +57,7 @@
 
             <li class="nav-item menu-open" v-for="m in menu" :key="m.id">
               <a :href="m.url" :class="'nav-link ' + m.class">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i :class="'nav-icon '+m.icon "></i>
                 <p>
                   {{ m.name }}
                 </p>
@@ -65,7 +65,7 @@
             </li>
             <li class="nav-item menu-open">
               <a href="#" class="nav-link" @click.prevent="logOut">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fa-solid fa-right-from-bracket"></i>
                 <p>
                   ออกจากระบบ
                 </p>
@@ -76,7 +76,7 @@
             v-else>
             <li class="nav-item menu-open">
               <a href="/" class="nav-link" @click.prevent="logOut">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fa-solid fa-right-to-bracket"></i>
                 <p>
                   เข้าสู่ระบบ
                 </p>
@@ -103,6 +103,8 @@
 
 <script>
 import UserService from '../services/UserService.js'
+import TypesService from '../services/TypesService'
+
 export default {
   name: "Nav",
   props: {
@@ -119,10 +121,15 @@ export default {
     },
   },
   mounted() {
+    TypesService.getTypes().then((res)=>{
+    localStorage.removeItem('types');
+    localStorage.setItem('types', JSON.stringify(res.data[0]));
+    })
     // console.log(this.$route.path);
     if (this.currentUser) {
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res) => {
         this.menu = res.data
+        console.log(this.menu);
         for (let m = 0; m < this.menu.length; m++) {
           this.menu[m].class = ''
           // console.log(this.menu[m]);

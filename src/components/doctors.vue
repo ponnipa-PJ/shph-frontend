@@ -10,14 +10,14 @@
           data-bs-toggle="modal"
           data-bs-target="#AddUser"
         >
-          <i class="fa fa-plus"></i> เพิ่มข้อมูลหมอนวด
+          <i class="fa fa-plus"></i> เพิ่มข้อมูลหมอ{{nametype.masseuse}}
         </button></a
       >
     </div>
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
-          <th scope="col" colspan="6" style="text-align: center;">รายชื่อหมอนวด</th>
+          <th scope="col" colspan="6" style="text-align: center;">รายชื่อหมอ{{nametype.masseuse}}</th>
         </tr>
       </thead>
       <thead>
@@ -181,10 +181,13 @@ export default {
         id:5,
         nameth:'วันศุกร์',
         nameen:'FRI'
-      }]
+      }],
+      nametype:{}
     };
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getUsers();
     this.getcourses()
   },
@@ -222,7 +225,7 @@ return value
       } else {
         this.course_id = []
         this.days =[]
-        this.title = "เพิ่มข้อมูลหมอนวด";
+        this.title = "เพิ่มข้อมูล"+this.nametype.masseuse;
         this.user = [];
       }
     },
