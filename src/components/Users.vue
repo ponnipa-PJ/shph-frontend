@@ -59,10 +59,10 @@
                 <a @click="getid(l.id)">
               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteUser">
                 <i class="fa fa-trash"></i></button></a>&nbsp;
-                <button v-if="l.role_id == 2" type="button" id="get_file" class="btn btn-info mt-3 mb-3" @click="print(l.id)" 
+                <!-- <button v-if="l.role_id == 2" type="button" id="get_file" class="btn btn-info mt-3 mb-3" @click="print(l.id)" 
           >
           <i class="fa fa-print"></i> 
-        </button>
+        </button> -->
           </td>
         </tr>
       </tbody>
@@ -498,7 +498,7 @@ if (this.user.email == "" || this.user.email == null) {
           shphId:this.user.shphId
         };
         if (this.user_id == 0) {
-          UserService.getUsers(this.user.email,'').then((res) => {
+          UserService.getUsers(this.user.email,'','').then((res) => {
             console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
@@ -529,7 +529,7 @@ if (this.user.email == "" || this.user.email == null) {
       // })
     }
 ,    getUsers() {
-      UserService.getUsers('',this.currentUser.role_id).then((res) => {
+      UserService.getUsers('',this.currentUser.role_id,'').then((res) => {
         this.list = res.data;
       });
     },

@@ -12,7 +12,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">ประเภททันตกรรม</th>
+          <th scope="col">ประเภท{{nametype.dentist}}</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -49,9 +49,9 @@
               <div class="card-body mt-3">
 
                 <div class="form-group mt-3">
-                  <label for="username">ประเภททันตกรรม</label>
+                  <label for="username">ประเภท{{nametype.dentist}}</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
-                    placeholder="กรุณากรอกประเภททันตกรรม" />
+                    :placeholder="'กรุณากรอกประเภท'+nametype.dentist" />
                 </div>
               </div>
             </form>
@@ -110,11 +110,14 @@ export default {
       amphurs: [],
       districts: [],
       zipcode: '',
-      shphlist:[]
+      shphlist:[],
+      nametype:{}
     };
   },
   mounted() {
     this.getUsers();
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
   },
   methods: {
     deleteshphid(){
@@ -126,20 +129,20 @@ export default {
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
-        this.title = "แก้ไขประเภททันตกรรม";
+        this.title = "แก้ไขประเภท"+this.nametype.dentist;
         // console.log(this.user_id);
         DentistTypeService.getdentisttype(this.user_id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
         });
       } else {
-        this.title = "เพิ่มประเภททันตกรรม";
+        this.title = "เพิ่มประเภท"+this.nametype.dentist;
         this.user = [];
       }
     },
     save() {
       if (this.user.name == "" || this.user.name == null) {
-        alert("กรุณากรอกประเภททันตกรรม");
+        alert("กรุณากรอกประเภท"+this.nametype.dentist);
       }else{
 this.saveUser()
       }

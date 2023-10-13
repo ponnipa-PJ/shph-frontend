@@ -180,7 +180,7 @@
                                   ไม่พบหมอที่ให้บริการวันที่เลือก
                                 </div>
                               </div>
-                              <label>ประเภททันตกรรม</label><br />
+                              <label>ประเภท{{nametype.dentist}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttype" :key="r">
                                 <input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -321,7 +321,7 @@
                                     ไม่พบหมอที่ให้บริการวันที่เลือก
                                   </div>
                                 </div>
-                                <label>ประเภททันตกรรม</label><br />
+                                <label>ประเภท{{nametype.dentist}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttype" :key="r">
                                 <input class="form-check-input" type="checkbox" :id="'checkboxupdate' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -1108,7 +1108,7 @@ export default {
           alert("กรุณาเลือกหมอ"+this.nametype.dentist);
         } 
         else if(this.dentisttypeuser.length == 0){
-          alert("กรุณาเลือกประเภททันตกรรม");
+          alert("กรุณาเลือกประเภท"+this.nametype.dentist);
         }
         else if (statushis == true) {
           alert("กรุณากรอก" + txt);

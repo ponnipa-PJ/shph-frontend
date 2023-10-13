@@ -7,6 +7,12 @@ class MenuService {
   getmenu(id) {
     return http.get(`/menus/`+id);
   }
+  gettypes_menu(id) {
+    return http.get(`/types_menu/`+id);
+  }
+  updatetypes_menu(id, data) {
+    return http.put(`/types_menu/${id}`, data);
+  }
   updatemenu(id, data) {
     return http.put(`/menus/${id}`, data);
   }

@@ -6,6 +6,27 @@
       <form>
         <div class="card-body mt-3">
           <div class="form-group">
+<div class="custom-control custom-radio">
+<input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" value="2" v-model="type">
+<label for="customRadio1" class="custom-control-label">บุคคลทั่วไป</label>
+</div>
+<div class="custom-control custom-radio">
+<input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" value="1" v-model="type">
+<label for="customRadio2" class="custom-control-label">เจ้าหน้าที่</label>
+</div>
+</div>
+<div class="form-group" v-if="type == 2">
+            <label for="uid">เลขบัตรประชาชน<span style="color: red">*</span> </label>
+            <input
+              v-model="user.UID"
+              v-on:keyup.enter="signIn()"
+              type="number"
+              class="form-control form-control-sm"
+              id="uid"
+              placeholder="กรุณากรอกเลขบัตรประชาชน"
+            />
+          </div>
+          <div class="form-group" v-else>
             <label for="email">อีเมล<span style="color: red">*</span> </label>
             <input
               v-model="user.email"
@@ -68,12 +89,14 @@ export default {
       menu:[],
       user:{},
       eye:true,
+      type:2
     }
   },
   mounted() {
     if (this.currentUser) {
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
           this.menu = res.data
+          console.log(this.menu);
           this.$router.push(res.data[0].url);
         })
       }
@@ -93,7 +116,67 @@ export default {
       var engine = LinkImageService.getLinkFrontend()+'/line'
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=1`
     },
+    Script_checkID(id) {
+      var i =0
+      var sum = 0
+      if (id.substring(0, 1) == 0) return false;
+      if (id.length != 13) return false;
+      for (i = 0, sum = 0; i < 12; i++)
+        sum += parseFloat(id.charAt(i)) * (13 - i);
+      if ((11 - (sum % 11)) % 10 != parseFloat(id.charAt(12))) return false;
+      return true;
+    },
      signIn() {
+      if (this.type == 2) {
+        if (this.user.UID == "" || this.user.UID == null) {
+        alert("กรุณากรอกเลขบัตรประชาชน");
+      } else if(!this.Script_checkID(this.user.UID)){
+        alert("กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง");
+      }else if (this.user.password == "" || this.user.password == null) {
+        alert("กรุณากรอกรหัสผ่าน");
+      } else {
+        var userindividual = {
+          UID: this.user.UID,
+          password: this.user.password,
+        };
+        this.$store.dispatch("auth/loginperson", userindividual).then(
+          () => {
+            // this.loading = true;
+            UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
+              // console.log(this.urlAuth());
+          var menu = res.data[0].url
+          // console.log(menu);
+          // console.log(this.currentUser);
+          
+          if (this.currentUser.line_token == null) {
+            window.open(this.urlAuth(), "_blank");
+          }else{
+  this.$router.push(menu);
+  location.reload();
+        
+          }
+        
+          //   setTimeout(function () {
+          //     location.reload();
+          //   }, 500);
+        })
+            
+          },
+          (error) => {
+            alert("เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง");
+            console.log(error);
+            // this.loading = false;
+            // this.message =
+            //   (error.response &&
+            //     error.response.data &&
+            //     error.response.data.message) ||
+            //   error.message ||
+            //   error.toString();
+          }
+        );
+      }
+    
+      }else{
       if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
@@ -143,7 +226,7 @@ export default {
             
           },
           (error) => {
-            alert("ชื่อหรือรหัสผ่านไม่ถูกต้อง");
+            alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
             console.log(error);
             // this.loading = false;
             // this.message =
@@ -156,6 +239,7 @@ export default {
         );
       }
     }
+  }
     },
   },
   computed: {

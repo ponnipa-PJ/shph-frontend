@@ -25,7 +25,7 @@
     </div>
   </nav> -->
   <div>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light" >
 
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -41,7 +41,7 @@
 <img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
 <span class="brand-text font-weight-light">รพ.สต.</span>
 </a>
-      <div class="sidebar">
+      <div class="sidebar" id="myDiv" style="max">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex" v-if="currentUser">
 <div class="image">
   <i class="fa fa-user fa-3x" aria-hidden="true"></i>
@@ -52,17 +52,36 @@
 </div>
 </div>
         <nav class="mt-3">
+          
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"
             v-if="currentUser">
-
-            <li class="nav-item menu-open" v-for="m in menu" :key="m.id">
+            <li class="nav-item menu-is-opening menu-open">
+              <div v-for="l in menu" :key="l.id" class="mt-3">
+<a href="#" class="nav-link active">
+<i :class="'nav-icon ' + l.icon"></i>
+<p>
+  {{ l.name }}
+</p>
+</a>
+<ul class="nav nav-treeview" style="display: block;">
+<li class="nav-item" v-for="m in l.menu" :key="m.id">
+<a :href="m.url" :class="'nav-link ' + m.class">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- <i :class="'nav-icon '+m.icon "></i> -->
+<p> {{ m.name }}</p>
+</a>
+</li>
+</ul>
+</div>
+</li>
+            <!-- <li class="nav-item menu-open" v-for="m in menu" :key="m.id">
               <a :href="m.url" :class="'nav-link ' + m.class">
                 <i :class="'nav-icon '+m.icon "></i>
                 <p>
                   {{ m.name }}
                 </p>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item menu-open">
               <a href="#" class="nav-link" @click.prevent="logOut">
                 <i class="nav-icon fa-solid fa-right-from-bracket"></i>
@@ -121,6 +140,13 @@ export default {
     },
   },
   mounted() {
+//     var myDiv = document.getElementById('myDiv');
+
+// var myDivWidth = myDiv.clientWidth || myDiv.offsetWidth || (myDiv.getBoundingClientRect()).width;
+// var myDivHeight= myDiv.clientHeight || myDiv.offsetHeight  || (myDiv.getBoundingClientRect()).height;
+          
+// console.log("Width: "+ myDivWidth + "px");
+// console.log("Height: "+ myDivHeight + "px");
     TypesService.getTypes().then((res)=>{
     localStorage.removeItem('types');
     localStorage.setItem('types', JSON.stringify(res.data[0]));
@@ -129,19 +155,25 @@ export default {
     if (this.currentUser) {
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res) => {
         this.menu = res.data
-        console.log(this.menu);
-        for (let m = 0; m < this.menu.length; m++) {
-          this.menu[m].class = ''
-          // console.log(this.menu[m]);
-          if (this.menu[m].url == this.$route.path) {
-            this.menu[m].class = 'active'
+        // console.log(this.menu);
+        for (let l = 0; l < this.menu.length; l++) {
+          for (let m = 0; m < this.menu[l].menu.length; m++) {
+            this.menu[l].menu[m].class = ''
+          // console.log(this.menu[l].menu[m]);
+          if (this.menu[l].menu[m].url == this.$route.path) {
+            this.menu[l].menu[m].class = 'active'
           }
-          if (this.$route.path == '/DetailHistoryDoctorMasseuse' && this.menu[m].url =='/HistoryDoctor') {
-              this.menu[m].class = 'active'
+          if (this.$route.path == '/DetailHistoryDoctorMasseuse' && this.menu[l].menu[m].url =='/HistoryDoctor') {
+              this.menu[l].menu[m].class = 'active'
           }
-          if (this.$route.path == '/DetailHistoryDoctorDentist' && this.menu[m].url =='/HistoryDoctor') {
-              this.menu[m].class = 'active'
+          if (this.$route.path == '/DetailHistoryDoctorDentist' && this.menu[l].menu[m].url =='/HistoryDoctor') {
+              this.menu[l].menu[m].class = 'active'
           }
+          if (this.$route.path == '/book' && this.menu[l].menu[m].url =='/shphmasseuse') {
+              this.menu[l].menu[m].class = 'active'
+          }
+          }
+          
         }
       })
     }

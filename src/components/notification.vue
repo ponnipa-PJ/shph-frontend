@@ -142,8 +142,8 @@ export default {
   },
   mounted() {
     this.getNoti();
-    var types = JSON.parse(localStorage.getItem('types'));
-    this.nametype = types.masseuse
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+    
   },
   methods: {
     getNoti(){
@@ -168,6 +168,8 @@ export default {
           hour:this.data.hour,
           message_chiropractor: this.data.message_chiropractor,
           cancel_chiropractor: this.data.cancel_chiropractor,
+          no_masseuse_worker:this.data.no_masseuse_worker,
+          no_dentist_worker:this.data.no_dentist_worker,
           message_dentist:this.data.message_dentist,
           cancel_dentist:this.data.cancel_dentist,
         };

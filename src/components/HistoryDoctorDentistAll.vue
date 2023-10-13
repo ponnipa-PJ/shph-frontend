@@ -1,9 +1,9 @@
 <template>
-  <div class="mt-5">
-    <div class="container" v-if="hiscases.length > 0">
+  <div class="row">
+    <div class="container mt-3" v-if="hiscases.length > 0">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">ประวัติการบริการทันตกรรม</h3>
+          <h3 class="card-title">ประวัติการบริการ{{nametype.dentist}}</h3>
         </div>
 
         <div class="card-body">
@@ -35,7 +35,7 @@
     </div>
 
     <div class="col-md-12 mt-5" v-else>
-      <h4 style="text-align: center">ไม่พบประวัติการรับบริการทันตกรรม</h4>
+      <h4 style="text-align: center">ไม่พบประวัติการรับบริการ{{nametype.dentist}}</h4>
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
     return {
       hiscases: [],
       mapcase: [],
+      nametype:{}
     };
   },
   methods: {
@@ -89,6 +90,8 @@ export default {
     },
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getmapcases();
     this.gethistorycases();
   },

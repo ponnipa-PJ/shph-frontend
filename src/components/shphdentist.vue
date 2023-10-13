@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       
-      <div class="col-md-12">
+      <div class="col-md-12" style="padding:0px">
 
 <div class="card card-widget widget-user-2">
 
@@ -25,7 +25,7 @@
 </ul>
 </div>
 <div class="col-md-12 mt-5" v-else>
-  <h4 style="text-align:center">ไม่พบคิวบริการทันตกรรม</h4>
+  <h4 style="text-align:center">ไม่พบคิวบริการ{{nametype.dentist}}</h4>
         </div>
 </div>
     </div>
@@ -127,7 +127,7 @@ shphService.getdoctorandshphdentist().then((res)=>{
       }
     },
     getUsers() {
-      UserService.getUsers('','').then((res) => {
+      UserService.getUsers('','','').then((res) => {
         this.list = res.data;
       });
     },

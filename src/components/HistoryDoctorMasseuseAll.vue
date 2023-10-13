@@ -1,28 +1,36 @@
 <template>
   <div class="row">
-    <div class="container" v-if="hiscases.length > 0">
+    <div class="container mt-3" v-if="hiscases.length > 0">
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">ประวัติการบริการ{{nametype.masseuse}}</h3>
         </div>
 
         <div class="card-body">
-          <table class="table table-bordered">
+          <div v-for="(c, i) in hiscases" :key="i">
+          <table class="table table-bordered" >
+            <thead>
+              <tr :style="'background-color:'+c.color">
+                <th colspan="10" style="width: 10px">{{changedate(c.date)}}</th>
+              </tr>
+            </thead>
             <thead>
               <tr>
-                <th style="width: 10px"></th>
+                <th style="width: 10px">ลำดับที่</th>
+                <th>เวลารับบริการ</th>
                 <th>เลขบัตรประชาชน</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th style="width: 40px"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(h, i) in hiscases" :key="i">
+              <tr v-for="(h, i) in c.case" :key="i">
                 <td>{{i+1}}</td>
+                <td>{{ h.time }}</td>
                 <td>{{ h.UID }}</td>
-                <td>{{ h.userfirstname }} {{ h.userlastname }}</td>
+                <td>{{ h.firstname }} {{ h.lastname }}</td>
                 <td>
-                  <a :href="'DetailHistoryDoctorMasseuse?id=' + h.userId"
+                  <a :href="'/HistoryMasseuse?id='+h.id" target="_blank"
                     ><button type="button" class="btn btn-success">
                       <i class="fa-solid fa-file-lines"></i></button
                   ></a>
@@ -30,6 +38,7 @@
               </tr>
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </div>
@@ -74,6 +83,7 @@ export default {
         year: "numeric",
         month: "long",
         day: "numeric",
+        weekday:"long"
       });
       return result;
     },

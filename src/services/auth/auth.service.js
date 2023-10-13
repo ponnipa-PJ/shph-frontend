@@ -18,7 +18,23 @@ class AuthService {
         }
       );
   }
-
+  async loginperson(user) {
+    // console.log(user)
+    return http.post('user/signinperson', user)
+      .then(response => {
+        console.log(response.data);
+        if (response.data.accessToken) {
+          localStorage.setItem('usershph', JSON.stringify(response.data));
+        }
+        return response.data;
+      },
+        error => {
+          console.log(error);
+          this.$router.push("/login");
+          alert('ชื่อหรือรหัสผ่านไม่ถูกต้อง')
+        }
+      );
+  }
   logout() {
     localStorage.removeItem('usershph');
   }

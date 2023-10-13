@@ -91,7 +91,15 @@
                 </div>
                 </div>
                </div>
-                
+               <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <button @click="connectline()" type="button" class="btn btn-success btn-md">
+                      <i class="fa-brands fa-line"></i>&nbsp;&nbsp;เชื่อมต่อไลน์
+                    </button>
+                </div>
+                </div>
+               </div>
                 <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
@@ -208,7 +216,16 @@ export default {
     this.user.message = this.generateGuid()
     this.getshph()
   },
-  methods: {
+  methods: {  
+    urlAuth() {
+      var clientId = 'qdyGSt6zjPxHwIrnFqaEzZ'
+      var engine = LinkImageService.getLinkFrontend() + '/line'
+      var username = '1'
+      return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`
+    },
+    connectline(){
+      window.open(this.urlAuth(), "_blank");
+    },
     getshph(){
       shphService.getShphs(1).then((res)=>{
         this.shphlist = res.data
@@ -343,7 +360,7 @@ export default {
         };
         if (this.user_id == 0) {
 
-          UserService.getUsers(this.user.email,'').then((res) => {
+          UserService.getUsers(this.user.email,'','').then((res) => {
             // console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
@@ -393,12 +410,6 @@ export default {
     },
     currentUser() {
       return this.$store.state.auth.user;
-    },
-    urlAuth() {
-      var clientId = 'qdyGSt6zjPxHwIrnFqaEzZ'
-      var engine = LinkImageService.getLinkFrontend() + '/line'
-      var username = '1'
-      return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`
     },
   },
 };

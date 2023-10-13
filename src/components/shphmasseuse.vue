@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       
-      <div class="col-md-12">
+      <div class="col-md-12" style="padding:0px">
 
 <div class="card card-widget widget-user-2">
 
@@ -129,7 +129,7 @@ shphService.getdoctorandshphmasseuse().then((res)=>{
       }
     },
     getUsers() {
-      UserService.getUsers('','').then((res) => {
+      UserService.getUsers('','','').then((res) => {
         this.list = res.data;
       });
     },

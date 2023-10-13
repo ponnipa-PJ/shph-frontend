@@ -64,7 +64,7 @@
                 <div class="tab-content">
                   <div class="tab-pane active" id="activity">
                     <div class="form-group">
-                            <label>&nbsp;&nbsp;&nbsp;ประเภททันตกรรม</label><br />
+                            <label>&nbsp;&nbsp;&nbsp;ประเภท{{nametype.dentist}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttypes" :key="r">
                                 &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -133,7 +133,7 @@
                         >
                           <div>
                             <div class="form-group mt-3">
-                            <label>&nbsp;&nbsp;&nbsp;ประเภททันตกรรม</label><br />
+                            <label>&nbsp;&nbsp;&nbsp;ประเภท{{nametype.dentist}}</label><br />
                               <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in dentisttypes" :key="r">
                                 &nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" :id="'checkbox' + i.id" :value="i.id" :name="'checkbox' + i.id"
@@ -152,7 +152,7 @@
                       </div>
                     </div>
                       <div class="col-md-12 mt-5" v-else>
-  <h5 style="text-align:center">ไม่พบประวัติการรับบริการทันตกรรม</h5>
+  <h5 style="text-align:center">ไม่พบประวัติการรับบริการ{{nametype.dentist}}</h5>
         </div>
                     </div>
                   </div>
@@ -192,9 +192,12 @@ export default {
       userId:0,
       dentisttypes:[],
       dentisttype:[],
+      nametype:{}
     };
   },
   async mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.mapId = this.$route.query.id;
     MapEventsDentistService.getmap_events_dentist(this.mapId).then((res) => {
         this.userId = res.data.userId

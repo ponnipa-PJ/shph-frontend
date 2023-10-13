@@ -109,7 +109,7 @@ export default {
       }
     },
     getUsers() {
-      UserService.getUsers('','').then((res) => {
+      UserService.getUsers('','','','').then((res) => {
         this.list = res.data;
       });
     },

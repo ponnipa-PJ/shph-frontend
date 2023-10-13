@@ -40,6 +40,12 @@ import ShphUsers from './components/ShphUsers.vue';
 import evaluation from './components/evaluation.vue';
 import Evaluationlist from './components/Evaluationlist.vue';
 import ShphMasseuseTime from './components/ShphMasseuseTime.vue';
+import HistoryUserDentistAll from './components/HistoryUserDentistAll.vue';
+import HistoryUserMasseuseAll from './components/HistoryUserMasseuseAll.vue';
+import HistoryDoctorDentistAll from './components/HistoryDoctorDentistAll.vue';
+import HistoryDoctorMasseuseAll from './components/HistoryDoctorMasseuseAll.vue';
+import QrcodeEva from './components/QrcodeEva.vue';
+import Types from './components/Types.vue';
 
 
 const router = new Router({
@@ -287,7 +293,42 @@ const router = new Router({
     name: "ShphMasseuseTime",
     component: ShphMasseuseTime
   },
-  
+  {
+    path: "/HistoryUserDentistAll",
+    alias: "/HistoryUserDentistAll",
+    name: "HistoryUserDentistAll",
+    component: HistoryUserDentistAll
+  },
+  {
+    path: "/HistoryUserMasseuseAll",
+    alias: "/HistoryUserMasseuseAll",
+    name: "HistoryUserMasseuseAll",
+    component: HistoryUserMasseuseAll
+  },
+  {
+    path: "/HistoryDoctorDentistAll",
+    alias: "/HistoryDoctorDentistAll",
+    name: "HistoryDoctorDentistAll",
+    component: HistoryDoctorDentistAll
+  },
+  {
+    path: "/HistoryDoctorMasseuseAll",
+    alias: "/HistoryDoctorMasseuseAll",
+    name: "HistoryDoctorMasseuseAll",
+    component: HistoryDoctorMasseuseAll
+  },
+  {
+    path: "/QrcodeEva",
+    alias: "/QrcodeEva",
+    name: "QrcodeEva",
+    component: QrcodeEva
+  },
+  {
+    path: "/types",
+    alias: "/types",
+    name: "types",
+    component: Types
+  },
   ]
 });
 

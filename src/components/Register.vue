@@ -452,32 +452,6 @@ export default {
         );
     },
     signIn() {
-      //       var uid = ''
-      //       UserService.getdatabyrole(2,'').then((res)=>{
-
-      //         uid += 'UID'
-      // var num = res.data.length
-      // var coun = String(num).length
-      // // console.log(coun);
-      // // console.log(num);
-      // // 1 000000
-      // // 10 00000
-      // // 100 0000
-      // var zero = 7-coun
-      // console.log(zero);
-      //   for (let z = 0; z < zero; z++) {
-      //     uid += '0'
-      //     // console.log(uid);
-      //     if (z+1 == zero) {
-      // uid += num+1
-
-      //     }
-      // // console.log(uid);
-      //         }
-
-      //       if (this.user.role_id != 2) {
-      //         uid = ''
-      //       }
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
       } else if (this.user.lastname == "" || this.user.lastname == null) {
@@ -501,7 +475,44 @@ export default {
       } else if (this.user.districtsId == "" || this.user.amphureId == null) {
         alert("กรุณาเลือกตำบล");
       } else {
-        UserService.getUsers(this.user.email, "").then((res) => {
+        if (this.user.role_id == 2) {
+          
+        UserService.getUsers('', "",this.user.UID).then((res) => {
+          // console.log(res.data);
+          if (res.data.length == 0) {
+            var user = {
+              firstname: this.user.firstname,
+              lastname: this.user.lastname,
+              email: this.user.email,
+              password: this.user.password,
+              role_id: this.user.role_id,
+              active: 1,
+              token: this.user.message,
+              phone: this.user.phone,
+              number: this.user.number,
+              moo: this.user.moo,
+              soi: this.user.soi,
+              provinceId: this.user.provinceId,
+              amphureId: this.user.amphureId,
+              districtsId: this.user.districtsId,
+              UID: this.user.UID,
+              shphId: this.user.shphId,
+              adminshphId: this.adminshph.id,
+            };
+            // console.log(user);
+            UserService.createUser(user).then(() => {
+                    // console.log(res.data);
+                    // console.log(this.user);
+                    this.sendEmail();
+            });
+          } else {
+            alert("หมายเลขบัตรประชาชนนี้มีในระบบแล้ว");
+          }
+        });
+      
+        }else{
+
+          UserService.getUsers(this.user.email, "",'').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -544,7 +555,8 @@ export default {
             alert("อีเมลนี้มีในระบบแล้ว กรุณาใช้อีเมลอื่น");
           }
         });
-      }
+      
+        }}
       // })
     },
   },

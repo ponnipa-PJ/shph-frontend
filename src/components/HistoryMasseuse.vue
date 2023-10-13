@@ -57,7 +57,7 @@
                         </div>
                       </div>
 
-                      <div class="form-group row">
+                      <div class="form-group row" v-if="currentUser.role_id ==1 || currentUser.role_id ==7">
                         <div class="offset-sm-4 col-sm-8">
                           <button @click="save()" class="btn btn-success">บันทึก</button>
                         </div>

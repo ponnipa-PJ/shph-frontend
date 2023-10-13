@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="container" v-if="hiscases.length > 0">
-      <h4 class="mt-5 mb-3">ประวัติการรับบริการทันตกรรม</h4>
+      <h4 class="mt-5 mb-3">ประวัติการรับบริการ{{nametype.dentist}}</h4>
 <div class="accordion" id="accordionExample">
   <div class="card"  v-for="(h,i) in hiscases" :key="i">
     <div class="card-header" :id="h.idtab">
@@ -33,7 +33,7 @@
       </div>
       
         <div class="col-md-12 mt-5" v-else>
-  <h4 style="text-align:center">ไม่พบประวัติการรับบริการทันตกรรม</h4>
+  <h4 style="text-align:center">ไม่พบประวัติการรับบริการ{{nametype.dentist}}</h4>
         </div>
 </div>
     
@@ -54,7 +54,8 @@ export default {
   data() {
     return {
       hiscases:[],
-      mapcase:[]
+      mapcase:[],
+      nametype:{}
     };
   },
   methods: {
@@ -82,6 +83,8 @@ export default {
     },
   },
   mounted() {
+    this.nametype = JSON.parse(localStorage.getItem('types'));
+
     this.getmapcases()
     this.gethistorycases();
   },
