@@ -64,7 +64,7 @@ export default {
     getshph(){
 shphService.getdoctorandshphdentist().then((res)=>{
   this.shphlist = res.data
-
+console.log(res.data);
   if (this.shphlist.length == 1) {
       this.$router.push('/bookdentist?id='+this.shphlist[0].id)
     }

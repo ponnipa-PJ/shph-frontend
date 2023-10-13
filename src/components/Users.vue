@@ -22,7 +22,7 @@
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">เลขบัตรประชาชน</th>
+          <!-- <th scope="col">เลขบัตรประชาชน</th> -->
           <th scope="col">ชื่อ-นามสกุล</th>
           <th scope="col">อีเมล</th>
           <th scope="col">เบอร์โทรศัพท์</th>
@@ -36,7 +36,7 @@
             {{ i + 1 }}
           </td>
           <td>
-            {{ l.UID }}
+            <!-- {{ l.UID }} -->
           </td>
           <td>
             {{ l.firstname }} {{ l.lastname }}

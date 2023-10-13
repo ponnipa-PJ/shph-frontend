@@ -16,9 +16,9 @@
                     >{{ convertdate(data.date) }} {{ data.time }}</a
                   >
                 </li>
-                <li class="list-group-item">
+                <!-- <li class="list-group-item">
                   <b>เลขบัตรประชาชน</b> <a class="float-right">{{ data.UID }}</a>
-                </li>
+                </li> -->
                 <li class="list-group-item">
                   <b>ชื่อ-นามสกุล</b>
                   <a class="float-right"

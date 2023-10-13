@@ -18,7 +18,7 @@
               <tr>
                 <th style="width: 10px">ลำดับที่</th>
                 <th>เวลารับบริการ</th>
-                <th>เลขบัตรประชาชน</th>
+                <!-- <th>เลขบัตรประชาชน</th> -->
                 <th>ชื่อ-นามสกุล</th>
                 <th style="width: 40px"></th>
               </tr>
@@ -27,7 +27,7 @@
               <tr v-for="(h, i) in c.case" :key="i">
                 <td>{{i+1}}</td>
                 <td>{{ h.time }}</td>
-                <td>{{ h.UID }}</td>
+                <!-- <td>{{ h.UID }}</td> -->
                 <td>{{ h.firstname }} {{ h.lastname }}</td>
                 <td>
                   <a :href="'/HistoryMasseuse?id='+h.id" target="_blank"

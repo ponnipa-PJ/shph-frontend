@@ -14,7 +14,7 @@
                 <b>วันที่เข้ารับการบริการ</b> <a class="float-right">{{ convertdate(data.date) }} {{ data.time }}</a>
               </li>
               <li class="list-group-item">
-                <b>เลขบัตรประชาชน</b> <a class="float-right">{{ data.UID }}</a>
+                <!-- <b>เลขบัตรประชาชน</b> <a class="float-right">{{ data.UID }}</a> -->
               </li>
               <li class="list-group-item">
                 <b>ชื่อ-นามสกุล</b> <a class="float-right">{{ data.firstname }} {{ data.lastname }}</a>

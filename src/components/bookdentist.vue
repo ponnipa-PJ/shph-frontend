@@ -100,6 +100,7 @@
                                   v-for="(i, r) in booktype"
                                   :key="r"
                                   :value="i.id"
+                                  @change="gettype()"
                                 >
                                   <input
                                     class="form-check-input"
@@ -585,6 +586,14 @@ export default {
     });
   },
   methods: {
+    gettype(){
+      if (this.typebook == 2) {
+this.userId = ""
+        
+      }else{
+        this.userId = this.currentUser.id
+      }
+    },
     getDentisttypes(){
       DentistTypeService.getdentisttypes(1).then((res) => {
       this.dentisttype = res.data;
@@ -1104,7 +1113,9 @@ export default {
         }
         else if (this.currentUser.role_id != 6 && res.data.length > this.noti.no_dentist || (res.data.length+1) > this.noti.no_dentist) {
           alert('ไม่สามารถจองคิวหมอ'+this.nametype.dentist+'เกิน ' + this.noti.no_dentist + ' ชั่วโมงต่อวัน')
-        }  else if (this.doctor_id == "" || this.doctor_id == null) {
+        } else if(this.typebook == 2 && this.userId == null ||this.userId == ''){
+alert('กรุณาเลือกประเภทการจองและกรอกข้อมูลให้ถูกต้อง')
+        } else if (this.doctor_id == "" || this.doctor_id == null) {
           alert("กรุณาเลือกหมอ"+this.nametype.dentist);
         } 
         else if(this.dentisttypeuser.length == 0){

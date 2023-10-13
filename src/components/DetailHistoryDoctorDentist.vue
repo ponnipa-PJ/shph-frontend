@@ -2,7 +2,7 @@
   <div class="row">
     <div class="container" v-if="hiscases.length > 0">
       <h4 class="mt-5 mb-3">ประวัติการบริการ{{nametype.dentist}}</h4>
-      <h5 class="mb-5">{{user.UID}}</h5>  <h5>{{user.firstname}} {{user.lastname}}</h5>
+      <h5 class="mb-5"></h5>  <h5>{{user.firstname}} {{user.lastname}}</h5>
       <div class="accordion" id="accordionExample">
         <div class="card" v-for="(h, i) in hiscases" :key="i">
           <div class="card-header" :id="h.idtab">

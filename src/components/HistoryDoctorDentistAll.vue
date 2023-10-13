@@ -11,7 +11,7 @@
             <thead>
               <tr>
                 <th style="width: 10px"></th>
-                <th>เลขบัตรประชาชน</th>
+                <!-- <th>เลขบัตรประชาชน</th> -->
                 <th>ชื่อ-นามสกุล</th>
                 <th style="width: 40px"></th>
               </tr>
@@ -19,7 +19,7 @@
             <tbody>
               <tr v-for="(h, i) in hiscases" :key="i">
                 <td>{{i+1}}</td>
-                <td>{{ h.UID }}</td>
+                <!-- <td>{{ h.UID }}</td> -->
                 <td>{{ h.userfirstname }} {{ h.userlastname }}</td>
                 <td>
                   <a :href="'DetailHistoryDoctorDentist?id=' + h.userId"

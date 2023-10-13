@@ -151,14 +151,14 @@
                   <label for="password">ประเภทการจอง</label>
                   <div class="form-group">
                     <div class="custom-control custom-checkbox" v-for="(i, r) in booktype" :key="r" :value="i.id">
-                      <input class="form-check-input" type="radio" name="radio1" :id="i.id"
+                      <input class="form-check-input" type="radio" name="radio1" :id="i.id" @change="gettype()"
                         :value="i.id" v-model="typebook">
                       <label :for="i.id" class="form-check-label">{{ i.name }}</label>
                     </div>
                   </div>
                 </div>
                 <div class="form-group mt-3" style="margin-bottom: 0px;" v-if="typebook == 2">
-                  <label for="password">UID</label>
+                  <label for="password">เลขบัตรประชาชน</label>
                 </div>
 
                 <div class="input-group input-group-sm" v-if="typebook == 2">
@@ -468,6 +468,14 @@ this.userId = this.currentUser.id
     // console.log(this.currentUser);
   },
   methods: {
+    gettype(){
+      if (this.typebook == 2) {
+this.userId = ""
+        
+      }else{
+        this.userId = this.currentUser.id
+      }
+    },
     getmasseusetypes(){
       MasseuseTypeService.getmasseusetypes(1).then((res) => {
       this.masseusetypes = res.data
@@ -826,7 +834,9 @@ this.getmap(id)
         }
         else if (this.currentUser.role_id != 6 && this.event_id.length > this.noti.hour) {
           alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.hour + ' ชั่วโมง')
-        } else
+        } else if(this.typebook == 2 && this.userId == null ||this.userId == ''){
+alert('กรุณาเลือกประเภทการจองและกรอกข้อมูลให้ถูกต้อง')
+        }else
           if (this.event_id.length == 0) {
             alert('กรุณาเลือกเวลา')
           }
