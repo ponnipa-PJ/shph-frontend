@@ -77,7 +77,7 @@
 
                   </div>
                 <div class="form-group mt-3">
-                  <label for="username">username</label>
+                  <label for="username">Username</label>
                   <input v-model="user.username" type="text" min="1" class="form-control form-control-sm" id="username" disabled
                     />
                 </div>
@@ -150,7 +150,8 @@ export default {
       shphlist:[],
       printstatus:false,
       image:'',
-      nametype:{}
+      nametype:{},
+      types:[]
     };
   },
   mounted() {

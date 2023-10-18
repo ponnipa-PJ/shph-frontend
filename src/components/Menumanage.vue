@@ -249,7 +249,7 @@ for (let l = 0; l < this.list[m].menu.length; l++) {
         };
         // console.log(userdata);
         if (this.user_id == 0) {
-          UserService.getUsers(this.user.email,'','').then((res) => {
+          UserService.getUsers(this.user.email,'','','').then((res) => {
             // console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {

@@ -45,7 +45,7 @@ export default {
   },
   mounted() {
     console.log(this.currentUser);
-    this.link = LinkImageService.getLinkImage();
+    this.link = LinkImageService.getLinkFrontend()+'/evaluation';
     shphService.getShph(this.currentUser.shphId).then((res) => {
       this.name = res.data.name;
     });

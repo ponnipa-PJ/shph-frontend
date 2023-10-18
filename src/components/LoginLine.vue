@@ -193,7 +193,7 @@ export default {
       } else if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
       } else {
-        UserService.getUsers(this.user.email,'','').then((res)=>{
+        UserService.getUsers(this.user.email,'','','').then((res)=>{
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {

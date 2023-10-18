@@ -35,9 +35,9 @@
           <td>
             {{ i + 1 }}
           </td>
-          <td>
-            <!-- {{ l.UID }} -->
-          </td>
+          <!-- <td>
+            {{ l.UID }}
+          </td> -->
           <td>
             {{ l.firstname }} {{ l.lastname }}
           </td>
@@ -262,9 +262,9 @@ export default {
     };
   },
   mounted() {
-    if(this.currentUser.role_id == 3){
-      this.$router.push('/ShphUsers')
-    }
+    // if(this.currentUser.role_id == 3){
+    //   this.$router.push('/ShphUsers')
+    // }
     this.getprovinces()
     this.getUsers();
     this.getroles()
@@ -498,7 +498,7 @@ if (this.user.email == "" || this.user.email == null) {
           shphId:this.user.shphId
         };
         if (this.user_id == 0) {
-          UserService.getUsers(this.user.email,'','').then((res) => {
+          UserService.getUsers(this.user.email,'','','').then((res) => {
             console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
@@ -529,9 +529,16 @@ if (this.user.email == "" || this.user.email == null) {
       // })
     }
 ,    getUsers() {
-      UserService.getUsers('',this.currentUser.role_id,'').then((res) => {
+  if (this.currentUser.role_id ==3) {
+    UserService.getUsers('','','',this.currentUser.shphId).then((res) => {
         this.list = res.data;
       });
+  }else{
+    UserService.getUsers('',this.currentUser.role_id,'','').then((res) => {
+        this.list = res.data;
+      });
+  }
+      
     },
   },
   computed: {

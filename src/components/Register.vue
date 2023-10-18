@@ -477,7 +477,7 @@ export default {
       } else {
         if (this.user.role_id == 2) {
           
-        UserService.getUsers('', "",this.user.UID).then((res) => {
+        UserService.getUsers('', "",this.user.UID,'').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -512,7 +512,7 @@ export default {
       
         }else{
 
-          UserService.getUsers(this.user.email, "",'').then((res) => {
+          UserService.getUsers(this.user.email, "",'','').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
