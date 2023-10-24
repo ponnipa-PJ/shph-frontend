@@ -37,6 +37,8 @@
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <div style="text-align:right"><a style="color: white;" class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a></div>
+
       <a href="#" class="brand-link"> 
 <img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
 <span class="brand-text font-weight-light">รพ.สต.</span>
