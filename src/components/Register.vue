@@ -477,7 +477,7 @@ export default {
       } else {
         if (this.user.role_id == 2) {
           
-        UserService.getUsers('', "",this.user.UID,'').then((res) => {
+        UserService.checkUID(this.user.UID).then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -511,7 +511,6 @@ export default {
         });
       
         }else{
-
           UserService.getUsers(this.user.email, "",'','').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
@@ -568,7 +567,7 @@ export default {
       return this.$store.state.auth.user;
     },
     urlAuth() {
-      var clientId = "qdyGSt6zjPxHwIrnFqaEzZ";
+      var clientId = "do6mzoSxLMNnOTXkr7USva";
       var engine = LinkImageService.getLinkFrontend() + "/line";
       var username = "1";
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`;

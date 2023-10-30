@@ -161,7 +161,7 @@ export default {
         for (let l = 0; l < this.menu.length; l++) {
           for (let m = 0; m < this.menu[l].menu.length; m++) {
             this.menu[l].menu[m].class = ''
-          // console.log(this.menu[l].menu[m]);
+          console.log(this.menu[l].menu[m].url);
           if (this.menu[l].menu[m].url == this.$route.path) {
             this.menu[l].menu[m].class = 'active'
           }
@@ -172,6 +172,9 @@ export default {
               this.menu[l].menu[m].class = 'active'
           }
           if (this.$route.path == '/book' && this.menu[l].menu[m].url =='/shphmasseuse') {
+              this.menu[l].menu[m].class = 'active'
+          }
+          if (this.$route.path == '/BookMakingAppointmentMasseuse' && this.menu[l].menu[m].url =='/MakingAppointmentMasseuseAll') {
               this.menu[l].menu[m].class = 'active'
           }
           }

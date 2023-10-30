@@ -46,6 +46,11 @@ import HistoryDoctorDentistAll from './components/HistoryDoctorDentistAll.vue';
 import HistoryDoctorMasseuseAll from './components/HistoryDoctorMasseuseAll.vue';
 import QrcodeEva from './components/QrcodeEva.vue';
 import Types from './components/Types.vue';
+import MakingAppointmentMasseuseAll from './components/MakingAppointmentMasseuseAll.vue';
+import LocationType from './components/LocationType.vue';
+import AppointmentType from './components/AppointmentType.vue';
+import BookMakingAppointmentMasseuse from './components/BookMakingAppointmentMasseuse.vue';
+
 
 
 const router = new Router({
@@ -329,6 +334,30 @@ const router = new Router({
     name: "types",
     component: Types
   },
+  {
+    path: "/MakingAppointmentMasseuseAll",
+    alias: "/MakingAppointmentMasseuseAll",
+    name: "MakingAppointmentMasseuseAll",
+    component: MakingAppointmentMasseuseAll
+  },
+  {
+    path: "/AppointmentType",
+    alias: "/AppointmentType",
+    name: "AppointmentType",
+    component: AppointmentType
+  },
+  {
+    path: "/LocationType",
+    alias: "/LocationType",
+    name: "LocationType",
+    component: LocationType
+  },
+  {
+    path: "/BookMakingAppointmentMasseuse",
+    alias: "/BookMakingAppointmentMasseuse",
+    name: "BookMakingAppointmentMasseuse",
+    component: BookMakingAppointmentMasseuse
+  }
   ]
 });
 

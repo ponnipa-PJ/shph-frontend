@@ -92,7 +92,7 @@
                 </div>
                 <div class="form-group mt-3" v-if="currentUser.role_id == 5 || currentUser.role_id == 3">
                   <label for="password">สิทธิ์การใช้งาน</label>
-                  <select class="form-control form-control-sm" v-model="user.role_id">
+                  <select class="form-control form-control-sm" v-model="user.role_id" @change="getshphall()">
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
@@ -102,7 +102,7 @@
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
                   </select>
                 </div>
-                <div class="form-group mt-3" v-if="user.role_id == 3">
+                <div class="form-group mt-3" v-if="shphstatus">
                   <label for="password">รพ.สต.</label>
                   <select class="form-control form-control-sm" v-model="user.shphId">
                     <option v-for="(i, r) in shphlist" :key="r" :value="i.id">{{ i.name }}</option>
@@ -258,7 +258,8 @@ export default {
       zipcode: '',
       shphlist:[],
       printstatus:false,
-      image:''
+      image:'',
+      shphstatus:false
     };
   },
   mounted() {
@@ -274,6 +275,14 @@ export default {
     this.user.lastname = 'UID0000001'
   },
   methods: {
+    getshphall(){
+console.log(this.user);
+if (this.user.role_id ==3 ) {
+  this.shphstatus = true
+}else{
+  this.shphstatus = false
+}
+    },
     print(id){
           this.printstatus = true
       UserService.getUser(id).then((res) => {
@@ -323,6 +332,7 @@ UserService.deleteUser(this.user_id).then(()=>{
     getshph(){
       shphService.getShphs(1).then((res)=>{
         this.shphlist = res.data
+        console.log(res.data);
       })
     },
     onChangeProvince() {
@@ -379,6 +389,7 @@ UserService.deleteUser(this.user_id).then(()=>{
       return true;
     },
     getid(id) {
+      this.shphstatus = false
       this.user_id = id;
       if (this.user_id != 0) {
         this.title = "แก้ไขข้อมูลผู้ใช้งาน";
@@ -387,7 +398,9 @@ UserService.deleteUser(this.user_id).then(()=>{
           // console.log(res.data);
           this.user = res.data;
           this.hash = this.user.password;
-          
+          if (this.user.role_id ==3 ) {
+  this.shphstatus = true
+}
           this.getamphurs()
           this.getdistricts()
           this.getzipcode()
@@ -498,6 +511,19 @@ if (this.user.email == "" || this.user.email == null) {
           shphId:this.user.shphId
         };
         if (this.user_id == 0) {
+          if (this.user.role_id == 2) {
+            UserService.checkUID(this.user.UID).then((res) => {
+          // console.log(res.data);
+          if (res.data.length == 0) {
+            UserService.createUser(userdata).then(() => {
+                document.getElementById("closeduser").click();
+                this.getUsers();
+            });
+          }else{
+            alert("หมายเลขบัตรประชาชนนี้มีในระบบแล้ว");
+          }
+        });
+          }else{
           UserService.getUsers(this.user.email,'','','').then((res) => {
             console.log(res.data);
             if (res.data.length == 0) {
@@ -513,6 +539,7 @@ if (this.user.email == "" || this.user.email == null) {
               alert('อีเมลนี้มีในระบบแล้ว กรุณาใช้อีเมลอื่น')
             }
           });
+        }
         } else {
           // console.log(this.user_id);
           UserService.updateUser(this.user_id, userdata).then(() => {

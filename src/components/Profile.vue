@@ -218,7 +218,7 @@ export default {
   },
   methods: {  
     urlAuth() {
-      var clientId = 'qdyGSt6zjPxHwIrnFqaEzZ'
+      var clientId = 'do6mzoSxLMNnOTXkr7USva'
       var engine = LinkImageService.getLinkFrontend() + '/line'
       var username = '1'
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`

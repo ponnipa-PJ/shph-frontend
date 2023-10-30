@@ -7,6 +7,9 @@ class MapEventsService {
     getmap_event(id) {
         return http.get('/map_events/' + id);
     }
+    findbyuserId(id) {
+        return http.get('/map_events/findbyuserId/' + id);
+    }
     gettypesbook() {
         return http.get('/typesbook');
     }

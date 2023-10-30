@@ -423,7 +423,7 @@ return time
     },
     
     getEvents() {
-      EventService.getevents('',this.doctor_id,this.shphId).then((res) => {
+      EventService.getevents('',this.doctor_id,this.shphId,'').then((res) => {
         this.calendarOptions.events = res.data
         // console.log(res.data);
         // this.calendarOptions.events = this.events 
@@ -440,7 +440,7 @@ return time
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       console.log(d);
-      EventService.getevents(d,this.doctor_id,this.shphId).then((res) => {
+      EventService.getevents(d,this.doctor_id,this.shphId,'').then((res) => {
         console.log(res.data);
         if (res.data.length == 0) {
           var now = new Date()
@@ -625,7 +625,7 @@ return time
           // console.log(res.data);
           this.book = res.data;
           console.log(this.book);
-          EventService.getevents(this.book.date,this.doctor_id,this.shphId).then((res) => {
+          EventService.getevents(this.book.date,this.doctor_id,this.shphId,'').then((res) => {
             console.log(res.data);
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);

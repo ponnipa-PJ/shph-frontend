@@ -37,7 +37,7 @@
           </td>
           <td> 
             <span v-if="l.type == 1">หมอ{{nametype.masseuse}}</span>
-            <span v-if="l.type == 2">หมอ{{nametype.dentist}}</span>
+            <span v-if="l.type == 4">หมอ{{nametype.dentist}}</span>
           </td>
           <!-- <td>{{ l.firstname }} {{ l.lastname }}</td> -->
           <td>

@@ -44,6 +44,7 @@ export default {
   },
   mounted() {
    this.token = this.$route.params.id
+   console.log(this.token);
   if (this.token) {
      this.activate()
     //  console.log(1);
@@ -53,7 +54,7 @@ export default {
     activate(){
       var data ={}
 UserService.updateToken(this.token,data).then((res)=>{
-  // console.log(res.data);
+  console.log(res.data);
   if (res.data.id) {
     UserService.getUserBytoken(this.token).then((res)=>{
       // console.log(res.data);
