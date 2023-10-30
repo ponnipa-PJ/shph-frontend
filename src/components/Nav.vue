@@ -40,7 +40,7 @@
       <div style="text-align:right"><a style="color: white;" class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a></div>
 
       <a href="#" class="brand-link"> 
-<img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
+<img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;max-height: 40px;">
 <span class="brand-text font-weight-light">รพ.สต.</span>
 </a>
       <div class="sidebar" id="myDiv" style="max">
@@ -161,7 +161,7 @@ export default {
         for (let l = 0; l < this.menu.length; l++) {
           for (let m = 0; m < this.menu[l].menu.length; m++) {
             this.menu[l].menu[m].class = ''
-          console.log(this.menu[l].menu[m].url);
+          // console.log(this.menu[l].menu[m].url);
           if (this.menu[l].menu[m].url == this.$route.path) {
             this.menu[l].menu[m].class = 'active'
           }
