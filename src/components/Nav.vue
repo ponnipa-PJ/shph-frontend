@@ -43,8 +43,8 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <div style="text-align:right"><a style="color: white;" class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a></div>
 
-      <a href="#" class="brand-link"> 
-<img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;max-height: 40px;">
+      <a href="#" class="brand-link" style="line-height: 3.5;"> 
+<img src="../assets/icon.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;max-height: 80px;margin-left: 0rem!important;">
 <span class="brand-text font-weight-light">รพ.สต.</span>
 </a>
       <div class="sidebar" id="myDiv" style="max">
@@ -115,8 +115,6 @@
 
     </aside>
     <div class="content-wrapper" style="min-height: 1302.26px;">
-
-
       <div class="content">
 <router-view />
 
@@ -179,6 +177,9 @@ export default {
               this.menu[l].menu[m].class = 'active'
           }
           if (this.$route.path == '/BookMakingAppointmentMasseuse' && this.menu[l].menu[m].url =='/MakingAppointmentMasseuseAll') {
+              this.menu[l].menu[m].class = 'active'
+          }
+          if (this.$route.path == '/BookMakingAppointmentDentist' && this.menu[l].menu[m].url =='/MakingAppointmentDentistAll') {
               this.menu[l].menu[m].class = 'active'
           }
           }

@@ -4,6 +4,9 @@ class EventService {
     getevents(name,id,shphId,userId){
         return http.get('/events?name='+name+'&&id='+id+'&&shphId='+shphId+'&&userId='+userId);
     }
+    geteventappoint(name,id,shphId,userId){
+        return http.get('/events/geteventappoint?name='+name+'&&id='+id+'&&shphId='+shphId+'&&userId='+userId);
+    }
     getbooks(name,id,shphId){
         return http.get('/events/book?name='+name+'&&id='+id+'&&shphId='+shphId);
     }

@@ -1,85 +1,85 @@
 <template>
   <div id="app">
     <div v-if="!statuseva">
-      <Nav  msg="Welcome to Your Vue.js App"/>
-
-    <!-- <router-view /> -->
-    <!-- <div id="google_translate_element"></div> -->
-
+      <Main />
+      <!-- <Nav  msg="Welcome to Your Vue.js App"/> -->
     </div>
     <div v-else>
-      <table width=100%>
-      <tr>
-        <td width=3%></td>
-        <td width=0.1% bgcolor="#ffffff"></td>
+      <table width="100%">
+        <tr>
+          <td width="3%"></td>
+          <td width="0.1%" bgcolor="#ffffff"></td>
 
+          <td width="93.8%" bgcolor="#of1527">
+            <table width="100%">
+              <tr>
+                <td width="5%"></td>
+                <td>
+                  <br /><br /><br /><br />
+                  <font size="5" color="#1099f0"
+                    >ระบบประเมินความพึงพอใจการให้บริการ</font
+                  >
+                  <br /><br />
+                  <font size="5" color="#ffffff"
+                    >สำนักงานขนส่งจังหวัดเชียงราย</font
+                  >
+                </td>
+              </tr>
 
-        <td width=93.8% bgcolor="#of1527">
-          <table width=100%>
-            <tr>
-              <td width=5%></td>
-              <td><br><br><br><br>
-                <font size="5" color="#1099f0">ระบบประเมินความพึงพอใจการให้บริการ</font>
-                <br><br>
-                <font size="5" color="#ffffff">สำนักงานขนส่งจังหวัดเชียงราย</font>
+              <tr>
+                <td width="5%"></td>
+                <td height="100" valign="top">
+                  <font> <br /><br /><span v-html="header.title"></span></font>
+                </td>
+              </tr>
 
-              </td>
-            </tr>
+              <tr>
+                <td width="5%"></td>
+                <td>
+                  <div style="background-color: #5472cc">
+                    <router-view />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
 
-            <tr>
-              <td width=5%></td>
-              <td height=100 valign="top">
-                <font>
-                  <br><br><span v-html="header.title"></span></font>
-              </td>
-            </tr>
-
-            <tr>
-              <td width=5%></td>
-              <td>
-<div style="background-color:#5472cc" >
-                <router-view />
-              </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-
-
-
-        <td width=0.1% bgcolor="#ffffff"></td>
-        <td width=3%></td>
-
-
-      </tr>
-
-    </table>
+          <td width="0.1%" bgcolor="#ffffff"></td>
+          <td width="3%"></td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
 
 <script>
-import Nav from './components/Nav.vue'
+// import Nav from './components/Nav.vue'
+import Main from "./components/Main.vue";
+
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Nav
+    // Nav,
+    Main,
   },
   data() {
     return {
-      statuseva:false,
-      header:{}
-    }
+      statuseva: false,
+      header: {},
+    };
   },
-  mounted() {
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
   },
-}
-
+  mounted() {},
+};
 </script>
 
 <style>
-div{
-  font-family: 'Niramit', sans-serif;
+div {
+  font-family: "Niramit", sans-serif;
   font-size: 14px;
 }
 </style>

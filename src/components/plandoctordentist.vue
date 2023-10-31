@@ -384,7 +384,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       return time
     },
     getEvents() {
-      EventDentistService.getevents('',this.doctor_id,this.shphId).then((res) => {
+      EventDentistService.getevents('',this.doctor_id,this.shphId,0).then((res) => {
         this.calendarOptions.events = res.data
         // this.calendarOptions.events = this.events 
         //   this.calendarOptions.events.push({
@@ -399,7 +399,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
       var breaktime = new Date(arg.dateStr)
 
       var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
-      EventDentistService.getevents(d,this.doctor_id,this.shphId).then((res) => {
+      EventDentistService.getevents(d,this.doctor_id,this.shphId,0).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
                 var now = new Date()
@@ -577,7 +577,7 @@ for (let a = 0; a < this.alltoken.length; a++) {
           // console.log(res.data);
           this.book = res.data;
           // console.log(this.book);
-          EventDentistService.getevents(this.book.date,this.doctor_id,this.shphId).then((res) => {
+          EventDentistService.getevents(this.book.date,this.doctor_id,this.shphId,0).then((res) => {
 
             for (let a = 0; a < res.data.length; a++) {
               // console.log(res.data[a].id);

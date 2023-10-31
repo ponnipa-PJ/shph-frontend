@@ -6,9 +6,9 @@
 <div class="card card-widget widget-user-2">
 
 <div class="widget-user-header bg-warning">
-<div class="widget-user-image">
+<!-- <div class="widget-user-image">
   <img src="../assets/icon.png" alt="">
-</div>
+</div> -->
 
 <h5 class="widget-user-desc">จัดการคิวหมอ{{nametype.dentist}}ประจำเดือน</h5>
 <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>

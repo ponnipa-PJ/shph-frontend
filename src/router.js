@@ -50,14 +50,16 @@ import MakingAppointmentMasseuseAll from './components/MakingAppointmentMasseuse
 import LocationType from './components/LocationType.vue';
 import AppointmentType from './components/AppointmentType.vue';
 import BookMakingAppointmentMasseuse from './components/BookMakingAppointmentMasseuse.vue';
-
-
+import BookMakingAppointmentDentist from './components/BookMakingAppointmentDentist.vue';
+import MakingAppointmentDentistAll from './components/MakingAppointmentDentistAll.vue';
+import MenuSuperAdmin from './components/MenuSuperAdmin.vue';
+import Mains from './components/Mains.vue';
 
 const router = new Router({
   mode: "history",
   routes: [
     {
-      path: "/",
+      path: "/login",
       alias: "/login",
       name: "login",
       component: Login
@@ -357,7 +359,32 @@ const router = new Router({
     alias: "/BookMakingAppointmentMasseuse",
     name: "BookMakingAppointmentMasseuse",
     component: BookMakingAppointmentMasseuse
-  }
+  },
+  {
+    path: "/BookMakingAppointmentDentist",
+    alias: "/BookMakingAppointmentDentist",
+    name: "BookMakingAppointmentDentist",
+    component: BookMakingAppointmentDentist
+  },
+  {
+    path: "/MakingAppointmentDentistAll",
+    alias: "/MakingAppointmentDentistAll",
+    name: "MakingAppointmentDentistAll",
+    component: MakingAppointmentDentistAll
+  },
+{
+  path: "/MenuSuperAdmin",
+  alias: "/MenuSuperAdmin",
+  name: "MenuSuperAdmin",
+  component: MenuSuperAdmin
+},
+{
+  path: "/Mains",
+  alias: "/Mains",
+  name: "Mains",
+  component: Mains
+},
+
   ]
 });
 
@@ -366,7 +393,7 @@ Vue.use(Router);
 router.beforeEach((to, from, next) => {
   var page = to.path.split("/")
   var qrcode = ''
-  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'Confirmdentist' || page[1] ==  'Confirmmasseuse' || page[1] ==  'evaluation') {
+  if (page[1] == 'activateemail' || page[1] == 'line' || page[1] ==  'Confirmdentist' || page[1] ==  'Confirmmasseuse' || page[1] ==  'evaluation' || page[1] == 'Mains') {
     qrcode = to.path
   }
   // console.log(page[1]);

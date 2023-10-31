@@ -49,6 +49,9 @@ class UserService {
     getMenubyRoleID(id) {
         return http.get('/user/getmenu/' + id);
     }
+    getmenuuser(id) {
+        return http.get('/user/getmenuuser/' + id);
+    }
     getMenubyRoleIDAll(id) {
         return http.get('/user/getmenuarray/' + id);
     }

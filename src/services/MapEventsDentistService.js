@@ -10,6 +10,9 @@ class MapEventsDentistService {
     getmap_event(id) {
         return http.get('/map_events_dentist/' + id);
     }
+    findbyuserId(id) {
+        return http.get('/map_events_dentist/findbyuserId/' + id);
+    }
     gettypesbook() {
         return http.get('/typesbook');
     }

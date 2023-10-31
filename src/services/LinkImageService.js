@@ -2,9 +2,9 @@ import axios from "axios";
 
 class LinkImageService {
   getLinkImage() {
-    return 'http://localhost:8081/uploadimage?name='
+    // return 'http://localhost:8081/uploadimage?name='
     // return 'https://api.shphQueue.ponnipa.in.th/uploadimage?name='
-    // return 'https://api.hpkmaeka.com/uploadimage?name='
+    return 'https://api.hpkmaeka.com/uploadimage?name='
   } 
   getLink() {
     // return 'http://localhost:8081'

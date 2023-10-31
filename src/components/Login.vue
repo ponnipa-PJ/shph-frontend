@@ -96,8 +96,12 @@ export default {
     if (this.currentUser) {
       UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
           this.menu = res.data
-          console.log(this.menu);
-          this.$router.push(res.data[0].url);
+          // console.log(this.menu);
+          // if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
+          // this.$router.push('/MenuSuperAdmin');
+          // }else if (this.currentUser.role_id == 2) {
+          // this.$router.push('/Mains');
+          // }
         })
       }
   },
@@ -145,16 +149,20 @@ this.user = {}
         this.$store.dispatch("auth/loginperson", userindividual).then(
           () => {
             // this.loading = true;
-            UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
+            UserService.getMenubyRoleID(this.currentUser.role_id).then(()=>{
               // console.log(this.urlAuth());
-          var menu = res.data[0].url
+          // var menu = res.data[0].url
           // console.log(menu);
           // console.log(this.currentUser);
           
           if (this.currentUser.line_token == null) {
             window.open(this.urlAuth(), "_blank");
           }else{
-  this.$router.push(menu);
+  if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
+          this.$router.push('/MenuSuperAdmin');
+          }else {
+          this.$router.push('/Mains');
+          }
   location.reload();
         
           }
@@ -208,16 +216,21 @@ this.user = {}
         this.$store.dispatch("auth/login", user).then(
           () => {
             // this.loading = true;
-            UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
+            UserService.getMenubyRoleID(this.currentUser.role_id).then(()=>{
               // console.log(this.urlAuth());
-          var menu = res.data[0].url
+          // var menu = res.data[0].url
           // console.log(menu);
           // console.log(this.currentUser);
           
           if (this.currentUser.line_token == null) {
             window.open(this.urlAuth(), "_blank");
           }else{
-  this.$router.push(menu);
+  // this.$router.push(menu);
+  if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
+          this.$router.push('/MenuSuperAdmin');
+          }else {
+          this.$router.push('/Mains');
+          }
   location.reload();
         
           }

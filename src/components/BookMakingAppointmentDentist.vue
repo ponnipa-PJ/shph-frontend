@@ -3,7 +3,7 @@
     <div class="container">
       <!-- <h5 class="mb-5" style="text-align:center">{{ shphName }}</h5> -->
       <div class="card mt-3">
-        <h5 class="mt-5" style="text-align: center">ตารางนัดหมาย{{nametype.masseuse}}</h5>
+        <h5 class="mt-5" style="text-align: center">ตารางนัดหมาย{{nametype.dentist}}</h5>
         <div class="card-body mt-3">
           <div class="row">
             <div class="col-md-6">
@@ -38,7 +38,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label
-                  >ประเภทการนวดแผนไทย<span style="color: red"> *</span>
+                  >ประเภทการ{{nametype.dentist}}<span style="color: red"> *</span>
                 </label>
                 <div class="form-group">
                   <div
@@ -256,7 +256,7 @@
                           </div>
                         </div>
                         <div class="col-md-6" style="text-align: right">
-                          <a :href="'/HistoryMasseuse?id=' + mapId">
+                          <a :href="'/HistoryDentist?id=' + mapId">
                             <i class="fa-regular fa-id-card fa-3x"></i
                           ></a>
                         </div>
@@ -384,17 +384,17 @@ import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import EventService from "../services/EventService";
 import UserService from "../services/UserService";
 import LinkImageService from "../services/LinkImageService";
 import esLocale from "@fullcalendar/core/locales/th";
-import HistorymasseuseService from "../services/HistorymasseuseService";
 import AppointmentTypeService from "../services/AppointmentTypeService";
-import MasseuseTypeService from "../services/MasseuseTypeService";
+import DentistTypeService from "../services/DentistTypeService";
 import LocationTypeService from "../services/LocationTypeService";
-import MapHistoryMasseuseService from "../services/MapHistoryMasseuseService";
-import MapEventsService from "../services/MapEventsService";
 import MakingAppointmentsService from "../services/MakingAppointmentsService";
+import EventDentistService from "../services/EventDentistService";
+import MapEventsDentistService from "../services/MapEventsDentistService";
+import HistorydentistService from "../services/HistorydentistService";
+import MapHistoryDentistService from "../services/MapHistoryDentistService";
 
 export default {
   name: "Nav",
@@ -502,16 +502,27 @@ export default {
     this.doctor_id = this.$route.query.id;
     if (this.$route.query.makeId) {
     this.makeId = this.$route.query.makeId;
-    }  
+    }
     if (this.$route.query.userId) {
     this.userId = this.$route.query.userId;
-    }    
-    console.log(this.userId);
-    console.log(this.makeId);
+    }
+    
+    if(this.userId != 0){
+      UserService.getUID(this.userId).then((res) => {
+        // console.log(res.data.UID);
+        this.UID = res.data.UID;
+        this.userId = res.data.id;
+        this.getEvents()
+      });
+    }else{
+      this.getEvents();
+    }
+    // console.log(this.makeId);
+    // console.log(this.userId);
     if (this.makeId != 0) {
-      MakingAppointmentsService.getmaking_appointment(this.makeId).then((res) => {
+      MakingAppointmentsService.findOnedentist(this.makeId).then((res) => {
       this.data = res.data;
-      console.log(this.data);
+      // console.log(this.data);
       this.masseusetype = JSON.parse(res.data.type);
       this.eventId = JSON.parse(res.data.eventId);
       UserService.getUID(this.data.userId).then((res) => {
@@ -522,15 +533,6 @@ export default {
       });
     });
     
-    }else if(this.userId != 0){
-      UserService.getUID(this.userId).then((res) => {
-        // console.log(res.data.UID);
-        this.UID = res.data.UID;
-        this.userId = res.data.id;
-        this.getEvents()
-      });
-    }else{
-      this.getEvents();
     }
     // this.shphId = this.$route.query.shphId
     // shphmasseusetimeService.getshph_masseuse_time(this.shphId).then((res)=>{
@@ -562,7 +564,7 @@ export default {
   },
   methods: {
     gethistory() {
-      MapHistoryMasseuseService.getmap_history_user_masseuses(1).then((res) => {
+      MapHistoryDentistService.getmap_history_user_dentists(1).then((res) => {
         this.history = res.data;
         // console.log(this.history);
       });
@@ -578,7 +580,7 @@ export default {
       });
     },
     gettypes() {
-      MasseuseTypeService.getmasseusetypes(1).then((res) => {
+      DentistTypeService.getdentisttypes(1).then((res) => {
         this.types = res.data;
       });
     },
@@ -627,7 +629,7 @@ export default {
     },
 
     getEvents() {
-      EventService.geteventappoint(this.eventId, this.doctor_id, "",this.userId).then((res) => {
+      EventDentistService.getevents("", this.doctor_id, "",this.userId).then((res) => {
         this.calendarOptions.events = res.data;
         // console.log(res.data);
         // this.calendarOptions.events = this.events
@@ -675,8 +677,8 @@ export default {
               this.calendarOptions.events[c].borderColor = "green";
             } else {
               this.calendarOptions.events[c].title = "จองแล้ว";
-              this.calendarOptions.events[c].backgroundColor = "red";
-              this.calendarOptions.events[c].borderColor = "red";
+              this.calendarOptions.events[c].backgroundColor = "green";
+              this.calendarOptions.events[c].borderColor = "green";
             }
           }
         }
@@ -712,11 +714,11 @@ export default {
       this.user_id = id;
       if (id != 0) {
         // console.log(this.user_id);
-        EventService.getevent(id).then((res) => {
+        EventDentistService.getevent(id).then((res) => {
           // console.log(res.data);
           this.book = res.data;
           console.log(this.book);
-          EventService.geteventappoint(
+          EventDentistService.getevents(
             this.book.date,
             this.doctor_id,
             this.shphId,
@@ -744,14 +746,14 @@ export default {
       //   title: this.book.title,
       //   userId: this.book.userId,
       // };
-      EventService.deleteevent(this.user_id).then(() => {
+      EventDentistService.deleteevent(this.user_id).then(() => {
         // console.log(res.data);
         var his = {
           eventId: this.user_id,
           title: "ลบคิว",
           createdBy: this.currentUser.id,
         };
-        HistorymasseuseService.createhistorymasseus(his).then(() => {
+        HistorydentistService.createhistoryhistorydentist(his).then(() => {
           document.getElementById("closeduser").click();
           this.getEvents();
           //       setTimeout(function () {
@@ -776,7 +778,7 @@ export default {
       // var docname = ''
       // console.log(this.event_id);
       for (let ee = 0; ee < events.length; ee++) {
-        EventService.getevent(events[ee]).then((res) => {
+        EventDentistService.getevent(events[ee]).then((res) => {
           // console.log(res.data);
           if (events.length > 1 && ee + 1 == events.length) {
             time += " - ";
@@ -795,14 +797,15 @@ export default {
         });
       }
     },
-    async save() {
+    save() {
+      console.log(this.userId);
       if (
         this.data.typeappointmentId == "" ||
         this.data.typeappointmentId == null
       ) {
         alert("กรุณาเลือกประเภทการนัดหมาย");
       } else if (this.masseusetype.length == 0) {
-        alert("กรุณาเลือกประเภทการนวดแผนไทย");
+        alert("กรุณาเลือกประเภทการ"+this.nametype.dentist);
       } else if (this.UID == "" || this.UID == null) {
         alert("กรุณากรอกเลขบัตรประชาชน");
       } else if (!this.Script_checkID(this.UID)) {
@@ -812,7 +815,7 @@ export default {
       } else {
         if (this.userId == 0) {
           UserService.checkUID(this.UID).then(async (res) => {
-            // console.log(res.data);
+            console.log(res.data);
             if (res.data.length == 0) {
               alert("ไม่พบเลขบัตรประชาชนนี้ในระบบ");
             } else {
@@ -836,18 +839,18 @@ export default {
           };
           // console.log(userdata);
           // console.log(res.data);
-          EventService.updateuser(this.eventId[e], userdata).then(() => {
+          EventDentistService.updateuser(this.eventId[e], userdata).then(() => {
             if (e + 1 == this.eventId.length) {
               var his = 'UPDATE map_events SET status = 0'
 
               var sql = his + ` WHERE id = ${this.data.id}`
               // console.log(sql);
-              EventService.createsql(sql).then(() => {
-                var his = 'DELETE FROM history_user_masseuse'
+              EventDentistService.createsql(sql).then(() => {
+                var his = 'DELETE FROM history_user_dentist'
 
               var sql = his + ` WHERE eventId = ${this.data.id}`
               // console.log(sql);
-              EventService.createsql(sql).then(() => {
+              EventDentistService.createsql(sql).then(() => {
                 this.saveAppoint()
               });
               });
@@ -860,8 +863,8 @@ export default {
     },
     saveAppoint(){
 
-      MapEventsService.findbyuserId(this.userId).then((res) => {
-        // console.log(res.data);
+      MapEventsDentistService.findbyuserId(this.userId).then((res) => {
+        console.log(res.data);
         if (res.data) {
           for (let h = 0; h < this.history.length; h++) {
             this.history[h].detail =
@@ -886,7 +889,7 @@ export default {
           // console.log(this.calendarOptions.events[c]);
           var date = new Date(this.calendarOptions.events[c].date);
           shphId = this.calendarOptions.events[c].shphId;
-          // console.log(date);
+          // console.log(day);
           if (
             day != "" &&
             day !=
@@ -896,8 +899,8 @@ export default {
                 "-" +
                 parseInt(date.getDate()).toString().padStart(2, "0")
           ) {
-            // alert("กรุณาเลือกวันนัดหมายให้ตรงกัน");
             checkdate = true
+            // alert("กรุณาเลือกวันนัดหมายให้ตรงกัน");
           } else {
             var day =
               parseInt(date.getFullYear()) +
@@ -924,11 +927,14 @@ export default {
           }
         }
       }
+      // console.log(checkdate);
       if (checkbook == false) {
         alert("กรุณาเลือกวันและเวลานัดหมาย");
-      } else if (checkdate == true) {
+      }else if (checkdate == true) {
         alert("กรุณาเลือกวันนัดหมายให้ตรงกัน");
-      } else {
+      } 
+      else {
+        console.log(events);
         for (let e = 0; e < events.length; e++) {
           var userdata = {
             bookstatus: 0,
@@ -937,7 +943,7 @@ export default {
           };
           console.log(userdata);
           // console.log(res.data);
-          EventService.updateuser(events[e], userdata).then(() => {
+          EventDentistService.updateuser(events[e], userdata).then(() => {
             if (e + 1 == events.length) {
               var map = {
                 date: day,
@@ -951,11 +957,11 @@ export default {
                 type: this.masseusetype,
               };
               // console.log(map);
-              MapEventsService.createmap_event(map).then((res) => {
+              MapEventsDentistService.createmap_event(map).then((res) => {
                 var mapId = res.data.id;
                 // console.log(this.history);
                 // console.log(this.historyraw);
-                var his = "INSERT INTO history_user_masseuse (id, eventId,";
+                var his = "INSERT INTO history_user_dentist (id, eventId,";
                 var value = "VALUES (NULL, " + mapId + ",";
                 for (let h = 0; h < this.history.length; h++) {
                   // console.log(this.history[h].historyuserdentistId);
@@ -971,9 +977,9 @@ export default {
                 // console.log(value);
                 var sql = his + value;
                 // console.log(sql);
-                EventService.createsql(sql).then(() => {
+                EventDentistService.createsql(sql).then(() => {
                   var make = {
-                    mapeventId: mapId,
+                    mapeventdentistId: mapId,
                     typeappointmentId: this.data.typeappointmentId,
                     locationId: this.data.locationId,
                     date: day,
@@ -994,7 +1000,6 @@ export default {
                   );
                   }
                 });
-              
               });
             }
           });

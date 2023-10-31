@@ -2,7 +2,7 @@
   <div class="row">
     <div class="container">
    <div class=" mb-3 mt-3" style="text-align: right">
-     <a :href="'BookMakingAppointmentMasseuse?id='+currentUser.id" target="_blank">
+     <a :href="'BookMakingAppointmentDentist?id='+currentUser.id" target="_blank">
        <button type="button" id="get_file" class="btn btn-success" >
          <i class="fa fa-plus"></i> เพิ่ม
        </button></a>
@@ -10,7 +10,7 @@
     <div class="container mt-3" v-if="hiscases.length > 0">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">การนัดหมาย{{nametype.masseuse}}</h3>
+          <h3 class="card-title">การนัดหมาย{{nametype.dentist}}</h3>
         </div>
 
         <div class="card-body">
@@ -37,11 +37,11 @@
                 <!-- <td>{{ h.UID }}</td> -->
                 <td>{{ h.firstname }} {{ h.lastname }} </td>
                 <td>
-                  <a :href="'/HistoryMasseuse?id='+h.id" target="_blank"
+                  <a :href="'/HistoryDentist?id='+h.id" target="_blank"
                     ><button type="button" class="btn btn-success">
                       <i class="fa-solid fa-file-lines"></i></button
                   ></a>&nbsp;&nbsp;
-                  <a :href="'/BookMakingAppointmentMasseuse?id='+h.doctorId+'&&makeId='+h.makeId" target="_blank"
+                  <a :href="'/BookMakingAppointmentDentist?id='+h.doctorId+'&&makeId='+h.makeId" target="_blank"
                     ><button type="button" class="btn btn-warning">
                       <i class="fa-solid fa-edit"></i></button
                   ></a>
@@ -54,15 +54,15 @@
       </div>
     </div>
     <div class="col-md-12 mt-5" v-else>
-      <h4 style="text-align: center">ไม่พบประวัติการรับบริการ{{nametype.masseuse}}</h4>
+      <h4 style="text-align: center">ไม่พบประวัติการรับบริการ{{nametype.dentist}}</h4>
     </div>
   </div>
   </div>
 </template>
 
 <script>
-import MapHistoryDoctorMasseuseService from "../services/MapHistoryDoctorMasseuseService";
 import MakingAppointmentsService from "../services/MakingAppointmentsService";
+import MapHistoryDoctorDentistService from "../services/MapHistoryDoctorDentistService";
 
 export default {
   name: "Carlist",
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     getmapcases() {
-      MapHistoryDoctorMasseuseService.getmap_history_doctor_masseuses(1).then(
+      MapHistoryDoctorDentistService.getmap_history_doctor_dentists(1).then(
         (res) => {
           this.mapcase = res.data;
           // console.log(this.history_doctor);
@@ -105,7 +105,7 @@ export default {
       if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
         userId = "";
       }
-      MakingAppointmentsService.getreportdoctor("", userId).then(
+      MakingAppointmentsService.getreportdoctordentist("", userId).then(
         (res) => {
           console.log(res.data);
           this.hiscases = res.data;

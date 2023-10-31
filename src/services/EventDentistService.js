@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class EventDentistService {
-    getevents(name,id,shphId){
-        return http.get('/eventsdentist?name='+name+'&&id='+id+name+'&&shphId='+shphId);
+    getevents(name,id,shphId,userId){
+        return http.get('/eventsdentist?name='+name+'&&id='+id+name+'&&shphId='+shphId+'&&userId='+userId);
     }
     getbooks(name,id,shphId){
         return http.get('/eventsdentist/book?name='+name+'&&id='+id+'&&shphId='+shphId);

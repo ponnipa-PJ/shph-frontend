@@ -104,6 +104,14 @@
                 </div>
                 
                   </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                  <label for="username">ชื่อเว็บไซต์<span style="color: red">*</span> </label>
+<input v-model="data.title" type="text" class="form-control " data-original-title="" title="">
+
+                </div>
+                
+                  </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col-md-3"></div>
@@ -172,14 +180,15 @@ export default {
           no_dentist_worker:this.data.no_dentist_worker,
           message_dentist:this.data.message_dentist,
           cancel_dentist:this.data.cancel_dentist,
+          title:this.data.title
         };
           NotificationService.updatenotification(1, data).then(() => {
             // console.log(res.data);
             alert('บันทึกสำเร็จ')
             this.getNoti();
-            //       setTimeout(function () {
-            //   location.reload();
-            // }, 500);
+                  setTimeout(function () {
+              location.reload();
+            }, 500);
             // window.scrollTo(0, 0);
           });
         

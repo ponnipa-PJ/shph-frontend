@@ -21,32 +21,67 @@ export default {
       user_id: 0,
       hash: 0,
       title: "",
-      roles:[]
+      roles:[],
     };
   },
-  mounted() {
+  async mounted() {
     this.getUsers();
     this.getroles()
-    // console.log(this.$route.query.code)
-    LinkImageService.gettoken(this.$route.query.code).then((res)=>{
+    console.log(this.$route.query.code)
+    UserService.getUserBytoken(this.$route.query.state).then(async (res)=>{
+      console.log(res.data);
+
+      this.user = res.data
+    await LinkImageService.gettoken(this.$route.query.code).then((res)=>{
       // console.log(res.data);
-      console.log(this.currentUser);
+      // console.log(this.currentUser);
       var d = {
         line_token:res.data
       }
-      UserService.updatetokenline(this.currentUser.id,d).then(()=>{
-        // console.log(res.data);
-        UserService.getMenubyRoleID(this.currentUser.role_id).then((res)=>{
-          var menu = res.data[0].url
-          // console.log(menu);
-        this.$router.push(menu);
-        setTimeout(function () {
+      console.log(d);
+      UserService.updatetokenline(this.user.id,d).then(()=>{
+        var user = {
+          email: this.user.email,
+          type:'token',
+          accessToken:this.user.token
+        };
+        this.$store.dispatch("auth/login", user).then(
+          () => {
+            console.log(this.currentUser);
+            if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
+          this.$router.push('/MenuSuperAdmin');
+          }else {
+          this.$router.push('/Mains');
+          }
+          setTimeout(function () {
           location.reload();
-        }, 1000);
-        });
+        }, 500);
+          },
+          (error) => {
+            alert("ชื่อหรือรหัสผ่านไม่ถูกต้อง");
+            console.log(error);
+          }
+        );
+        // console.log(res.data);
+      //   UserService.getMenubyRoleID(this.currentUser.role_id).then(()=>{
+      //     // var menu = res.data[0].url
+      //     // console.log(menu);
+      //   // this.$router.push(menu);
+      // localStorage.removeItem('usershph');
+      //     localStorage.setItem('usershph', JSON.stringify(response.data));
+      //   if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
+      //     this.$router.push('/MenuSuperAdmin');
+      //     }else {
+      //     this.$router.push('/Mains');
+      //     }
+      //   setTimeout(function () {
+      //     location.reload();
+      //   }, 1000);
+      //   });
 
       })
 
+    });
     })
 
 

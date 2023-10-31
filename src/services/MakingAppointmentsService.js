@@ -7,8 +7,14 @@ class MakingAppointmentsService {
     getmaking_appointment(id) {
         return http.get('/making_appointments/' + id);
     }
+    findOnedentist(id) {
+        return http.get('/making_appointments/findOnedentist/' + id);
+    }
     getreportdoctor(userId,doctorId){
         return http.get('/making_appointments/getreportdoctor?userId='+userId+'&&doctorId='+doctorId);
+    }
+    getreportdoctordentist(userId,doctorId){
+        return http.get('/making_appointments/getreportdoctordentist?userId='+userId+'&&doctorId='+doctorId);
     }
     createmaking_appointment(data) {
         return http.post('/making_appointments', data);

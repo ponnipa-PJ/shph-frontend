@@ -54,7 +54,7 @@ export default {
     activate(){
       var data ={}
 UserService.updateToken(this.token,data).then((res)=>{
-  console.log(res.data);
+  // console.log(res.data);
   if (res.data.id) {
     UserService.getUserBytoken(this.token).then((res)=>{
       // console.log(res.data);

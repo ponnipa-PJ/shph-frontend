@@ -7,6 +7,7 @@ class AuthService {
       .then(response => {
         console.log(response.data);
         if (response.data.accessToken) {
+          localStorage.removeItem('usershph');
           localStorage.setItem('usershph', JSON.stringify(response.data));
         }
         return response.data;
