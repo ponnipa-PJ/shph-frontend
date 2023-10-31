@@ -379,7 +379,7 @@ const router = new Router({
   component: MenuSuperAdmin
 },
 {
-  path: "/Mains",
+  path: "/",
   alias: "/Mains",
   name: "Mains",
   component: Mains
