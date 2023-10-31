@@ -90,7 +90,7 @@
                   <input v-model="user.password" type="password" class="form-control form-control-sm" id="password"
                     placeholder="กรุณากรอกรหัสผ่าน" />
                 </div>
-                <div class="form-group mt-3" v-if="currentUser.role_id == 5 || currentUser.role_id == 3">
+                <div class="form-group mt-3" v-if="currentUser.role_id == 5">
                   <label for="password">สิทธิ์การใช้งาน</label>
                   <select class="form-control form-control-sm" v-model="user.role_id" @change="getshphall()">
                     <option v-for="(i, r) in roles" :key="r" :value="i.id">{{ i.name }}</option>
@@ -119,7 +119,7 @@
                     placeholder="กรุณากรอกนามสกุล" />
                 </div>
                     <div class="form-group mt-3">
-                  <label for="username">หมายเลขบัตรประชาชน<span style="color: red">*</span> </label>
+                  <label for="username">หมายเลขบัตรประชาชน</label>
                   <input v-model="user.UID" v-on:keyup.enter="signIn()" type="text" min="1"
                     class="form-control form-control-sm" id="username" />
                 </div> 
@@ -422,15 +422,20 @@ UserService.deleteUser(this.user_id).then(()=>{
     },
     save() {
       
-//       if (this.user.role_id == 1 || this.user.role_id == 4 || this.user.role_id == 7) {
-//         if (this.user.email == "" || this.user.email == null) {
-//         alert("กรุณากรอกอีเมล");
-//       } else if (this.user.password == "" || this.user.password == null) {
-//         alert("กรุณากรอกรหัสผ่าน");
-//       }else{
-// this.saveUser()
-//       }
-//       } else 
+      // if (this.user.role_id == 1 || this.user.role_id == 4 || this.user.role_id == 7) {
+        if (this.user.role_id == 3) {
+        if (this.user.email == "" || this.user.email == null) {
+        alert("กรุณากรอกอีเมล");
+      } else if (this.user.password == "" || this.user.password == null) {
+        alert("กรุณากรอกรหัสผ่าน");
+      }
+      else if (this.user.shphId == ""|| this.user.shphId == null) {
+        alert("กรุณาเลือกรพ.สต.");
+      }
+      else{
+this.saveUser()
+      }
+      } else 
 if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
@@ -441,9 +446,11 @@ if (this.user.email == "" || this.user.email == null) {
         alert("กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง");
       }else if (this.user.role_id == ""|| this.user.role_id == null) {
         alert("กรุณาเลือกสิทธิ์");
-      } else if (this.user.role_id == 3 && this.user.shphId == ""|| this.user.shphId == null) {
-        alert("กรุณาเลือกรพ.สต.");
-      } else{
+      } 
+      // else if (this.user.role_id == 3 && this.user.shphId == ""|| this.user.shphId == null) {
+      //   alert("กรุณาเลือกรพ.สต.");
+      // } 
+      else{
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
       } else if (this.user.lastname == "" || this.user.lastname == null) {

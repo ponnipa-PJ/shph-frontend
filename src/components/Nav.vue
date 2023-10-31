@@ -1,4 +1,8 @@
 <template>
+
+<!-- <div style="text-align:center;margin-top:150px">
+    <h3><a href="https://www.hpkmaeka.com/"> https://www.hpkmaeka.com</a> </h3>
+  </div> -->
   <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#" v-if="currentUser">{{ currentUser.firstname }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"

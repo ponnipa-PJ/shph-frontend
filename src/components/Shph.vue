@@ -123,7 +123,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    this.link = LinkImageService.getLinkImage()
+    this.link = LinkImageService.getLinkFrontend()+'/evaluation';
   },
   methods: {
     deleteshphid(){

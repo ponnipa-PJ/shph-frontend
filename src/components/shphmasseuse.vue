@@ -66,7 +66,7 @@ export default {
     getshph(){
 shphService.getdoctorandshphmasseuse().then((res)=>{
   this.shphlist = res.data
-  console.log(this.shphlist);
+  // console.log(this.shphlist);
   // if (this.shphlist.length == 1) {
   //     this.$router.push('/book?id='+this.shphlist[0].id)
   //   }

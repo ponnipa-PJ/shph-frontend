@@ -3,20 +3,35 @@
     <div v-if="printstatus">
       <div class="row">
         <div class="col-md-12">
-    <div ref="printMe" id="my-node" style="width:200px;height:120px;" :name="user.UID">
-      <br>
-      <div style="text-align:left">&nbsp;{{user.UID}}</div><br>
-      <div style="text-align:center">{{user.firstname}} {{user.lastname}}</div>
+          <div
+            ref="printMe"
+            id="my-node"
+            style="width: 200px; height: 120px"
+            :name="user.UID"
+          >
+            <br />
+            <div style="text-align: left">&nbsp;{{ user.UID }}</div>
+            <br />
+            <div style="text-align: center">
+              {{ user.firstname }} {{ user.lastname }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-  </div>
     <div style="text-align: right">
       <a>
-        <button type="button" id="get_file" class="btn btn-success mt-3 mb-3" @click="getid(0)" data-bs-toggle="modal"
-          data-bs-target="#AddUser">
-          <i class="fa fa-plus"></i> เพิ่มหมอ
-        </button></a>
+        <button
+          type="button"
+          id="get_file"
+          class="btn btn-success mt-3 mb-3"
+          @click="getid(0)"
+          data-bs-toggle="modal"
+          data-bs-target="#AddUser"
+        >
+          <i class="fa fa-plus"></i> เพิ่มบัญชีหมอ
+        </button></a
+      >
     </div>
     <table class="table table-bordered">
       <thead>
@@ -35,56 +50,99 @@
           <td>
             {{ l.username }}
           </td>
-          <td> 
-            <span v-if="l.type == 1">หมอ{{nametype.masseuse}}</span>
-            <span v-if="l.type == 4">หมอ{{nametype.dentist}}</span>
+          <td>
+            <span v-if="l.type == 1">หมอ{{ nametype.masseuse }}</span>
+            <span v-if="l.type == 4">หมอ{{ nametype.dentist }}</span>
           </td>
           <!-- <td>{{ l.firstname }} {{ l.lastname }}</td> -->
           <td>
             <a @click="getid(l.id)">
-              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddUser">
-                <i class="fa fa-edit"></i></button></a>&nbsp;
-                <a @click="getid(l.id)">
-              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteUser">
-                <i class="fa fa-trash"></i></button></a>&nbsp;
-                <button v-if="l.role_id == 2" type="button" id="get_file" class="btn btn-info mt-3 mb-3" @click="print(l.id)" 
-          >
-          <i class="fa fa-print"></i> 
-        </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#AddUser"
+              >
+                <i class="fa fa-edit"></i></button></a
+            >&nbsp;
+            <a @click="getid(l.id)">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#DeleteUser"
+              >
+                <i class="fa fa-trash"></i></button></a
+            >&nbsp;
+            <button
+              v-if="l.role_id == 2"
+              type="button"
+              id="get_file"
+              class="btn btn-info mt-3 mb-3"
+              @click="print(l.id)"
+            >
+              <i class="fa fa-print"></i>
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <!-- Modal -->
-    <div class="modal fade" id="AddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="AddUser"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
-
           </div>
           <div class="modal-body">
             <form>
               <div class="card-body mt-3">
                 <div>
-                    <label for="inputPassword">ประเภทหมอ <span style="color:red">*</span></label>
-                    <div class="form-group">
-                      <select class="form-control form-control-sm" v-model="user.type">
-                        <option v-for="(d, i) in types" :key="i" :value="d.id"> {{ d.name}}</option>
-                      </select>
-                    </div>
-
+                  <label for="inputPassword"
+                    >ประเภทหมอ <span style="color: red">*</span></label
+                  >
+                  <div class="form-group">
+                    <select
+                      class="form-control form-control-sm"
+                      v-model="user.type"
+                    >
+                      <option v-for="(d, i) in types" :key="i" :value="d.id">
+                        {{ d.name }}
+                      </option>
+                    </select>
                   </div>
-                <div class="form-group mt-3">
+                </div>
+                <!-- <div class="form-group mt-3">
                   <label for="username">Username</label>
                   <input v-model="user.username" type="text" min="1" class="form-control form-control-sm" id="username" disabled
                     />
+                </div> -->
+                <div class="form-group mt-3">
+                  <label for="username">จำนวนบัญชี</label>
+                  <input
+                    v-model="user.no"
+                    type="text"
+                    min="1"
+                    class="form-control form-control-sm"
+                    id="username"
+                  />
                 </div>
                 <div class="form-group mt-3">
                   <label for="password">รหัสผ่าน</label>
-                  <input v-model="user.password" type="password" class="form-control form-control-sm" id="password"
-                    placeholder="กรุณากรอกรหัสผ่าน" />
+                  <input
+                    v-model="user.password"
+                    type="password"
+                    class="form-control form-control-sm"
+                    id="password"
+                    placeholder="กรุณากรอกรหัสผ่าน"
+                  />
                 </div>
               </div>
             </form>
@@ -93,25 +151,44 @@
             <button type="button" class="btn btn-success" @click="save()">
               บันทึก
             </button>
-            <button id="closeduser" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button
+              id="closeduser"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
               ปิด
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="DeleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="DeleteUser"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">ยืนการการลบ</h5>
-
           </div>
           <div class="modal-footer mt-3">
-            <button type="button" class="btn btn-danger" @click="deleteuserid()">
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="deleteuserid()"
+            >
               ลบ
             </button>
-            <button id="closeduserdelete" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button
+              id="closeduserdelete"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
               ปิด
             </button>
           </div>
@@ -146,81 +223,83 @@ export default {
       provinces: [],
       amphurs: [],
       districts: [],
-      zipcode: '',
-      shphlist:[],
-      printstatus:false,
-      image:'',
-      nametype:{},
-      types:[]
+      zipcode: "",
+      shphlist: [],
+      printstatus: false,
+      image: "",
+      nametype: {},
+      types: [],
     };
   },
   mounted() {
-    this.nametype = JSON.parse(localStorage.getItem('types'));
-    this.types.push({
-      id:1,
-      name: this.nametype.masseuse
-    },
-    {
-      id:4,
-      name:this.nametype.dentist
-    })
+    this.nametype = JSON.parse(localStorage.getItem("types"));
+    this.types.push(
+      {
+        id: 1,
+        name: this.nametype.masseuse,
+      },
+      {
+        id: 4,
+        name: this.nametype.dentist,
+      }
+    );
     this.getUsers();
-    this.user.username = 'ID0001'
+    this.user.username = "ID0001";
   },
   methods: {
-    deleteuserid(){
-AdminshphService.deleteadminshph(this.user_id,0).then(()=>{
-  document.getElementById("closeduserdelete").click();
-            this.getUsers();
-      })
+    deleteuserid() {
+      AdminshphService.deleteadminshph(this.user_id, 0).then(() => {
+        document.getElementById("closeduserdelete").click();
+        this.getUsers();
+      });
     },
-    getshph(){
-      shphService.getShphs(1).then((res)=>{
-        this.shphlist = res.data
-      })
+    getshph() {
+      shphService.getShphs(1).then((res) => {
+        this.shphlist = res.data;
+      });
     },
     onChangeProvince() {
       // console.log(evt.target.value);
-      this.getamphurs()
+      this.getamphurs();
     },
     onChangeAmphur() {
       // console.log(evt.target.value);
-      this.getdistricts()
+      this.getdistricts();
     },
     onChangeDistrict() {
       // console.log(evt.target.value);
-      this.getzipcode()
+      this.getzipcode();
     },
     getprovinces() {
       ProvinceService.getprovinces().then((res) => {
-        this.provinces = res.data
+        this.provinces = res.data;
         // console.log(res.data);
-      })
+      });
     },
     getamphurs() {
       AmphuresService.getamphures(this.user.provinceId).then((res) => {
-        this.amphurs = res.data
-        this.districts = {}
-        this.zipcode = ''
+        this.amphurs = res.data;
+        this.districts = {};
+        this.zipcode = "";
         // console.log(res.data);
-      })
+      });
     },
     getdistricts() {
       DistrictService.getdistricts(this.user.amphureId).then((res) => {
-        this.districts = res.data
+        this.districts = res.data;
         // console.log(res.data);
-      })
+      });
     },
     getzipcode() {
       DistrictService.getdistrict(this.user.districtsId).then((res) => {
-        this.zipcode = res.data.zip_code
+        this.zipcode = res.data.zip_code;
         // console.log(res.data);
-      })
+      });
     },
     getroles() {
       UserService.getRoles().then((res) => {
-        this.roles = res.data
-      })
+        this.roles = res.data;
+      });
     },
     getid(id) {
       this.user_id = id;
@@ -231,112 +310,109 @@ AdminshphService.deleteadminshph(this.user_id,0).then(()=>{
           // console.log(res.data);
           this.user = res.data;
           this.hash = this.user.password;
-          
-          this.getamphurs()
-          this.getdistricts()
-          this.getzipcode()
+
+          this.getamphurs();
+          this.getdistricts();
+          this.getzipcode();
         });
       } else {
-        var uid = ''
-      AdminshphService.getadminshphs(1,'').then((res)=>{
-        console.log(res.data);
+        //         var uid = ''
+        //       AdminshphService.getadminshphs(1,'').then((res)=>{
+        //         console.log(res.data);
 
-        uid += 'ID'
-var num = res.data.length
-var coun = String(num).length
-// console.log(coun);
-console.log(num);
-// 1 000000
-// 10 00000
-// 100 0000
-var zero = 4-coun
-console.log(zero);
-  for (let z = 0; z < zero; z++) {
-    uid += '0'
-    // console.log(uid);
-    if (z+1 == zero) {
-uid += num+1
-      
-    }
-}
-console.log(uid);
-this.user={}
-this.user.username = uid
-      });
+        //         uid += 'ID'
+        // var num = res.data.length
+        // var coun = String(num).length
+        // // console.log(coun);
+        // console.log(num);
+        // // 1 000000
+        // // 10 00000
+        // // 100 0000
+        // var zero = 4-coun
+        // console.log(zero);
+        //   for (let z = 0; z < zero; z++) {
+        //     uid += '0'
+        //     // console.log(uid);
+        //     if (z+1 == zero) {
+        // uid += num+1
+
+        //     }
+        // }
+        // console.log(uid);
+        this.user = {};
+        // this.user.username = uid
+        // });
         this.title = "เพิ่มข้อมูลผู้ใช้งาน";
-
       }
-      
     },
-    save() 
-    { if (this.user.username == "" || this.user.username == null) {
-        alert("กรุณากรอกอีเมล");
-      } else if (this.user.password == "" || this.user.password == null) {
+    save() {
+      // if (this.user.username == "" || this.user.username == null) {
+      //     alert("กรุณากรอกอีเมล");
+      //   } else
+      if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
-      } else{
-        this.saveUser()
+      } else {
+        this.saveUser();
       }
-      
     },
-    saveUser(){
-      var uid = ''
-      AdminshphService.getadminshphs(1,'').then((res)=>{
-        uid += 'UID'
-var num = res.data.length
-var coun = String(num).length
-// console.log(coun);
-// console.log(num);
-// 1 000000
-// 10 00000
-// 100 0000
-var zero = 4-coun
-console.log(zero);
-  for (let z = 0; z < zero; z++) {
-    uid += '0'
-    // console.log(uid);
-    if (z+1 == zero) {
-uid += num+1
-      
-    }
-}
-// console.log(uid);
-        
-      
-      var userdata = {
-        username:this.user.username,
-        shphId:this.currentUser.shphId,
-          password:this.user.password,
-          adminId:this.currentUser.id,
-          UID:uid,
-          hash:this.hash,
-          type:this.user.type
+    saveUser() {
+      if (this.user_id != 0) {
+        var update = {
+          password: this.user.password,
+          hash: this.hash,
         };
-        if (this.user_id == 0) {
-              AdminshphService.createadminshph(userdata).then(() => {
+        // console.log(this.user_id);
+        AdminshphService.updateadminshph(this.user_id, update).then(() => {
+          // console.log(res.data);
+          document.getElementById("closeduser").click();
+          this.getUsers();
+          //       setTimeout(function () {
+          //   location.reload();
+          // }, 500);
+          // window.scrollTo(0, 0);
+        });
+      } else {
+        var uid = "";
+        AdminshphService.getadminshphs(1, "").then((res) => {
+          for (let n = 0; n < this.user.no; n++) {
+            uid = "UID";
+            var num = res.data.length + n;
+            var coun = String(num).length;
+            var zero = 4 - coun;
+            // console.log(zero);
+            for (let z = 0; z < zero; z++) {
+              uid += "0";
+              // console.log(uid);
+              if (z + 1 == zero) {
+                uid += num + 1;
+              }
+            }
+            console.log(uid);
+            var userdata = {
+              username: uid,
+              shphId: this.currentUser.shphId,
+              password: this.user.password,
+              adminId: this.currentUser.id,
+              UID: uid,
+              hash: this.hash,
+              type: this.user.type,
+            };
+            AdminshphService.createadminshph(userdata).then(() => {
+              if (n + 1 == this.user.no) {
                 document.getElementById("closeduser").click();
                 this.getUsers();
-                //       setTimeout(function () {
-                //   location.reload();
-                // }, 500);
-                // window.scrollTo(0, 0);
-          });
-        } else {
-          // console.log(this.user_id);
-          AdminshphService.updateadminshph(this.user_id, userdata).then(() => {
-            // console.log(res.data);
-            document.getElementById("closeduser").click();
-            this.getUsers();
-            //       setTimeout(function () {
-            //   location.reload();
-            // }, 500);
-            // window.scrollTo(0, 0);
-          });
-        }
-
-      })
-    }
-,    getUsers() {
-  AdminshphService.getadminshphs('',this.currentUser.id).then((res) => {
+              }
+              //       setTimeout(function () {
+              //   location.reload();
+              // }, 500);
+              // window.scrollTo(0, 0);
+            });
+          }
+        });
+      }
+    },
+    getUsers() {
+      AdminshphService.getadminshphs("", this.currentUser.id).then((res) => {
         this.list = res.data;
       });
     },

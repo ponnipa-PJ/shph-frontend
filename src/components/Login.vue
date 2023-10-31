@@ -7,11 +7,11 @@
         <div class="card-body mt-3">
           <div class="form-group">
 <div class="custom-control custom-radio">
-<input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" value="2" v-model="type">
+<input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" value="2" v-model="type" @click="cleardata()">
 <label for="customRadio1" class="custom-control-label">บุคคลทั่วไป</label>
 </div>
 <div class="custom-control custom-radio">
-<input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" value="1" v-model="type">
+<input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" value="1" v-model="type" @click="cleardata()">
 <label for="customRadio2" class="custom-control-label">เจ้าหน้าที่</label>
 </div>
 </div>
@@ -102,6 +102,9 @@ export default {
       }
   },
   methods: {
+    cleardata(){
+this.user = {}
+    },
     showPassword(status){
       // console.log(status);
       if (status == true) {
