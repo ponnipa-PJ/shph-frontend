@@ -11,13 +11,13 @@
   </div>
 </div>
   </div>
-    <div style="text-align: right">
+    <!-- <div style="text-align: right">
       <a>
         <button type="button" id="get_file" class="btn btn-success mt-3 mb-3" @click="getid(0)" data-bs-toggle="modal"
           data-bs-target="#AddUser">
           <i class="fa fa-plus"></i> เพิ่มผู้ใช้งาน
         </button></a>
-    </div>
+    </div> -->
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
@@ -375,7 +375,11 @@ UserService.deleteUser(this.user_id).then(()=>{
     },
     getroles() {
       UserService.getRoles().then((res) => {
-        this.roles = res.data
+        for (let r = 0; r < res.data.length; r++) {
+          if (res.data[r].id != 2) {
+            this.roles.push(res.data[r])
+          }
+        }
       })
     },
     Script_checkID(id) {

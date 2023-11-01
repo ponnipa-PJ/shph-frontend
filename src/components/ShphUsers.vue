@@ -38,7 +38,8 @@
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
           <th scope="col">Username</th>
-          <th scope="col">หมอ</th>
+          <th scope="col">สิทธิ์การใช้งาน</th>
+          <th scope="col">รพ.สต.</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -51,8 +52,10 @@
             {{ l.username }}
           </td>
           <td>
-            <span v-if="l.type == 1">หมอ{{ nametype.masseuse }}</span>
-            <span v-if="l.type == 4">หมอ{{ nametype.dentist }}</span>
+            <span>{{ l.role }}</span>
+          </td>
+          <td>
+            <span>{{ l.shph }}</span>
           </td>
           <!-- <td>{{ l.firstname }} {{ l.lastname }}</td> -->
           <td>
@@ -104,27 +107,43 @@
           <div class="modal-body">
             <form>
               <div class="card-body mt-3">
+
+                <div class="form-group mt-3" v-if="user.id">
+                  <label for="username">Username</label>
+                  <input v-model="user.username" type="text" min="1" class="form-control form-control-sm" id="username" disabled
+                    />
+                </div>
                 <div>
                   <label for="inputPassword"
-                    >ประเภทหมอ <span style="color: red">*</span></label
+                    >สิทธิ์การใช้งาน <span style="color: red">*</span></label
                   >
                   <div class="form-group">
                     <select
                       class="form-control form-control-sm"
                       v-model="user.type"
                     >
-                      <option v-for="(d, i) in types" :key="i" :value="d.id">
+                      <option v-for="(d, i) in roles" :key="i" :value="d.id">
                         {{ d.name }}
                       </option>
                     </select>
                   </div>
                 </div>
-                <!-- <div class="form-group mt-3">
-                  <label for="username">Username</label>
-                  <input v-model="user.username" type="text" min="1" class="form-control form-control-sm" id="username" disabled
-                    />
-                </div> -->
-                <div class="form-group mt-3">
+                <div v-if="currentUser.role_id == 5">
+                  <label for="inputPassword"
+                    >รพ.สต. <span style="color: red">*</span></label
+                  >
+                  <div class="form-group">
+                    <select
+                      class="form-control form-control-sm"
+                      v-model="user.shphId"
+                    >
+                      <option v-for="(d, i) in shphlist" :key="i" :value="d.id">
+                        {{ d.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group mt-3" v-if="!user.id">
                   <label for="username">จำนวนบัญชี</label>
                   <input
                     v-model="user.no"
@@ -244,9 +263,26 @@ export default {
       }
     );
     this.getUsers();
+    this.getshph()
+    this.getroles()
     this.user.username = "ID0001";
   },
   methods: {
+    getroles() {
+      UserService.getRoles().then((res) => {
+        for (let r = 0; r < res.data.length; r++) {
+          if (this.currentUser.role_id == 5) {
+          if (res.data[r].id != 2) {
+            this.roles.push(res.data[r])
+          }
+          }else  {
+            if (res.data[r].id != 2 && res.data[r].id != 5) {
+            this.roles.push(res.data[r])
+          }
+          }
+        }
+      })
+    },
     deleteuserid() {
       AdminshphService.deleteadminshph(this.user_id, 0).then(() => {
         document.getElementById("closeduserdelete").click();
@@ -296,11 +332,6 @@ export default {
         // console.log(res.data);
       });
     },
-    getroles() {
-      UserService.getRoles().then((res) => {
-        this.roles = res.data;
-      });
-    },
     getid(id) {
       this.user_id = id;
       if (this.user_id != 0) {
@@ -344,11 +375,20 @@ export default {
         // });
         this.title = "เพิ่มข้อมูลผู้ใช้งาน";
       }
+      this.user.shphId = this.currentUser.shphId
     },
     save() {
-      // if (this.user.username == "" || this.user.username == null) {
-      //     alert("กรุณากรอกอีเมล");
-      //   } else
+      if (this.currentUser.role_id == 5) {
+        if (this.user.shphId == "" || this.user.shphId == null) {
+        alert("กรุณาเลือกรพ.สต.");
+      } 
+      else
+      if (this.user.password == "" || this.user.password == null) {
+        alert("กรุณากรอกรหัสผ่าน");
+      } else {
+        this.saveUser();
+      }
+    }else
       if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
       } else {
@@ -360,6 +400,8 @@ export default {
         var update = {
           password: this.user.password,
           hash: this.hash,
+              shphId: this.user.shphId,
+              type: this.user.type,
         };
         // console.log(this.user_id);
         AdminshphService.updateadminshph(this.user_id, update).then(() => {
@@ -390,7 +432,7 @@ export default {
             console.log(uid);
             var userdata = {
               username: uid,
-              shphId: this.currentUser.shphId,
+              shphId: this.user.shphId,
               password: this.user.password,
               adminId: this.currentUser.id,
               UID: uid,
@@ -412,7 +454,7 @@ export default {
       }
     },
     getUsers() {
-      AdminshphService.getadminshphs("", this.currentUser.id).then((res) => {
+      AdminshphService.getadminshphs(1, this.currentUser.id).then((res) => {
         this.list = res.data;
       });
     },
