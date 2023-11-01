@@ -10,9 +10,33 @@
         </div>
         <div
           class="col-sm-9"
-          style="margin-top: 8%; border-bottom: 5px solid #e7038f"
-        >
+          style="margin-top: 5%; border-bottom: 5px solid #e7038f"
+        >   
+        <!-- <a href="#" style="padding-right: 15px;bottom:0px;right:0px;position:absolute;" @click.prevent="logOut" v-if="currentUser"> 
+          <img src="../assets/logout.png" style="width:60px;" />&nbsp;
+        </a>  -->
+        <!-- {{icon}}
+        <div v-for="c in icon" :key="c.id">
+        <a :href="c.url" :style="c.style"> 
+          <img :src="s.src" style="width:60px;" />&nbsp;
+        </a> 
+      </div> -->
+        <!-- <a href="/MenuSuperAdmin" style="padding-right: 80px;bottom:0px;right:0px;position:absolute;" v-if="currentUser && (currentUser.role_id == 3 ||
+                currentUser.role_id == 5)"> 
+          <img src="../assets/setting.png" style="width:50px;" />&nbsp;
+        </a> 
+        <a href="/Mains" style="padding-right: 140px;bottom:0px;right:0px;position:absolute;"> 
+          <img src="../assets/home.png" />&nbsp;
+        </a>  -->
+        <!-- <img src="../assets/setting.png" style="width:110px;padding-right: 70px;bottom:0px;right:0px;position:absolute;" v-if="currentUser && (currentUser.role_id == 3 ||
+                currentUser.role_id == 5)"/>&nbsp;
+          <img src="../assets/home.png" style="padding-right: 120px;bottom:0px;right:0px;position:absolute;" />&nbsp; -->
+         <!-- <p class="bet_time" style="margin: 0px;">
+          <img src="../assets/home.png" style="padding-right: 70px;" width="100%" />&nbsp;
+         </p> -->
+
           <h1>{{data.title}}</h1>
+          
         </div>
       </div>
       <div class="row" v-if="status">
@@ -126,7 +150,16 @@
             "
           >
             <div class="row mt-3" style="margin: 5px">
-              <h4>ข่าวสาร</h4>
+              <div class="col-sm-12">
+              <h4 class="mb-3">ข่าวสาร</h4>
+
+              </div>
+              <!-- <div class="col-sm-12">
+              <div class="callout callout-info" v-for="n in news" :key="n.id">
+                <h5 v-html="n.title"></h5>
+<p v-html="n.content"></p>
+              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -142,6 +175,7 @@
 import UserService from "../services/UserService.js";
 // import MenuSuperAdmin from "../components/MenuSuperAdmin.vue";
 import NotificationService from "../services/NotificationService";
+import NewsService from "../services/NewsService";
 
 export default {
   name: "Nav",
@@ -152,7 +186,9 @@ export default {
     return {
       menu: [],
       status: true,
-      data:{}
+      data:{},
+      news:[],
+      icon:[]
     };
   },
   computed: {
@@ -161,6 +197,19 @@ export default {
     },
   },
   mounted() {
+    if (this.currentUser) {
+      this.icon.push({
+        url:'/Mains',
+        style:'padding-right: 15px;bottom:0px;right:0px;position:absolute;',
+        src:'../assets/logout.png'
+      })
+    }else{
+      this.icon.push({
+        url:'/Mains',
+        style:'padding-right: 15px;bottom:0px;right:0px;position:absolute;',
+        src:'../assets/logout.png'
+      })
+    }
     // console.log(this.$route.path);
     this.getNoti()
     if (
@@ -228,8 +277,14 @@ export default {
         });
       }
     }
+    this.getNews()
   },
   methods: {
+    getNews(){
+      NewsService.getnews(1).then((res) => {
+        this.news = res.data;
+      });
+    },
     getNoti(){
       NotificationService.getnotification(1).then((res)=>{
         this.data = res.data
@@ -252,5 +307,13 @@ export default {
   background-color: gray;
   width: 100%;
   border: 15px solid gray;
+}
+.box {
+    position:relative;
+}
+.bet_time {
+    position:absolute;
+    bottom:0;
+    right:0;
 }
 </style>

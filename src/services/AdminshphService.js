@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class AdminshphService {
-    getadminshphs(name,adminId) {
-        return http.get('/adminshph?name='+name+'&&adminId='+adminId);
+    getadminshphs(name,adminId,role) {
+        return http.get('/adminshph?name='+name+'&&adminId='+adminId+'&&role='+role);
     }
     getadminshph(id) {
         return http.get('/adminshph/' + id);

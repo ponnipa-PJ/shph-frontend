@@ -320,6 +320,7 @@ import ProvinceService from "../services/ProvinceService";
 import AmphuresService from "../services/AmphuresService";
 import AdminshphService from "../services/AdminshphService";
 import DoctorShphService from "../services/DoctorShphService";
+import NotificationService from "../services/NotificationService";
 
 export default {
   name: "Nav",
@@ -356,10 +357,16 @@ export default {
 
     this.getprovinces();
     this.getroles();
-    this.user.from_name = "ระบบจองคิวของรพ.สต.";
+this.getNoti()
+    // this.user.from_name = "ระบบจองคิวของรพ.สต.";
     this.user.message = this.generateGuid();
   },
   methods: {
+    getNoti(){
+      NotificationService.getnotification(1).then((res)=>{
+        this.user.from_name = res.data.title
+      })
+    },
     Script_checkID(id) {
       var i =0
       var sum = 0
@@ -511,7 +518,8 @@ export default {
         });
       
         }else{
-          UserService.getUsers(this.user.email, "",'','').then((res) => {
+          UserService.checkUID(this.user.UID).then((res) => {
+          // UserService.getUsers(this.user.email, "",'','').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -551,7 +559,8 @@ export default {
               );
             });
           } else {
-            alert("อีเมลนี้มีในระบบแล้ว กรุณาใช้อีเมลอื่น");
+            // alert("อีเมลนี้มีในระบบแล้ว กรุณาใช้อีเมลอื่น");
+            alert("หมายเลขบัตรประชาชนนี้มีในระบบแล้ว");
           }
         });
       

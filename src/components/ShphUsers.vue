@@ -19,7 +19,43 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-3 mt-3">
+        <label for="inputPassword"
+                    >สิทธิ์การใช้งาน <span style="color: red">*</span></label
+                  >
+                  <div class="form-group">
+                    <select
+                      class="form-control form-control-sm"
+                      v-model="role"
+                      @change="selectrole"
+                    >
+                      <option v-for="(d, i) in roleslist" :key="i" :value="d.id">
+                        {{ d.name }}
+                      </option>
+                    </select>
+                  </div>
+      </div>
+                  
+                </div>
     <div style="text-align: right">
+      <vue-excel-xlsx
+      class="btn btn-success"
+                id="excel"
+                :data="list"
+                :columns="columns"
+                :file-name="filename"
+                :file-type="'xlsx'"
+                :sheet-name="'sheetname'"
+              >
+              <i class="fa fa-file-excel"></i>  Export Excel
+              </vue-excel-xlsx>&nbsp;
+      <!-- <button
+              class="btn btn-success"
+              style="color: white"
+            >
+              Export
+            </button> -->
       <a>
         <button
           type="button"
@@ -33,11 +69,11 @@
         </button></a
       >
     </div>
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="tblData">
       <thead>
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
-          <th scope="col">Username</th>
+          <th scope="col">ชื่อผู้ใช้งาน</th>
           <th scope="col">สิทธิ์การใช้งาน</th>
           <th scope="col">รพ.สต.</th>
           <th scope="col"></th>
@@ -46,7 +82,7 @@
       <tbody>
         <tr v-for="(l, i) in list" :key="i">
           <td>
-            {{ i + 1 }}
+            {{ l.no }}
           </td>
           <td>
             {{ l.username }}
@@ -224,6 +260,7 @@ import DistrictService from "../services/DistrictService";
 import ProvinceService from "../services/ProvinceService";
 import AmphuresService from "../services/AmphuresService";
 import shphService from "../services/shphService";
+import RoleService from '../services/RoleService';
 
 export default {
   name: "Nav",
@@ -232,6 +269,7 @@ export default {
   },
   data() {
     return {
+      columns: [],
       concert_id: 0,
       list: [],
       user: {},
@@ -248,9 +286,13 @@ export default {
       image: "",
       nametype: {},
       types: [],
+      role:0,
+      roleslist:[],
+      filename:'รายชื่อผู้ใช้งานทั้งหมด'
     };
   },
   mounted() {
+    this.generatecolumn()
     this.nametype = JSON.parse(localStorage.getItem("types"));
     this.types.push(
       {
@@ -268,6 +310,70 @@ export default {
     this.user.username = "ID0001";
   },
   methods: {
+    generatecolumn() {
+      this.columns = [];
+      this.columns.push(
+        {
+          label: "ลำดับที่",
+          field: "no",
+          align: "center",
+        },
+        {
+          label: "ชื่อผู้ใช้งาน",
+          field: "username",
+        },
+        {
+          label: "สิทธิ์การใช้งาน",
+          field: "role",
+        },
+        {
+          label: "รพ.สต.",
+          field: "shph",
+        },
+      );
+    },
+    exportTableToExcel(tableID, filename = "") {
+      var downloadLink;
+      var dataType = "application/vnd.ms-excel";
+      var tableSelect = document.getElementById(tableID);
+      var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20");
+
+      // Specify file name
+      var file = ''
+      file = "รายชื่อ.xls"
+      filename = filename
+        ? filename + ".xls"
+        : file;
+
+      // Create download link element
+      downloadLink = document.createElement("a");
+
+      document.body.appendChild(downloadLink);
+
+      if (navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(["\ufeff", tableHTML], {
+          type: dataType,
+        });
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Create a link to the file
+        downloadLink.href = "data:" + dataType + ", " + tableHTML;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        //triggering the function
+        downloadLink.click();
+      }
+    },
+    selectrole(){
+      RoleService.getRole(this.role).then((res) => {
+        console.log(res.data);
+
+      this.filename = 'รายชื่อผู้ใช้งานสิทธิ์' +res.data.name
+      })
+this.getUsers()
+    },
     getroles() {
       UserService.getRoles().then((res) => {
         for (let r = 0; r < res.data.length; r++) {
@@ -278,6 +384,21 @@ export default {
           }else  {
             if (res.data[r].id != 2 && res.data[r].id != 5) {
             this.roles.push(res.data[r])
+          }
+          }
+        }
+      })
+      UserService.getRoles().then((res) => {
+        this.roleslist.push({id:0,
+          name:'ทั้งหมด'})
+        for (let r = 0; r < res.data.length; r++) {
+          if (this.currentUser.role_id == 5) {
+          if (res.data[r].id != 2) {
+            this.roleslist.push(res.data[r])
+          }
+          }else  {
+            if (res.data[r].id != 2 && res.data[r].id != 5) {
+            this.roleslist.push(res.data[r])
           }
           }
         }
@@ -454,8 +575,12 @@ export default {
       }
     },
     getUsers() {
-      AdminshphService.getadminshphs(1, this.currentUser.id).then((res) => {
+      AdminshphService.getadminshphs(1, this.currentUser.id,this.role).then((res) => {
         this.list = res.data;
+        for (let r = 0; r < this.list.length; r++) {
+          this.list[r].no = r+1
+          
+        }
       });
     },
   },
