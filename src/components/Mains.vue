@@ -2,11 +2,11 @@
   <div>
     <div class="row mt-3" style="margin: 5px">
             <div class="col-sm-4" v-for="(m, i) in menu" :key="i">
-              <a href="#" @click="gotopage(m.url)"
+              <a href="" @click="gotopage(m.url)"
                 ><div class="card" style="height: 200px">
                   <div class="card-body">
                     <h4 style="text-align: center" class="mt-5">
-                      <i :class="'nav-icon ' + m.icon"></i><br>
+                      <!-- <i :class="'nav-icon ' + m.icon"></i><br> -->
                       {{ m.name }}
                     </h4>
                   </div>
@@ -65,7 +65,7 @@ if (this.currentUser) {
       setTimeout(function () {
         location.reload();
       }, 500);
-      this.$router.push("/Mains");
+      this.$router.push("/");
     },
   },
 };

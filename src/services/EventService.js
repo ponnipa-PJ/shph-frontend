@@ -32,6 +32,9 @@ class EventService {
     geteventbydocanddate(date,id){
         return http.get('/events/geteventbydocanddate?date='+date+'&&id='+id);
     }
+    geteventbook(id){
+        return http.get('/events/geteventbook?id='+id);
+    }
     getevent(id) {
         return http.get('/events/' + id);
     }

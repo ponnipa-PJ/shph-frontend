@@ -11,7 +11,7 @@
           </div> -->
 
           <h5 class="widget-user-desc">จัดการคิว{{nametype.masseuse}}ประจำเดือน</h5>
-          <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
+          <h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพตำบลแม่กา จังหวัดพะเยา</h5>
           <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
         </div>
@@ -25,7 +25,7 @@
 <div class="card-body p-0" style="display: block;">
 <ul class="nav nav-pills flex-column">
 <li class="nav-item active" v-for="s in u.shph" :key="s.id"> 
-  <a :href="'/plandoctor?id=' + u.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+  <a :href="'/plandoctor?id=' + u.id + '&&shphId=' + s.id" class="nav-link">
     <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
 </a>
 </li>
@@ -38,7 +38,7 @@
         <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 1 || currentUser.role_id == 7">
 <ul class="nav nav-pills flex-column">
 <li class="nav-item active" v-for="s in shphlist" :key="s.id"> 
-  <a :href="'/plandoctor?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+  <a :href="'/plandoctor?id=' + currentUser.id + '&&shphId=' + s.id" class="nav-link">
     <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
 </a>
 </li>

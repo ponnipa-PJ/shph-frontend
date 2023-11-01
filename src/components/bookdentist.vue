@@ -960,7 +960,7 @@ this.userId = ""
       var d =
         breaktime.getFullYear() +
         "-" +
-        (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") +
+        (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") +
         "-" +
         breaktime.getDate().toString().padStart(2, "0");
 
@@ -975,7 +975,7 @@ this.userId = ""
         now =
           now.getFullYear() +
           "-" +
-          (parseInt(now.getUTCMonth()) + 1) +
+          (parseInt(now.getMonth()) + 1) +
           "-" +
           now.getDate();
         now = new Date(now);

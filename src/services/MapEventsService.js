@@ -22,6 +22,9 @@ class MapEventsService {
     updatemap_event(id, data) {
         return http.put(`/map_events/${id}`, data);
     }
+    updateconfirm(id, data) {
+        return http.put(`/map_events/updateconfirm/${id}`, data);
+    }
     deletemap_event(id) {
         return http.delete('/map_events/' + id);
     }

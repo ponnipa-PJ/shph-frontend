@@ -11,7 +11,7 @@
 </div> -->
 
 <h5 class="widget-user-desc">จองคิว{{nametype.masseuse}}ประจำเดือน</h5>
-<h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพ</h5>
+<h5 class="widget-user-desc">โรงพยาบาลส่งเสริมสุขภาพตำบลแม่กา จังหวัดพะเยา</h5>
 <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
 
 </div>

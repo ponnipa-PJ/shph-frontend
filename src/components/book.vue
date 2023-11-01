@@ -444,7 +444,8 @@ cusname:{},
 masseusetypes:[],
 masseusetype:[],
 masseusetypeupdate:[],
-nametype:{}
+nametype:{},
+masseusetypebook:''
     };
   },
   
@@ -469,6 +470,8 @@ this.userId = this.currentUser.id
   },
   methods: {
     gettype(){
+      this.uid = ''
+      this.cusname = {}
       if (this.typebook == 2) {
 this.userId = ""
         
@@ -639,7 +642,7 @@ this.getmap(id)
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0")) + '-' + (breaktime.getDate().toString().padStart(2, "0"))
+      var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0")) + '-' + (breaktime.getDate().toString().padStart(2, "0"))
 
       // console.log(id);
       this.getid(id, d)
@@ -650,7 +653,7 @@ this.getmap(id)
       //   // console.log(clickInfo.event.id);
       //   var breaktime = new Date(clickInfo.event.start)
 
-      //   var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
+      //   var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
 
       //   EventService.geteventbyuseranddate(d,this.currentUser.id).then((res) => {
       //     // console.log(res.data);
@@ -660,7 +663,7 @@ this.getmap(id)
       //       var now = new Date()
       //   var selectdate = new Date(d)
 
-      //   now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1) + '-' + now.getDate()
+      //   now = now.getFullYear() + '-' + (parseInt(now.getMonth()) + 1) + '-' + now.getDate()
       //   now = new Date(now)
 
 
@@ -732,6 +735,7 @@ this.getmap(id)
 
     },
     getalleventbycreatedBy() {
+      this.masseusetype = []
       MapEventsService.geteventbycreatedBy(this.date, this.doctor_id, this.currentUser.id, this.shphId).then((res) => {
         console.log(res.data);
         this.booklist = res.data
@@ -848,7 +852,14 @@ alert('กรุณาเลือกประเภทการจองแล�
             alert('กรุณากรอก' + txt)
           } else {
             // var time = ' เวลา '
+            this.masseusetypebook = ''
+            for (let m = 0; m < this.masseusetype.length; m++) {
+               MasseuseTypeService.getmasseusetype(this.masseusetype[m]).then((res)=>{
+                this.masseusetypebook += ' '+res.data.name
+               })
+              }
             if (this.eventId == 0) {
+              
               for (let e = 0; e < this.event_id.length; e++) {
                 var userdata = {
                   bookstatus: 0,
@@ -902,7 +913,7 @@ alert('กรุณาเลือกประเภทการจองแล�
                       var sql = his + value
                       // console.log(sql);
                       EventService.createsql(sql).then(() => {
-                        var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                        var message = this.noti.message_chiropractor  + ' '+this.masseusetypebook+ ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                         // console.log(message);
                         LinkImageService.sendNotify(message, this.currentUser.line_token)
                         document.getElementById("booktab").click();

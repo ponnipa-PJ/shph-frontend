@@ -65,7 +65,7 @@
           data-bs-toggle="modal"
           data-bs-target="#AddUser"
         >
-          <i class="fa fa-plus"></i> เพิ่มบัญชีหมอ
+          <i class="fa fa-plus"></i> เพิ่มบัญชี
         </button></a
       >
     </div>
@@ -74,6 +74,7 @@
         <tr class="table-active">
           <th scope="col">ลำดับที่</th>
           <th scope="col">ชื่อผู้ใช้งาน</th>
+          <th scope="col">รหัสผ่าน</th>
           <th scope="col">สิทธิ์การใช้งาน</th>
           <th scope="col">รพ.สต.</th>
           <th scope="col"></th>
@@ -86,6 +87,9 @@
           </td>
           <td>
             {{ l.username }}
+          </td>
+          <td>
+            <span>1234</span>
           </td>
           <td>
             <span>{{ l.role }}</span>
@@ -189,7 +193,7 @@
                     id="username"
                   />
                 </div>
-                <div class="form-group mt-3">
+                <!-- <div class="form-group mt-3">
                   <label for="password">รหัสผ่าน</label>
                   <input
                     v-model="user.password"
@@ -198,7 +202,7 @@
                     id="password"
                     placeholder="กรุณากรอกรหัสผ่าน"
                   />
-                </div>
+                </div> -->
               </div>
             </form>
           </div>
@@ -321,6 +325,10 @@ export default {
         {
           label: "ชื่อผู้ใช้งาน",
           field: "username",
+        },
+        {
+          label: "รหัสผ่าน",
+          field: "password",
         },
         {
           label: "สิทธิ์การใช้งาน",
@@ -492,6 +500,7 @@ this.getUsers()
         // }
         // console.log(uid);
         this.user = {};
+        this.user.password= '1234'
         // this.user.username = uid
         // });
         this.title = "เพิ่มข้อมูลผู้ใช้งาน";
@@ -536,7 +545,8 @@ this.getUsers()
         });
       } else {
         var uid = "";
-        AdminshphService.getadminshphs(1, "").then((res) => {
+        AdminshphService.getadminshphs(1, "",0).then(async (res) => {
+          console.log(res.data);
           for (let n = 0; n < this.user.no; n++) {
             uid = "UID";
             var num = res.data.length + n;
@@ -560,7 +570,7 @@ this.getUsers()
               hash: this.hash,
               type: this.user.type,
             };
-            AdminshphService.createadminshph(userdata).then(() => {
+            await AdminshphService.createadminshph(userdata).then(() => {
               if (n + 1 == this.user.no) {
                 document.getElementById("closeduser").click();
                 this.getUsers();
@@ -579,6 +589,7 @@ this.getUsers()
         this.list = res.data;
         for (let r = 0; r < this.list.length; r++) {
           this.list[r].no = r+1
+          this.list[r].password = 1234
           
         }
       });

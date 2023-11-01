@@ -34,6 +34,7 @@
 
 <script>
 import EventDentistService from "../services/EventDentistService";
+import MapEventsDentistService from "../services/MapEventsDentistService";
 
 export default {
   name: "Nav",
@@ -50,18 +51,18 @@ export default {
   },
   mounted() {
    this.event_id = this.$route.query.id
-   EventDentistService.getevent(this.event_id).then((res)=>{
+   EventDentistService.geteventbook(this.event_id).then((res)=>{
 this.user = res.data
 console.log(this.user);
 var breaktime = new Date(this.user.date)
 
-      // var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
+      // var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
       
-this.title = 'คุณได้จองคิว'+this.nametype+' หมอ'+ this.user.firstname+ ' '+ this.user.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
+this.title = 'คุณได้จองคิว'+this.user.typename+' หมอ'+ this.user.firstname+ ' '+ this.user.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
-        }) + ' '+this.timeformat(this.user.date)
+        }) + res.data.time+' ที่'+ res.data.shph
 })
   },
   methods: {
@@ -79,7 +80,7 @@ this.title = 'คุณได้จองคิว'+this.nametype+' หมอ'+ 
         confirmstatus:this.user.confirmstatus
       }
 console.log(data);
-EventDentistService.updateconfirm(this.event_id,data).then(()=>{
+MapEventsDentistService.updateconfirm(this.event_id,data).then(()=>{
         alert('บันทึกสำเร็จ')
 })
       }

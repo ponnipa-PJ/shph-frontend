@@ -51,7 +51,7 @@ export default {
             if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
           this.$router.push('/MenuSuperAdmin');
           }else {
-          this.$router.push('/Mains');
+          this.$router.push('/');
           }
           setTimeout(function () {
           location.reload();

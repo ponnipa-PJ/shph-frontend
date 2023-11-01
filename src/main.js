@@ -26,6 +26,13 @@ Vue.config.productionTip = false
 
 Vue.use(VueExcelXlsx);
 
+// import './assets/fonts/fontawesome/font-awesome.min.css'
+// import './assets/fonts/iconsmind/iconsmind.css'
+// import './assets/css/plugins.min.css'
+import './assets/css/style.css'
+// import './assets/scripts/script.j/s'
+
+
 new Vue({
   router,
   store,

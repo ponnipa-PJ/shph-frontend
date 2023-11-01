@@ -4,7 +4,7 @@
       <div
         class="col-md-12" style="padding-right: 0px;"
       >
-      <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="background-color: white!important;padding: 0px;">
+      <!-- <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="background-color: white!important;padding: 0px;">
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -15,7 +15,7 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav> -->
         <div class="row mt-3" style="margin: 5px">
           <div class="col-sm-4" v-for="(l, i) in menu" :key="i">
             <a :href="l.url"

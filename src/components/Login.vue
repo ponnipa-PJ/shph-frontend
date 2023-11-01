@@ -218,7 +218,7 @@ export default {
                   ) {
                     this.$router.push("/MenuSuperAdmin");
                   } else {
-                    this.$router.push("/Mains");
+                    this.$router.push("/");
                   }
                   location.reload();
                 }
@@ -267,7 +267,7 @@ export default {
                       ) {
                         this.$router.push("/MenuSuperAdmin");
                       } else {
-                        this.$router.push("/Mains");
+                        this.$router.push("/");
                       }
                       location.reload();
                     }

@@ -398,14 +398,14 @@ for (let a = 0; a < this.alltoken.length; a++) {
       // console.log(arg);
       var breaktime = new Date(arg.dateStr)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       EventDentistService.getevents(d,this.doctor_id,this.shphId,0).then((res) => {
         // console.log(res.data);
         if (res.data.length == 0) {
                 var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
+      now = now.getFullYear() + '-' + (parseInt(now.getMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       
@@ -495,11 +495,11 @@ for (let a = 0; a < this.alltoken.length; a++) {
       var id = clickInfo.event.id
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
+      now = now.getFullYear() + '-' + (parseInt(now.getMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       

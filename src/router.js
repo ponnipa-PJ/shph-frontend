@@ -55,6 +55,7 @@ import MakingAppointmentDentistAll from './components/MakingAppointmentDentistAl
 import MenuSuperAdmin from './components/MenuSuperAdmin.vue';
 import Mains from './components/Mains.vue';
 import News from './components/News.vue';
+import MenuManager from './components/MenuManager.vue';
 
 const router = new Router({
   mode: "history",
@@ -390,6 +391,12 @@ const router = new Router({
   alias: "/News",
   name: "News",
   component: News
+},
+{
+  path: "/MenuManager",
+  alias: "/MenuManager",
+  name: "MenuManager",
+  component: MenuManager
 },
 
   ]

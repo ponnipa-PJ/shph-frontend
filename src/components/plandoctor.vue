@@ -438,7 +438,7 @@ return time
       // console.log(arg);
       var breaktime = new Date(arg.dateStr)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       console.log(d);
       EventService.getevents(d,this.doctor_id,this.shphId,0).then((res) => {
         console.log(res.data);
@@ -446,7 +446,7 @@ return time
           var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()).toString().padStart(2, "0") + 1) + '-' + now.getDate().toString().padStart(2, "0")
+      now = now.getFullYear() + '-' + (parseInt(now.getMonth()).toString().padStart(2, "0") + 1) + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       
@@ -544,11 +544,11 @@ return time
       // console.log(this.mapId);
       var breaktime = new Date(clickInfo.event.start)
 
-      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
+      var d = breaktime.getFullYear() + '-' + (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") + '-' + breaktime.getDate().toString().padStart(2, "0")
       var now = new Date()
       var selectdate = new Date(d)
 
-      now = now.getFullYear() + '-' + (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
+      now = now.getFullYear() + '-' + (parseInt(now.getMonth()) + 1).toString().padStart(2, "0") + '-' + now.getDate().toString().padStart(2, "0")
       now = new Date(now)
       
       

@@ -6,15 +6,15 @@
           <div class="card-body login-card-body">
                 <div class="card-body">
                   
-                  <h5 >{{ title }} เวลาดังนี้</h5>
+                  <h5 >{{ title }}</h5>
 
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <div class="custom-control custom-checkbox" v-for="(i, r) in time" :key="r" >
                       <input class="form-check-input" type="checkbox" :id="i.date" disabled
                         :value="i.id" v-model="event_id">
                       <label :for="i.date" class="form-check-label">{{ timeformat(i.date) }}</label>
                     </div>
-                  </div>
+                  </div> -->
                  <div class="form-group">
 <div class="custom-control custom-radio">
 <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" value="1" v-model="user.confirmstatus">
@@ -42,6 +42,7 @@
 
 <script>
 import EventService from "../services/EventService";
+import MapEventsService from "../services/MapEventsService";
 
 export default {
   name: "Nav",
@@ -59,54 +60,30 @@ export default {
   },
   mounted() {
    this.event_id = this.$route.query.id
-   EventService.getevent(this.event_id).then((res)=>{
-    this.user = res.data
-    var breaktime = new Date(res.data.date)
-
-      var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
-
-    EventService.gettimebydoctoranddate(d,res.data.doctorId,res.data.userId).then((res) => {
+    EventService.geteventbook(this.event_id).then((res) => {
 // this.user = res.data
-console.log(res.data);
-for (let r = 0; r < res.data.length; r++) {
-  if (res.data[r].userId == this.user.userId) {
-    this.time.push(res.data[r])
-  }
-  
-}
-      // var d = breaktime.getFullYear() + '-' + ((parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0"))+ '-' + (breaktime.getDate().toString().padStart(2, "0"))
-      
-this.title = 'คุณได้จองคิว'+this.nametype+' หมอ'+ this.user.firstname+ ' '+ this.user.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
+var breaktime = new Date(res.data.date)
+// console.log(res.data);
+this.title = 'คุณได้จองคิว '+res.data.typename+' หมอ'+ res.data.firstname+ ' '+ res.data.lastname+' วันที่ ' + breaktime.toLocaleDateString('th-TH', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
-        }) 
-})
+        }) + res.data.time+' ที่'+ res.data.shph
 })
   },
   methods: {
-    timeformat(date) {
-      var time = date.split('T')
-      time = time[1].split(':')
-// console.log(time);
-      return time[0] + '.' + time[1] + ' น.'
-    },
     save(){
       if (this.user.confirmstatus == null) {
         alert('กรุณายืนยันคิว')
       }else{
-        for (let t = 0; t < this.time.length; t++) {
           var data ={
         confirmstatus:this.user.confirmstatus
       }
 // console.log(data);
-      EventService.updateconfirm(this.time[t].id,data).then(()=>{
-        if (t+1 == this.time.length) {
+      MapEventsService.updateconfirm(this.event_id,data).then(()=>{
         alert('บันทึกสำเร็จ')
           
-        }
 })
-        }
         
       }
       

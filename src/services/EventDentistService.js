@@ -19,6 +19,9 @@ class EventDentistService {
     geteventbyuseranddate(date,id,shphId){
         return http.get('/eventsdentist/geteventbyuseranddate?date='+date+'&&id='+id+'&&shphId='+shphId);
     }
+    geteventbook(id){
+        return http.get('/eventsdentist/geteventbook?id='+id);
+    }
     geteventbydocanddate(date,id,shphId){
         return http.get('/eventsdentist/geteventbydocanddate?date='+date+'&&id='+id +'&&shphId='+shphId);
     }

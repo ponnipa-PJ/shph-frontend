@@ -650,7 +650,7 @@ export default {
       var d =
         breaktime.getFullYear() +
         "-" +
-        (parseInt(breaktime.getUTCMonth()) + 1).toString().padStart(2, "0") +
+        (parseInt(breaktime.getMonth()) + 1).toString().padStart(2, "0") +
         "-" +
         breaktime.getDate().toString().padStart(2, "0");
       var now = new Date();
@@ -659,7 +659,7 @@ export default {
       now =
         now.getFullYear() +
         "-" +
-        (parseInt(now.getUTCMonth()) + 1).toString().padStart(2, "0") +
+        (parseInt(now.getMonth()) + 1).toString().padStart(2, "0") +
         "-" +
         now.getDate().toString().padStart(2, "0");
       now = new Date(now);
@@ -895,7 +895,7 @@ export default {
             day !=
               parseInt(date.getFullYear()) +
                 "-" +
-                (parseInt(date.getUTCMonth()) + 1).toString().padStart(2, "0") +
+                (parseInt(date.getMonth()) + 1).toString().padStart(2, "0") +
                 "-" +
                 parseInt(date.getDate()).toString().padStart(2, "0")
           ) {
@@ -905,7 +905,7 @@ export default {
             var day =
               parseInt(date.getFullYear()) +
               "-" +
-              (parseInt(date.getUTCMonth()) + 1).toString().padStart(2, "0") +
+              (parseInt(date.getMonth()) + 1).toString().padStart(2, "0") +
               "-" +
               parseInt(date.getDate()).toString().padStart(2, "0");
             // console.log(day);
