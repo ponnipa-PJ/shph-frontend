@@ -18,7 +18,7 @@
     <div
       class="vlt-hero-title-holder jarallax"
       style="
-        background-image: url('https://www.hdwallpapers.in/download/geometric_squres_shapes_pattern_white_background_hd_white_background-1600x900.jpg');
+        background-image: url('https://1.bp.blogspot.com/-bIIRlWJsmdA/XCiKPoUc2TI/AAAAAAAAbHE/HNHi1K_Qdqwjm-tlS7Ca9nnAIv9t2LgigCLcBGAs/s1600/BANTUM.jpg');
         position: relative;
         z-index: 0;
         background-attachment: scroll;
@@ -32,6 +32,7 @@
 
       <!-- <div id="jarallax-container-0" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -100;"><img src="#" style="max-width: none; position: fixed; top: 0px; left: 0px; width: 1301.79px; height: 732.259px; overflow: hidden; pointer-events: none; margin-left: -141.897px; margin-top: 23.3707px; visibility: visible; background-position: 50% 50%; transform: translateY(-23.3707px) translateZ(0px);"></div> -->
     </div>
+    <div style="margin-left:20px;margin-top: 20px;" v-if="currentUser"><h6 style="font-weight: bold;">ยินดีต้อนรับ คุณ {{currentUser.firstname}} {{currentUser.lastname}}</h6></div>
     <main class="vlt-main-holder vlt-main-padding" style="background-color:white">
       <div class="container">
         <div class="vlt-portfolio-grid-filters">
@@ -41,13 +42,13 @@
             v-for="(i, c) in icon"
             :key="c"
           >
-            <a @click="gotopage(i.url)"><span>{{ i.name }}</span></a>
+            <a @click="gotopage(i.url)"><h5 :style="i.font">{{ i.name }}</h5></a>
           </div>
           <div v-if="currentUser"
           class="cbp-filter-item"
             data-filter=".portfolio_category"
           >
-            <a @click.prevent="logOut"><span>ออกจากระบบ</span></a>
+            <a @click.prevent="logOut"><h5 style="'font-weight: 100!important'">ออกจากระบบ</h5></a>
           </div>
         </div>
         <router-view />
@@ -139,7 +140,7 @@ export default {
         name: "การจัดการระบบ",
         url:'/MenuSuperAdmin',
       });
-      }else{
+      }else if(this.currentUser.role_id != 2){
         this.icon.push({
         class: "cbp-filter-item",
         url:'/',
@@ -149,6 +150,12 @@ export default {
         class: "cbp-filter-item",
         name: "การจัดการระบบ",
         url:'/MenuManager',
+      });
+      }else{
+        this.icon.push({
+        class: "cbp-filter-item",
+        url:'/',
+        name: "หน้าหลัก",
       });
       }
     } else {
@@ -245,9 +252,11 @@ export default {
     activemenu(){
       for (let i = 0; i < this.icon.length; i++) {
         this.icon[i].class = 'cbp-filter-item'
+        this.icon[i].font ='font-weight:normal'
       if (this.$route.path == this.icon[i].url) {
         var classactive = this.icon[i].class + ' cbp-filter-item-active'
         this.icon[i].class = classactive
+        this.icon[i].font = 'font-weight:bold'
       } 
     }
     },
