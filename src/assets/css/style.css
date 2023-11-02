@@ -291,13 +291,13 @@ input::-webkit-inner-spin-button {
     appearance: none;
 }
 
-select {
+/* select {
     background-image: url("../img/select_bg.svg");
     background-position: calc(100% - 10px) 50%;
     background-repeat: no-repeat;
     background-size: 10px;
     padding-right: 30px;
-}
+} */
 
 textarea {
     width: 100%;

@@ -19,7 +19,7 @@
         <div class="row mt-3" style="margin: 5px">
           <div class="col-sm-4" v-for="(l, i) in menu" :key="i">
             <a :href="l.url"
-              ><div class="card" style="height: 800px">
+              ><div class="card" style="height: 900px">
                 <div class="card-body">
                   <h5 style="text-align: center">
                     <i :class="'nav-icon ' + l.icon"></i>

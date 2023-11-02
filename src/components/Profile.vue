@@ -69,6 +69,13 @@
                <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
+                  <label for="password">เลขบัตรประชาชน<span style="color: red">*</span> </label>
+                  <input v-model="user.UID" v-on:keyup.enter="signIn()" type="text" class="form-control form-control-sm"
+                    id="phone" />
+                </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
                   <label for="password">เบอร์โทรศัพท์<span style="color: red">*</span> </label>
                   <input v-model="user.phone" v-on:keyup.enter="signIn()" type="text" class="form-control form-control-sm"
                     id="phone" />
@@ -220,8 +227,8 @@ export default {
     urlAuth() {
       var clientId = 'do6mzoSxLMNnOTXkr7USva'
       var engine = LinkImageService.getLinkFrontend() + '/line'
-      var username = '1'
-      return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`
+      console.log(this.currentUser);
+      return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${this.currentUser.token}`
     },
     connectline(){
       window.open(this.urlAuth(), "_blank");
@@ -235,6 +242,10 @@ export default {
       UserService.getUser(this.currentUser.id).then((res) => {
           // console.log(res.data);
           this.user = res.data;
+          UserService.getUID(this.currentUser.id).then((uid) => {
+            // console.log(uid.data.UID);
+          this.user.UID = uid.data.UID
+          });
           this.hash = this.user.password;
             this.getprovinces()
           this.getamphurs()
@@ -318,6 +329,16 @@ export default {
         }
         )
     },
+    Script_checkID(id) {
+      var i =0
+      var sum = 0
+      if (id.substring(0, 1) == 0) return false;
+      if (id.length != 13) return false;
+      for (i = 0, sum = 0; i < 12; i++)
+        sum += parseFloat(id.charAt(i)) * (13 - i);
+      if ((11 - (sum % 11)) % 10 != parseFloat(id.charAt(12))) return false;
+      return true;
+    },
     signIn() {
       if (this.user.firstname == "" || this.user.firstname == null) {
         alert("กรุณากรอกชื่อผู้ใช้งาน");
@@ -327,6 +348,10 @@ export default {
         alert("กรุณากรอกอีเมล");
       } else if (this.user.password == "" || this.user.password == null) {
         alert("กรุณากรอกรหัสผ่าน");
+      }else if (this.user.UID == "" || this.user.UID == null) {
+        alert("กรุณากรอกเลขบัตรประชาชน");
+      } else if(!this.Script_checkID(this.user.UID)){
+        alert("กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง");
       } else if (this.user.number == "" || this.user.number == null) {
         alert("กรุณากรอกบ้านเลขที่");
       } else if (this.user.phone == "" || this.user.phone == null) {
@@ -339,7 +364,7 @@ export default {
         alert("กรุณาเลือกตำบล");
       } else if (this.user.role_id == "") {
         alert("กรุณาเลือกสิทธิ์");
-      } else {
+      } else { 
         var userdata = {
           firstname: this.user.firstname,
           lastname: this.user.lastname,
@@ -357,10 +382,11 @@ export default {
           amphureId: this.user.amphureId,
           districtsId: this.user.districtsId,
           shphId:this.user.shphId,
+          UID:this.user.UID,
         };
         if (this.user_id == 0) {
-
-          UserService.getUsers(this.user.email,'','','').then((res) => {
+          UserService.checkUID(this.user.UID).then((res) => {
+          // UserService.getUsers(this.user.email,'','','').then((res) => {
             // console.log(res.data);
             if (res.data.length == 0) {
               UserService.createUser(userdata).then(() => {
@@ -372,11 +398,13 @@ export default {
                 // window.scrollTo(0, 0);
               });
             } else {
-              alert('อีเมลนี้มีในระบบแล้ว กรุณาใช้อีเมลอื่น')
+              alert('หมายเลขบัตรประชาชนนี้มีในระบบแล้ว')
             }
           });
         } else {
           // console.log(this.user_id);
+          UserService.checkUID(this.user.UID).then((res) => {
+            if (res.data.length == 0) {
           UserService.updateUser(this.currentUser.id, userdata).then(() => {
             // console.log(res.data);
             alert('บันทึกสำเร็จ')
@@ -395,11 +423,15 @@ export default {
               });
               })
             }
+          
             //       setTimeout(function () {
             //   location.reload();
             // }, 500);
             // window.scrollTo(0, 0);
           });
+        }else{
+          alert("หมายเลขบัตรประชาชนนี้มีในระบบแล้ว");
+        }})
         }
       }
     },

@@ -17,14 +17,7 @@
     </div>
     <div
       class="vlt-hero-title-holder jarallax"
-      style="
-        background-image: url('https://1.bp.blogspot.com/-bIIRlWJsmdA/XCiKPoUc2TI/AAAAAAAAbHE/HNHi1K_Qdqwjm-tlS7Ca9nnAIv9t2LgigCLcBGAs/s1600/BANTUM.jpg');
-        position: relative;
-        z-index: 0;
-        background-attachment: scroll;
-        background-size: auto;
-      "
-    >
+      :style="{'background-image': 'url(' + data.img_background + ')'}">
       <div class="vlt-hero-title-inner">
         <h1 class="vlt-hero-title">{{ data.title }}</h1>
         <!-- <p class="vlt-hero-subtitle">Work hard. Dream big.</p> -->
@@ -127,6 +120,7 @@ export default {
   },
   mounted() {
 
+    this.getNoti();
     // console.log(this.currentUser);
     if (this.currentUser) {
       if (this.currentUser.role_id == 3 || this.currentUser.role_id == 5) {
@@ -177,7 +171,6 @@ export default {
 
     this.activemenu()
     // console.log(this.$route.path);
-    this.getNoti();
     // UserService.getUID(20).then((res) => {
     //   console.log(res.data);
     // })
@@ -272,6 +265,7 @@ export default {
     getNoti() {
       NotificationService.getnotification(1).then((res) => {
         this.data = res.data;
+        this.data.img = 'background-image: url('+this.data.img_background+')'+'position: relative;z-index: 0;background-attachment: scroll;background-size: auto;'
       });
     },
     logOut() {

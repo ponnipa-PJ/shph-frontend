@@ -209,9 +209,9 @@ export default {
                 // console.log(menu);
                 // console.log(this.currentUser);
 
-                if (this.currentUser.line_token == null) {
-                  window.open(this.urlAuth(), "_blank");
-                } else {
+                // if (this.currentUser.line_token == null) {
+                //   window.open(this.urlAuth(), "_blank");
+                // } else {
                   if (
                     this.currentUser.role_id == 3 ||
                     this.currentUser.role_id == 5
@@ -221,7 +221,7 @@ export default {
                     this.$router.push("/");
                   }
                   location.reload();
-                }
+                // }
 
                 //   setTimeout(function () {
                 //     location.reload();
@@ -258,9 +258,9 @@ export default {
                     // console.log(menu);
                     // console.log(this.currentUser);
 
-                    if (this.currentUser.line_token == null) {
-                      window.open(this.urlAuth(), "_blank");
-                    } else {
+                    // if (this.currentUser.line_token == null) {
+                    //   window.open(this.urlAuth(), "_blank");
+                    // } else {
                       if (
                         this.currentUser.role_id == 3 ||
                         this.currentUser.role_id == 5
@@ -270,7 +270,7 @@ export default {
                         this.$router.push("/");
                       }
                       location.reload();
-                    }
+                    // }
 
                     //   setTimeout(function () {
                     //     location.reload();

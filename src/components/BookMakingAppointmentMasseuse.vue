@@ -395,6 +395,7 @@ import LocationTypeService from "../services/LocationTypeService";
 import MapHistoryMasseuseService from "../services/MapHistoryMasseuseService";
 import MapEventsService from "../services/MapEventsService";
 import MakingAppointmentsService from "../services/MakingAppointmentsService";
+import NotificationService from "../services/NotificationService";
 
 export default {
   name: "Nav",
@@ -494,7 +495,8 @@ export default {
       historyraw: "",
       makeId: 0,
       UID: "",
-      eventId:[]
+      eventId:[],
+      noti:{}
     };
   },
   mounted() {
@@ -559,6 +561,9 @@ export default {
       alert("กรุณากรอกข้อมูลส่วนตัวให้ครบ");
       this.$router.push("/profile");
     }
+    NotificationService.getnotification(1).then((res)=>{
+      this.noti = res.data
+    })
   },
   methods: {
     gethistory() {
@@ -982,8 +987,31 @@ export default {
                   // console.log(make);
                   if (this.makeId == 0) {
                     MakingAppointmentsService.createmaking_appointment(make).then(
-                    () => {
+                    (res) => {
+                      EventService.getappointbyId(res.data.id).then((res)=>{
+                        var message_appointment = ''
+                            if (res.data.eventtype == 1) {
+                                message_appointment = this.noti.message_appointment_chiropractor
+                            }else{
+                                message_appointment = this.noti.message_appointment_dentist
+                            }
+                        var breaktime = new Date(res.data.date)
+                            var header = breaktime.toLocaleDateString('th-TH', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            }) + res.data.time
+                            UserService.getUser(this.userId).then((user)=>{
+                            var messagedoc = 'คุณได้นัดหมาย' + ' '+user.data.firstname+ ' '+user.data.lastname+' '+res.data.appoint+' '+res.data.typename+ ' วันที่ ' + header + ' ที่ ' + res.data.location
+                            var message = message_appointment + ' '+res.data.appoint+' '+res.data.typename+' หมอ' + res.data.firstname + ' ' + res.data.lastname + ' วันที่ ' + header + ' ที่ ' + res.data.location
+                            LinkImageService.sendNotify(messagedoc, this.currentUser.line_token)
+if (user.data.line_token) {
+  LinkImageService.sendNotify(message, user.data.line_token)
+}
+                            })
                       alert("บันทึกสำเร็จ");
+                      })
+                    
                     }
                   );
                   }else{

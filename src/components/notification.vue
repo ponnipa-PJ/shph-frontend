@@ -106,12 +106,42 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
+                  <label for="username">ข้อความแจ้งเตือนการนัดหมาย{{nametype.dentist}}<span style="color: red">*</span> </label>
+<input v-model="data.message_appointment_chiropractor" type="text" class="form-control " data-original-title="" title="">
+
+                </div>
+                
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                  <label for="username">ข้อความแจ้งเตือนการนัดหมาย{{nametype.dentist}}<span style="color: red">*</span> </label>
+<input v-model="data.message_appointment_dentist" type="text" class="form-control " data-original-title="" title="">
+
+                </div>
+                
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
                   <label for="username">ชื่อเว็บไซต์<span style="color: red">*</span> </label>
 <input v-model="data.title" type="text" class="form-control " data-original-title="" title="">
 
                 </div>
                 
                   </div>
+                  <!-- <div class="col-md-12">
+                    <div class="form-group">
+                  <label for="username">พื้นหลังเว็บไซต์<span style="color: red">*</span> </label>
+                  <img :src="data.img_background">
+                  <input
+        id="my_file"
+        class="form-control"
+        type="file"
+        accept="image/*"
+        @change="onFileChange"
+      />
+                </div>
+                
+                  </div> -->
                 </div>
                 <div class="row mt-3">
                   <div class="col-md-3"></div>
@@ -136,6 +166,8 @@
 
 <script>
 import NotificationService from "../services/NotificationService";
+import LinkImageService from "../services/LinkImageService";
+import axios from 'axios'
 
 export default {
   name: "Nav",
@@ -145,7 +177,8 @@ export default {
   data() {
     return {
       data:{},
-      nametype:{}
+      nametype:{},
+      filename:''
     };
   },
   mounted() {
@@ -158,6 +191,31 @@ export default {
       NotificationService.getnotification(1).then((res)=>{
         this.data = res.data
       })
+    },
+    onFileChange(evt) {
+      const files = evt.target.files || evt.dataTransfer.files;
+      this.selectedFile = evt.target.files[0];
+      
+      this.filename = this.selectedFile.name;
+      if (!files.length) return;
+      this.onUploadFile();
+      // }
+    },
+    onUploadFile() {
+      const formData = new FormData();
+      formData.append("file", this.selectedFile); // appending file
+      //  sending file to the backend
+      //console.log(this.filename);
+      // var http = "http://localhost:8080/uploadbanner?name="+this.filename;
+      var http = LinkImageService.getLink()+ "/uploadbg?name="+this.filename;
+      axios
+        .post(http, formData)
+        .then(() => {    
+          this.data.img_background = LinkImageService.getLink() +"/uploads/bg/" + this.filename
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     save() {
       if (this.data.email == "") {
@@ -180,7 +238,10 @@ export default {
           no_dentist_worker:this.data.no_dentist_worker,
           message_dentist:this.data.message_dentist,
           cancel_dentist:this.data.cancel_dentist,
-          title:this.data.title
+          title:this.data.title,
+          message_appointment_chiropractor:this.data.message_appointment_chiropractor,
+          message_appointment_dentist:this.data.message_appointment_dentist,
+          img_background:this.data.img_background
         };
           NotificationService.updatenotification(1, data).then(() => {
             // console.log(res.data);

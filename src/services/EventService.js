@@ -38,6 +38,9 @@ class EventService {
     getevent(id) {
         return http.get('/events/' + id);
     }
+    getappointbyId(id) {
+        return http.get('/events/getappointbyId?id='+id);
+    }
     createevent(data) {
         return http.post('/events', data);
     }
