@@ -17,7 +17,7 @@
                 <td>
                   <br /><br /><br /><br />
                   <font size="5" color="#1099f0"
-                    >แบบประเมินความพึงพอใจการให้บริการ</font
+                    >{{title}}</font
                   >
                   <br /><br />
                   <font size="5" color="#ffffff"
@@ -66,6 +66,7 @@ export default {
     return {
       statuseva: false,
       header: {},
+      title:''
     };
   },
   computed: {
@@ -76,6 +77,9 @@ export default {
   mounted() {
     if (this.$route.path == '/evaluation' || this.$route.path == '/Confirmmasseuse' || this.$route.path == '/Confirmdentist') {
        this.statuseva = true
+       if (this.$route.path == '/evaluation') {
+        this.title = 'แบบประเมินความพึงพอใจการให้บริการ'
+       }
       } 
     // console.log(this.currentUser);
   },
