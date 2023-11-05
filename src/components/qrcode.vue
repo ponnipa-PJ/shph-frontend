@@ -1,13 +1,5 @@
 <template>
 <div class="container-fluid">
-  <div v-if="statustable">
-  <button type="button" class="btn btn-primary mt-3" @click="getstatus(1)">บุคคล</button>&nbsp;
-<button type="button" class="btn btn-secondary mt-3" @click="getstatus(2)">หน่วยงาน</button>
-</div>
-<div v-else>
-  <button type="button" class="btn btn-secondary mt-3" @click="getstatus(1)">บุคคล</button>&nbsp;
-<button type="button" class="btn btn-primary mt-3" @click="getstatus(2)">หน่วยงาน</button>
-</div>
 <div class="container-fluid mt-3">
   <div style="text-align:right">
   <a :href="'/addqrcode/'+ type +'/0'">

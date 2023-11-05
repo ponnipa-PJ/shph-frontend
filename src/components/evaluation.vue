@@ -2,7 +2,7 @@
   <div class="row">
   <div class="container-fluid mt-5">
     <div class="container" v-if="savestatus">
-      <h5 class="mt-3">ระดับความพึงพอใจ</h5>
+      <h5 class="mt-3 mb-3">ระดับความพึงพอใจ</h5>
       <div class="row">
         <table width=100%>
           <tr>
@@ -82,7 +82,7 @@
       </table>
     </div>
     <div class="form-group mt-5">
-      <label for="exampleFormControlTextarea1">ข้อเสนอแนะ</label>
+      <label style="color: black;font-weight: normal;">ข้อเสนอแนะ</label>
       <textarea v-model="eva.suggestion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     </div>
     <div class="form-group row mt-3" style="text-align:center">

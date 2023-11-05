@@ -56,6 +56,7 @@ import MenuSuperAdmin from './components/MenuSuperAdmin.vue';
 import Mains from './components/Mains.vue';
 import News from './components/News.vue';
 import MenuManager from './components/MenuManager.vue';
+import QrcodeWeb from './components/QrcodeWeb.vue';
 
 const router = new Router({
   mode: "history",
@@ -398,7 +399,12 @@ const router = new Router({
   name: "MenuManager",
   component: MenuManager
 },
-
+{
+  path: "/QrcodeWeb",
+  alias: "/QrcodeWeb",
+  name: "QrcodeWeb",
+  component: QrcodeWeb
+},
   ]
 });
 

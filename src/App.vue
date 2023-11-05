@@ -17,11 +17,11 @@
                 <td>
                   <br /><br /><br /><br />
                   <font size="5" color="#1099f0"
-                    >ระบบประเมินความพึงพอใจการให้บริการ</font
+                    >แบบประเมินความพึงพอใจการให้บริการ</font
                   >
                   <br /><br />
                   <font size="5" color="#ffffff"
-                    >สำนักงานขนส่งจังหวัดเชียงราย</font
+                    >โรงพยาบาลส่งเสริมสุขภาพตำบลแม่กา จังหวัดพะเยา</font
                   >
                 </td>
               </tr>
@@ -74,6 +74,9 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.path == '/evaluation' || this.$route.path == '/Confirmmasseuse' || this.$route.path == '/Confirmdentist') {
+       this.statuseva = true
+      } 
     // console.log(this.currentUser);
   },
 };
