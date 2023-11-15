@@ -11,10 +11,11 @@
     <table class="table table-bordered">
       <thead>
         <tr class="table-active">
-          <th scope="col">ลำดับที่</th>
-          <th scope="col">รพ.สต.</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
+          <th scope="col" style="width: 5%;">ลำดับที่</th>
+          <th scope="col" style="width: 20%;">รพ.สต.</th>
+          <th scope="col" style="width: 20%;">รูปภาพ</th>
+          <th scope="col" style="width: 20%;"></th>
+          <th scope="col" style="width: 10%;"></th>
         </tr>
       </thead>
       <tbody>
@@ -25,7 +26,10 @@
           <td>
             {{ l.name }} 
           </td>
-          <td><qr-code :text="link+'?id='+l.id" :size=100> </qr-code></td>
+          <td>
+           <img :src="l.img_path" style="width:100%">
+          </td>
+          <td><qr-code :text="link+'?id='+l.id" :size=200> </qr-code></td>
           <td>
             <a @click="getid(l.id)">
               <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddUser">
@@ -36,7 +40,7 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> 
 
     <!-- Modal -->
     <div class="modal fade" id="AddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -54,6 +58,17 @@
                   <label for="username">รพ.สต.</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
                     placeholder="กรุณากรอกรพ.สต." />
+                </div>
+                <div class="form-group">
+                  <label for="username">พื้นหลังเว็บไซต์<span style="color: red">*</span> </label>
+                  <img :src="user.img_path">
+                  <input
+        id="my_file"
+        class="form-control"
+        type="file"
+        accept="image/*"
+        @change="onFileChange"
+      />
                 </div>
               </div>
             </form>
@@ -98,6 +113,7 @@ import AmphuresService from "../services/AmphuresService";
 import shphService from "../services/shphService";
 import LinkImageService from "../services/LinkImageService";
 import shphmasseusetimeService from "../services/shphmasseusetimeService";
+import axios from 'axios'
 
 export default {
   name: "Nav",
@@ -118,7 +134,9 @@ export default {
       districts: [],
       zipcode: '',
       shphlist:[],
-      link:''
+      link:'',
+      filename:'',
+      selectedFile:''
     };
   },
   mounted() {
@@ -126,6 +144,31 @@ export default {
     this.link = LinkImageService.getLinkFrontend()+'/evaluation';
   },
   methods: {
+    onFileChange(evt) {
+      const files = evt.target.files || evt.dataTransfer.files;
+      this.selectedFile = evt.target.files[0];
+      
+      this.filename = this.selectedFile.name;
+      if (!files.length) return;
+      this.onUploadFile();
+      // }
+    },
+    onUploadFile() {
+      const formData = new FormData();
+      formData.append("file", this.selectedFile); // appending file
+      //  sending file to the backend
+      //console.log(this.filename);
+      // var http = "http://localhost:8080/uploadbanner?name="+this.filename;
+      var http = LinkImageService.getLink()+ "/uploadbg?name="+this.filename;
+      axios
+        .post(http, formData)
+        .then(() => {    
+          this.user.img_path = LinkImageService.getLink() +"/uploads/bg/" + this.filename
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     deleteshphid(){
 shphService.deleteShph(this.user_id).then(()=>{
   document.getElementById("closedshph").click();
@@ -208,7 +251,8 @@ this.saveUser()
       var userdata = {
           name: this.user.name,
           status: 1,
-          createdBy:this.currentUser.id
+          createdBy:this.currentUser.id,
+          img_path:this.user.img_path
         };
         if (this.user_id == 0) {
 

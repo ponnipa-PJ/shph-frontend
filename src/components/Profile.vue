@@ -251,9 +251,6 @@ export default {
           this.getamphurs()
           this.getdistricts()
           this.getzipcode()
-          
-
-    
         });
     },
     getroles(){
@@ -385,7 +382,7 @@ export default {
           UID:this.user.UID,
         };
         if (this.user_id == 0) {
-          UserService.checkUID(this.user.UID).then((res) => {
+          UserService.checkUID(this.user.UID,'').then((res) => {
           // UserService.getUsers(this.user.email,'','','').then((res) => {
             // console.log(res.data);
             if (res.data.length == 0) {
@@ -403,7 +400,7 @@ export default {
           });
         } else {
           // console.log(this.user_id);
-          UserService.checkUID(this.user.UID).then((res) => {
+          UserService.checkUID(this.user.UID,this.user.id).then((res) => {
             if (res.data.length == 0) {
           UserService.updateUser(this.currentUser.id, userdata).then(() => {
             // console.log(res.data);

@@ -30,7 +30,9 @@ Vue.use(VueExcelXlsx);
 // import './assets/fonts/iconsmind/iconsmind.css'
 // import './assets/css/plugins.min.css'
 import './assets/css/style.css'
-// import './assets/scripts/script.j/s'
+import './assets/css/stylenew.css'
+
+// import './assets/scripts/frostui'
 
 
 new Vue({

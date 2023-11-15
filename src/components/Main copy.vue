@@ -108,7 +108,7 @@
               >
                 <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                <a class="nav-link" href="/Mains" style="color:black;background-color: wheat;"> หน้าหลัก </a>
+                <a class="nav-link" href="/home" style="color:black;background-color: wheat;"> หน้าหลัก </a>
             </li>&nbsp;
             <li class="nav-item" v-if="currentUser && (currentUser.role_id == 3 ||
                 currentUser.role_id == 5)">

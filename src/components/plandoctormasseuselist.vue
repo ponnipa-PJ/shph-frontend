@@ -85,7 +85,7 @@ export default {
         // shphId = this.currentUser.shphId
         DoctorShphService.getdoctorandshphmasseuse(this.currentUser.role_id, '').then((res) => {
           this.shphlist = res.data
-          // console.log(this.shphlist);
+          console.log(this.shphlist);
 
         })
       }

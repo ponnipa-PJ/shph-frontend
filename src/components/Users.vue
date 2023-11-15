@@ -523,7 +523,7 @@ if (this.user.email == "" || this.user.email == null) {
         };
         if (this.user_id == 0) {
           if (this.user.role_id == 2) {
-            UserService.checkUID(this.user.UID).then((res) => {
+            UserService.checkUID(this.user.UID,'').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             UserService.createUser(userdata).then(() => {

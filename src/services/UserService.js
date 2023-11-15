@@ -10,8 +10,8 @@ class UserService {
     getUID(UID) {
         return http.get('/user/getUID?UID='+UID)
     }
-    checkUID(UID) {
-        return http.get('/user/checkUID?UID='+UID)
+    checkUID(UID,UIDUser) {
+        return http.get('/user/checkUID?UID='+UID+'&&UIDUser='+UIDUser)
     }
     getDoctors() {
         return http.get('/user/getdoctor')

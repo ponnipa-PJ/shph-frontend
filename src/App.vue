@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div v-if="!statuseva">
+    <div v-if="statuseva == 1">
       <Main />
       <!-- <Nav  msg="Welcome to Your Vue.js App"/> -->
     </div>
-    <div v-else>
+    <div v-if="statuseva == 2">
       <table width="100%">
         <tr>
           <td width="3%"></td>
@@ -49,12 +49,16 @@
         </tr>
       </table>
     </div>
+    <div v-if="statuseva == 3">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
 // import Nav from './components/Nav.vue'
 import Main from "./components/Main.vue";
+import TypesService from './services/TypesService'
 
 export default {
   name: "App",
@@ -64,7 +68,7 @@ export default {
   },
   data() {
     return {
-      statuseva: false,
+      statuseva: 1,
       header: {},
       title:''
     };
@@ -75,14 +79,28 @@ export default {
     },
   },
   mounted() {
+    TypesService.getTypes().then((res)=>{
+    localStorage.removeItem('types');
+    localStorage.setItem('types', JSON.stringify(res.data[0]));
+    })
+    if (!JSON.parse(localStorage.getItem('color'))) {
+      localStorage.removeItem('color');
+    localStorage.setItem('color', JSON.stringify({status:false}));
+    }
+    
+    // console.log(localStorage.getItem('color'));
+    // console.log(this.$route.path);
     if (this.$route.path == '/evaluation' || this.$route.path == '/Confirmmasseuse' || this.$route.path == '/Confirmdentist') {
-       this.statuseva = true
+       this.statuseva = 2
        if (this.$route.path == '/evaluation') {
         this.title = 'แบบประเมินความพึงพอใจการให้บริการ'
        }
+      } else if (this.$route.path == '/home' || this.$route.path == '/') {
+       this.statuseva = 3
+      //  this.$router.push('/');
+
       } 
-    // console.log(this.currentUser);
-  },
+  }
 };
 </script>
 

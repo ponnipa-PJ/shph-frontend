@@ -57,7 +57,7 @@ export default {
 if (this.currentUser) {
   this.$router.push(url);
 }else{
-  this.$router.push('/login');
+  this.$router.push('/?link=login');
 }
     },
     logOut() {

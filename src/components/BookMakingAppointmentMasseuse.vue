@@ -816,7 +816,7 @@ export default {
         alert("กรุณาเลือกสถานที่ตรวจ");
       } else {
         if (this.userId == 0) {
-          UserService.checkUID(this.UID).then(async (res) => {
+          UserService.checkUID(this.UID,'').then(async (res) => {
             // console.log(res.data);
             if (res.data.length == 0) {
               alert("ไม่พบเลขบัตรประชาชนนี้ในระบบ");

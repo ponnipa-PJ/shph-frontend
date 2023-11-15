@@ -14,7 +14,7 @@ class AuthService {
       },
         error => {
           console.log(error);
-          this.$router.push("/login");
+          this.$router.push("/?link=login");
           alert('ชื่อหรือรหัสผ่านไม่ถูกต้อง')
         }
       );
@@ -31,7 +31,7 @@ class AuthService {
       },
         error => {
           console.log(error);
-          this.$router.push("/login");
+          this.$router.push("/?link=login");
           alert('ชื่อหรือรหัสผ่านไม่ถูกต้อง')
         }
       );

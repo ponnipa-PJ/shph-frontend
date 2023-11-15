@@ -57,6 +57,7 @@ import Mains from './components/Mains.vue';
 import News from './components/News.vue';
 import MenuManager from './components/MenuManager.vue';
 import QrcodeWeb from './components/QrcodeWeb.vue';
+import Home from './components/Home.vue';
 
 const router = new Router({
   mode: "history",
@@ -382,7 +383,7 @@ const router = new Router({
   component: MenuSuperAdmin
 },
 {
-  path: "/",
+  path: "/Mains",
   alias: "/Mains",
   name: "Mains",
   component: Mains
@@ -404,6 +405,18 @@ const router = new Router({
   alias: "/QrcodeWeb",
   name: "QrcodeWeb",
   component: QrcodeWeb
+},
+{
+  path: "/",
+  alias: "/home",
+  name: "home",
+  component: Home
+},
+{
+  path: "/home",
+  alias: "/home",
+  name: "home",
+  component: Home
 },
   ]
 });

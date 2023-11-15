@@ -484,7 +484,7 @@ this.getNoti()
       } else {
         if (this.user.role_id == 2) {
           
-        UserService.checkUID(this.user.UID).then((res) => {
+        UserService.checkUID(this.user.UID,'').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {
             var user = {
@@ -518,7 +518,7 @@ this.getNoti()
         });
       
         }else{
-          UserService.checkUID(this.user.UID).then((res) => {
+          UserService.checkUID(this.user.UID,'').then((res) => {
           // UserService.getUsers(this.user.email, "",'','').then((res) => {
           // console.log(res.data);
           if (res.data.length == 0) {

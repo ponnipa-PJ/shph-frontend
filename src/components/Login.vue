@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="card mt-5" style="width: 80%">
+    <div class="card" style="width: 80%">
       <div class="card-body login-card-body mt-3">
         <h3 class="login-box-msg" style="text-align: center">เข้าสู่ระบบ</h3>
         <form>
