@@ -30,7 +30,7 @@
                 <!-- <td>{{ h.UID }}</td> -->
                 <td>{{ h.firstname }} {{ h.lastname }}</td>
                 <td>
-                  <a :href="'/HistoryMasseuse?id='+h.id" target="_blank"
+                  <a :href="'/HistoryMasseuse?id='+h.id" 
                     ><button type="button" class="btn btn-success">
                       <i class="fa-solid fa-file-lines"></i></button
                   ></a>

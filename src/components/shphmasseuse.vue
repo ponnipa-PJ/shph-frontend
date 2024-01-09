@@ -18,7 +18,7 @@
 <div class="card-footer p-0" v-if="shphlist">
 <ul class="nav flex-column">
 <li class="nav-item" v-for="s in shphlist" :key="s.id">
-<a :href="'/book?id='+s.id" target="_blank" class="nav-link">
+<a :href="'/book?id='+s.id"  class="nav-link">
 {{s.name}} 
 </a>
 </li>

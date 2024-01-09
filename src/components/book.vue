@@ -2,8 +2,8 @@
     <div class="row">
 
   <div class="container">
-    <h5 class="mt-5" style="text-align:center">{{ shphName }}</h5>
-    <h5 class="mb-5" style="text-align:center">จองคิว{{nametype.masseuse}}ประจำเดือน</h5>
+    <h4 class="mt-5" style="text-align:center;font-size: 1.5rem;">{{ shphName }}</h4>
+    <h5 class="mb-5" style="text-align:center;font-size: 1.5rem;">จองคิว{{nametype.masseuse}}ประจำเดือน</h5>
 
     <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
       <template v-slot:eventContent='arg'>
@@ -120,7 +120,7 @@
                 <div class="card-header p-0 pt-1">
                   <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" @click="selectbook()" id="custom-tabs-one-home-tab" data-toggle="pill"
+                      <a class="nav-link active" @click="selectbook()" id="booknew" data-toggle="pill"
                         href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
                         aria-selected="true">จองคิว</a>
                     </li>
@@ -646,7 +646,8 @@ this.getmap(id)
 
       // console.log(id);
       this.getid(id, d)
-
+this.date = d
+document.getElementById("booknew").click();
       document.getElementById("AddEventDentist").click();
       //   EventService.getevent(id).then((res) => {
       //     this.book = res.data

@@ -181,7 +181,7 @@
       </div>
       <div class="col-md-1"></div>
     </div>
-    <!-- <a target="_blank" :href="urlAuth">เชื่อมต่อ LINE</a> -->
+    <!-- <a  :href="urlAuth">เชื่อมต่อ LINE</a> -->
   </div>
 </template>
 
@@ -217,6 +217,7 @@ export default {
     };
   },
   async mounted() {
+    this.connectline()
     this.getroles()
     this.getUser()
     this.user.from_name = 'ระบบจองคิวของรพ.สต.'
@@ -226,6 +227,7 @@ export default {
   methods: {  
     urlAuth() {
       var clientId = 'do6mzoSxLMNnOTXkr7USva'
+      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend() + '/line'
       console.log(this.currentUser);
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${this.currentUser.token}`
@@ -234,7 +236,7 @@ export default {
       window.open(this.urlAuth(), "_blank");
     },
     getshph(){
-      shphService.getShphs(1).then((res)=>{
+      shphService.getShphs(1,'').then((res)=>{
         this.shphlist = res.data
       })
     },
@@ -405,6 +407,7 @@ export default {
           UserService.updateUser(this.currentUser.id, userdata).then(() => {
             // console.log(res.data);
             alert('บันทึกสำเร็จ')
+            this.$router.push("/");
             this.getUser();
             if (this.currentUser.firstname == null || this.currentUser.firstname == '') {
               var id = this.currentUser.id

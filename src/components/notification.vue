@@ -159,7 +159,7 @@
       </div>
       <div class="col-md-1"></div>
     </div>
-    <!-- <a target="_blank" :href="urlAuth">เชื่อมต่อ LINE</a> -->
+    <!-- <a  :href="urlAuth">เชื่อมต่อ LINE</a> -->
   </div>
   </div>
 </template>

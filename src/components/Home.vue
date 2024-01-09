@@ -1,7 +1,11 @@
 <template>
-  <div>
+  <div :style="color">
+    <table>
+      <td style="width:30%"><br><br>
+    <div style="text-align:right"> <img src="../assets/icon.png" style="display: inline-block;width:50%"></div></td>
+      <td style="width:70%"></td>
+    </table>
     <span class="fixed end-3 z-50 top-3 cursor-pointer">
-     
       <!-- <img src="../assets/home.png" style="display: inline-block;"> -->
       <a href="/">
         <div style="display: inline-block">
@@ -14,7 +18,6 @@
             :style="iconcolor+';font-size: 25px'"
           ></i></div></a
       >&nbsp;&nbsp;
-     
       <a
         v-if="currentUser && currentUser.role_id != 2"
         href=""
@@ -39,7 +42,6 @@
         @change="savebg()"
       />
     </span>
-
     <section class="pt-48 pb-10" :style="color">
       <div class="container 2xl:px-20">
         <div class="grid xl:grid-cols-2 grid-cols-1 gap-6 items-center">
@@ -52,8 +54,8 @@
           </div>
 
           <div>
-            <h2 class="text-2xl leading-snug font-semibold mb-5" :style="titlecolor">
-              การให้บริการโรงพยาบาลส่งเสริมสุขภาพตำบลแม่กา จังหวัดพะเยา
+            <h2 class="text-2xl leading-snug font-semibold mb-5" :style="titlecolor+';font-size: 1.5rem;'">
+              {{fullname}}
             </h2>
             <p class="text-gray-500 dark:text-gray-400 mb-5" v-if="currentUser" :style="contentcolor">
               ยินดีต้อนรับ คุณ {{currentUser.firstname}} {{currentUser.lastname}}
@@ -69,9 +71,10 @@
               >
                 <a href="" @click="gotopage(m.url)"
                   ><div
-                    class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center"
+                    class="w-10 h-10 rounded-full flex items-center justify-center"
                   >
-                    <svg
+                  <img src="../assets/icon.png"/>
+                    <!-- <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                       class="h-4 w-4 mx-auto text-white"
@@ -80,10 +83,10 @@
                         fill="currentColor"
                         d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
                       />
-                    </svg>
+                    </svg> -->
                   </div>
 
-                  <h3 class="text-2xl font-semibold mt-5 mb-2" :style="titlecolor">{{ m.name }}</h3>
+                  <h4 class="text-2xl font-semibold mt-5 mb-2" :style="titlecolor">{{ m.name }}</h4>
                   <!-- <p class="text-gray-500 dark:text-gray-400">Design For every Owner to feeel comfort and relax.</p> -->
                 </a>
               </div>
@@ -150,7 +153,8 @@ export default {
       contentcolor:"color:#6B7280",
       bgcardcolor:"background-color:#FFFFFF",
       bg:true,
-      imgbg:''
+      imgbg:'',
+      fullname:''
     };
   },
   computed: {
@@ -162,17 +166,39 @@ export default {
     if (this.currentUser) {
       if (this.currentUser.shphId) {
         shphService.getShph(this.currentUser.shphId).then((res) => {
-        // console.log(res.data);
+
         this.imgbg = res.data.img_path
+        this.fullname = res.data.fullname
       });
     }else{
-    shphService.getShphs(1).then((res) => {
+    shphService.getShphs(1,1).then((res) => {       
+      //  console.log(res.data);
+       if (res.data) {
         this.imgbg = res.data[0].img_path
+        this.fullname = res.data[0].fullname
+       }else{
+        shphService.getShphs(1,'').then((res) => {       
+      //  console.log(res.data);
+        this.imgbg = res.data[0].img_path
+        this.fullname = res.data[0].fullname
+        
+       })
+       }
       });
     }
   }else{
-    shphService.getShphs(1).then((res) => {
+    shphService.getShphs(1,1).then((res) => {
+      if (res.data) {
         this.imgbg = res.data[0].img_path
+        this.fullname = res.data[0].fullname
+       }else{
+        shphService.getShphs(1,'').then((res) => {       
+      //  console.log(res.data);
+        this.imgbg = res.data[0].img_path
+        this.fullname = res.data[0].fullname
+        
+       })
+       }
       });
     }
       

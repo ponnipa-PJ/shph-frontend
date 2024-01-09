@@ -25,7 +25,7 @@
 <div class="card-body p-0" style="display: block;">
 <ul class="nav nav-pills flex-column">
 <li class="nav-item active" v-for="s in u.shph" :key="s.id"> 
-  <a :href="'/plandoctordentist?id=' + u.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+  <a :href="'/plandoctordentist?id=' + u.id + '&&shphId=' + s.id"  class="nav-link">
     <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
 </a>
 </li>
@@ -38,7 +38,7 @@
         <div class="card-body p-0" style="display: block;" v-if="currentUser.role_id == 4">
 <ul class="nav nav-pills flex-column">
 <li class="nav-item active" v-for="s in shphlist" :key="s.id"> 
-  <a :href="'/plandoctordentist?id=' + currentUser.id + '&&shphId=' + s.id" target="_blank" class="nav-link">
+  <a :href="'/plandoctordentist?id=' + currentUser.id + '&&shphId=' + s.id"  class="nav-link">
     <i class="fa fa-circle" aria-hidden="true"></i> {{ s.name }}
 </a>
 </li>

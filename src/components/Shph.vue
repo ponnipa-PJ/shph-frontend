@@ -12,9 +12,11 @@
       <thead>
         <tr class="table-active">
           <th scope="col" style="width: 5%;">ลำดับที่</th>
-          <th scope="col" style="width: 20%;">รพ.สต.</th>
+          <th scope="col" style="width: 20%;">ชื่อเต็ม</th>
+          <th scope="col" style="width: 20%;">ชื่อย่อ</th>
           <th scope="col" style="width: 20%;">รูปภาพ</th>
           <th scope="col" style="width: 20%;"></th>
+          <th scope="col" style="width: 10%;"></th>
           <th scope="col" style="width: 10%;"></th>
         </tr>
       </thead>
@@ -24,12 +26,21 @@
             {{ i + 1 }}
           </td>
           <td>
+            {{ l.fullname }} 
+          </td>
+          <td>
             {{ l.name }} 
           </td>
           <td>
            <img :src="l.img_path" style="width:100%">
           </td>
           <td><qr-code :text="link+'?id='+l.id" :size=200> </qr-code></td>
+          <td><div class="form-group">
+<div class="custom-control custom-switch">
+<input type="checkbox" class="custom-control-input" :id="l.id" v-model="l.defaultshow" @change="savestatus(l.id,l.defaultshow)">
+<label class="custom-control-label" :for="l.id"></label>
+</div>
+</div></td>
           <td>
             <a @click="getid(l.id)">
               <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AddUser">
@@ -53,11 +64,15 @@
           <div class="modal-body">
             <form>
               <div class="card-body mt-3">
-
                 <div class="form-group mt-3">
-                  <label for="username">รพ.สต.</label>
+                  <label for="username">ชื่อเต็ม</label>
+                  <input v-model="user.fullname" type="text" min="1" class="form-control form-control-sm" id="username"
+                    placeholder="กรุณากรอกชื่อเต็ม" />
+                </div>
+                <div class="form-group mt-3">
+                  <label for="username">ชื่อย่อ</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
-                    placeholder="กรุณากรอกรพ.สต." />
+                    placeholder="กรุณากรอกชื่อย่อ" />
                 </div>
                 <div class="form-group">
                   <label for="username">พื้นหลังเว็บไซต์<span style="color: red">*</span> </label>
@@ -144,6 +159,14 @@ export default {
     this.link = LinkImageService.getLinkFrontend()+'/evaluation';
   },
   methods: {
+    savestatus(id,defaultshow){
+var data={
+  defaultshow:defaultshow
+}
+shphService.updatedefaultshow(id,data).then(()=>{
+  this.getUsers()
+})
+    },
     onFileChange(evt) {
       const files = evt.target.files || evt.dataTransfer.files;
       this.selectedFile = evt.target.files[0];
@@ -176,7 +199,7 @@ shphService.deleteShph(this.user_id).then(()=>{
       })
     },
     getshph(){
-      shphService.getShphs(1).then((res)=>{
+      shphService.getShphs(1,'').then((res)=>{
         this.shphlist = res.data
       })
     },
@@ -252,7 +275,8 @@ this.saveUser()
           name: this.user.name,
           status: 1,
           createdBy:this.currentUser.id,
-          img_path:this.user.img_path
+          img_path:this.user.img_path,
+          fullname:this.user.fullname,
         };
         if (this.user_id == 0) {
 
@@ -287,7 +311,7 @@ this.saveUser()
         }
     }
 ,    getUsers() {
-  shphService.getShphs(1).then((res) => {
+  shphService.getShphs(1,'').then((res) => {
         this.list = res.data;
       });
     },

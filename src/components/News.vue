@@ -244,7 +244,7 @@ export default {
       });
     },
     getshph() {
-      shphService.getShphs(1).then((res) => {
+      shphService.getShphs(1,'').then((res) => {
         this.shphlist = res.data;
       });
     },

@@ -353,7 +353,7 @@ jQuery.noConflict()(function($) {
 			onLoadEvent: true,
 			timeout: true,
 			timeoutCountdown: 1200,
-			linkElement: 'a:not([target="_blank"]):not([href^="#"]):not([href^="mailto"]):not(.ajax-btn, #cancel-comment-reply-link, .comment-reply-link, .no-anims, .author-anims-link, .lightbox-link, .vlt-cats-toggle a)',
+			linkElement: 'a:not([]):not([href^="#"]):not([href^="mailto"]):not(.ajax-btn, #cancel-comment-reply-link, .comment-reply-link, .no-anims, .author-anims-link, .lightbox-link, .vlt-cats-toggle a)',
 			loadingClass: 'vlt-preloader-holder',
 			loadingInner: '<div class="vlt-preloader"></div>'
 		});

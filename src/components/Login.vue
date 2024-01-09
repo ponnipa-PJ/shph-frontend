@@ -152,6 +152,7 @@ export default {
     },
     urlAuth() {
       var clientId = "do6mzoSxLMNnOTXkr7USva";
+      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend() + "/line";
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=1`;
     },
@@ -199,7 +200,7 @@ export default {
             email: this.user.UID,
             password: this.user.password,
           };
-          console.log(useremail);
+          // console.log(useremail);
           this.$store.dispatch("auth/login", useremail).then(
             () => {
               // this.loading = true;
@@ -255,7 +256,7 @@ export default {
                   () => {
                     // console.log(this.urlAuth());
                     // var menu = res.data[0].url
-                    // console.log(menu);
+                    console.log(this.currentUser.role_id);
                     // console.log(this.currentUser);
 
                     // if (this.currentUser.line_token == null) {
@@ -269,7 +270,7 @@ export default {
                       } else {
                         this.$router.push("/");
                       }
-                      location.reload();
+                      // location.reload();
                     // }
 
                     //   setTimeout(function () {

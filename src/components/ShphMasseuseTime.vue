@@ -84,7 +84,7 @@ this.data = res.data
           this.gettime()
               });
       }else{
-        shphService.getShphs(1).then((res)=>{
+        shphService.getShphs(1,'').then((res)=>{
         this.list = res.data
         this.shphId = res.data[0].id
         this.gettime()

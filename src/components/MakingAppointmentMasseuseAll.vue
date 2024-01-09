@@ -2,7 +2,7 @@
   <div class="row">
     <div class="container">
    <div class=" mb-3 mt-3" style="text-align: right">
-     <a :href="'BookMakingAppointmentMasseuse?id='+currentUser.id" target="_blank">
+     <a :href="'BookMakingAppointmentMasseuse?id='+currentUser.id" >
        <button type="button" id="get_file" class="btn btn-success" >
          <i class="fa fa-plus"></i> เพิ่ม
        </button></a>
@@ -37,11 +37,11 @@
                 <!-- <td>{{ h.UID }}</td> -->
                 <td>{{ h.firstname }} {{ h.lastname }} </td>
                 <td>
-                  <a :href="'/HistoryMasseuse?id='+h.id" target="_blank"
+                  <a :href="'/HistoryMasseuse?id='+h.id" 
                     ><button type="button" class="btn btn-success">
                       <i class="fa-solid fa-file-lines"></i></button
                   ></a>&nbsp;&nbsp;
-                  <a :href="'/BookMakingAppointmentMasseuse?id='+h.doctorId+'&&makeId='+h.makeId" target="_blank"
+                  <a :href="'/BookMakingAppointmentMasseuse?id='+h.doctorId+'&&makeId='+h.makeId" 
                     ><button type="button" class="btn btn-warning">
                       <i class="fa-solid fa-edit"></i></button
                   ></a>

@@ -110,7 +110,7 @@
                       <button @click="save()" class="btn btn-success">
                         บันทึก
                       </button>&nbsp;
-                      <a :href="'/BookMakingAppointmentMasseuse?id='+currentUser.id+'&&userId='+userId" target="_blank">
+                      <a :href="'/BookMakingAppointmentMasseuse?id='+currentUser.id+'&&userId='+userId" >
                       <button class="btn btn-warning">
                         นัดหมาย
                       </button>
@@ -205,7 +205,7 @@
         </div>
       </div>
     </div>
-    <!-- <a target="_blank" :href="urlAuth">เชื่อมต่อ LINE</a> -->
+    <!-- <a  :href="urlAuth">เชื่อมต่อ LINE</a> -->
   </div>
 </template>
 

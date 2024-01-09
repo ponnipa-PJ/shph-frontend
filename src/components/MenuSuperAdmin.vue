@@ -21,13 +21,13 @@
             <a :href="l.url"
               ><div class="card" style="height: 900px">
                 <div class="card-body">
-                  <h5 style="text-align: center">
+                  <h5 style="text-align: center;font-size: 1rem;">
                     <i :class="'nav-icon ' + l.icon"></i>
                     {{ l.name }}
                   </h5>
                   <ul class="nav flex-column">
                     <li class="nav-item" v-for="m in l.menu" :key="m.id">
-                      <a :href="m.url" target="_blank" class="nav-link">
+                      <a :href="m.url"  class="nav-link">
                         {{ m.name }}
                       </a>
                     </li>

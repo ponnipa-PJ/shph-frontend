@@ -34,6 +34,9 @@ class EventDentistService {
     getevent(id) {
         return http.get('/eventsdentist/' + id);
     }
+    gettimebydoctoranddate(date,id,userid,shphId,type){
+        return http.get('/eventsdentist/gettimebydoctoranddate?date='+date+'&&id='+id+'&&userid='+userid+'&&shphId='+shphId+'&&type='+type);
+    }
     createevent(data) {
         return http.post('/eventsdentist', data);
     }

@@ -307,7 +307,7 @@
       </div>
       <div class="col-md-1"></div>
     </div>
-    <!-- <a target="_blank" :href="urlAuth">เชื่อมต่อ LINE</a> -->
+    <!-- <a  :href="urlAuth">เชื่อมต่อ LINE</a> -->
   </div>
 </template>
 
@@ -577,6 +577,7 @@ this.getNoti()
     },
     urlAuth() {
       var clientId = "do6mzoSxLMNnOTXkr7USva";
+      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend() + "/line";
       var username = "1";
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${username}`;

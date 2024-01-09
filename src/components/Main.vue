@@ -35,7 +35,7 @@
             v-for="(i, c) in icon"
             :key="c"
           >
-            <a href="" @click="gotopage(i.url)"><h5 :style="i.font">{{ i.name }}</h5></a>
+            <a href="" @click="gotopage(i.url)"><h5 :style="i.font+';font-size: 1rem;'">{{ i.name }}</h5></a>
           </div>
           <!-- <div v-if="currentUser"
           class="cbp-filter-item"

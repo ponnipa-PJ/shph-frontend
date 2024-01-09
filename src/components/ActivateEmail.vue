@@ -7,7 +7,7 @@
           <div class="card-body login-card-body mt-3">
               <div class="card-body mt-3">
                <div class="social-auth-links text-center mb-3 mt-3">
-                <a target="_blank" :href="urlAuth" >
+                <a  :href="urlAuth" >
                   <button
                     type="button"
                     class="btn btn-success btn-sm"
@@ -90,6 +90,7 @@ UserService.updateToken(this.token,data).then((res)=>{
     },
     urlAuth() {
       var clientId = 'do6mzoSxLMNnOTXkr7USva'
+      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend()+'/line'
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${this.token}`
     },

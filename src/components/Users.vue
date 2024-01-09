@@ -330,7 +330,7 @@ UserService.deleteUser(this.user_id).then(()=>{
       })
     },
     getshph(){
-      shphService.getShphs(1).then((res)=>{
+      shphService.getShphs(1,'').then((res)=>{
         this.shphlist = res.data
         console.log(res.data);
       })
