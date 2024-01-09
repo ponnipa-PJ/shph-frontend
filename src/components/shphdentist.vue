@@ -60,7 +60,7 @@ export default {
     this.getshph()
     this.nametype = JSON.parse(localStorage.getItem('types'));
   },
-  methods: {
+  methods: { 
     getshph(){
 shphService.getdoctorandshphdentist().then((res)=>{
   this.shphlist = res.data

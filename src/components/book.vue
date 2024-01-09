@@ -1012,7 +1012,7 @@ alert('กรุณาเลือกประเภทการจองแล�
         }
       }
       // console.log(statushis);
-      EventService.geteventbyuseranddate(this.date, this.currentUser.id).then((res) => {
+      EventService.geteventbyuseranddate(this.date, this.currentUser.id,this.shphId).then((res) => {
         console.log(res.data.length, this.noti.hour, this.event_id_update.length);
         if (this.event_id_update.length > this.noti.hour) {
           alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.hour + ' ชั่วโมง')

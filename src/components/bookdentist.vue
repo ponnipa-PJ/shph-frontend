@@ -178,7 +178,7 @@
                             <label>เวลา</label><br />
                             <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in doctors" :key="r">
-                                <input class="form-check-input" type="radio" :id="'time'+i.id" :value="i.id"
+                                <input class="form-check-input" type="checkbox" :id="'time'+i.id" :value="i.id"
                                   v-model="event_id">
                                 <label :for="'time'+i.id" class="form-check-label">{{ timeformat(i.date) }}</label>
                               </div>
@@ -252,9 +252,9 @@
                             <label>เวลา</label><br />
                             <div class="form-group">
                               <div class="custom-control custom-checkbox" v-for="(i, r) in doctorsupdate" :key="r">
-                                <input class="form-check-input" type="radio" :id="'time'+i.id" :value="i.id"
+                                <input class="form-check-input" type="checkbox" :id="'timeupdate'+i.id" :value="i.id"
                                   v-model="event_id_update">
-                                <label :for="'time'+i.id" class="form-check-label">{{ timeformat(i.date) }}</label>
+                                <label :for="'timeupdate'+i.id" class="form-check-label">{{ timeformat(i.date) }}</label>
                               </div>
                             </div>
                             <label>ประเภทการ{{nametype.masseuse}}</label><br />
@@ -527,7 +527,7 @@ this.getmap(id)
                 this.eventId_update = res.data.eventId
                 console.log(res.data);
                 // this.event_id_update = JSON.parse(res.data.eventIdlist)
-                this.event_id_update = res.data.eventIdlist
+                this.event_id_update = JSON.parse(res.data.eventIdlist)
                 this.eventold = JSON.parse(res.data.eventIdlist)
                 this.allday = false
                 this.typebookupdate = res.data.typebook
@@ -835,6 +835,7 @@ document.getElementById("booknew").click();
         }
       }
       // console.log(statushis);
+      console.log(this.shphId);
       EventDentistService.geteventbyuseranddate(this.date, this.userId,this.shphId).then((res) => {
         console.log((this.event_id.length+res.data.length) , this.noti.hour); 
         if (this.currentUser.role_id == 6 && this.event_id.length > this.noti.no_masseuse_worker) {
@@ -917,7 +918,7 @@ alert('กรุณาเลือกประเภทการจองแล�
                       var sql = his + value
                       // console.log(sql);
                       EventDentistService.createsql(sql).then(() => {
-                        var message = this.noti.message_chiropractor  + ' '+this.dentisttypebook+ ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                        var message = this.noti.message_dentist  + ' '+this.dentisttypebook+ ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                         // console.log(message);
                         LinkImageService.sendNotify(message, this.currentUser.line_token)
                         document.getElementById("booktab").click();
@@ -977,7 +978,7 @@ alert('กรุณาเลือกประเภทการจองแล�
                             // console.log(map_events);
                             EventDentistService.createsql(map_events).then(() => {
 
-                              var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                              var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                               // console.log(message);
                               LinkImageService.sendNotify(message, this.currentUser.line_token)
                               document.getElementById("booktab").click();
@@ -1015,7 +1016,7 @@ alert('กรุณาเลือกประเภทการจองแล�
         }
       }
       // console.log(statushis);
-      EventDentistService.geteventbyuseranddate(this.date, this.currentUser.id).then((res) => {
+      EventDentistService.geteventbyuseranddate(this.date, this.currentUser.id,this.shphId).then((res) => {
         console.log(res.data.length, this.noti.hour, this.event_id_update.length);
         if (this.event_id_update.length > this.noti.hour) {
           alert('ไม่สามารถจองคิว'+this.nametype+'เกิน ' + this.noti.hour + ' ชั่วโมง')
@@ -1068,7 +1069,7 @@ alert('กรุณาเลือกประเภทการจองแล�
                             // console.log(map_events);
                             EventDentistService.createsql(map_events).then(() => {
 
-                              var message = this.noti.message_chiropractor + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
+                              var message = this.noti.message_dentist + ' หมอ' + this.docname + ' วันที่ ' + this.header + this.timeline + ' ที่' + this.shphName
                               // console.log(message);
                               LinkImageService.sendNotify(message, this.currentUser.line_token)
                               // document.getElementById("closeduser").click();

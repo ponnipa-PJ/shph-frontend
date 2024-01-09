@@ -163,6 +163,8 @@ export default {
     },
   },
   mounted() {
+    
+    // /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
     if (this.currentUser) {
       if (this.currentUser.shphId) {
         shphService.getShph(this.currentUser.shphId).then((res) => {

@@ -106,7 +106,7 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                  <label for="username">ข้อความแจ้งเตือนการนัดหมาย{{nametype.dentist}}<span style="color: red">*</span> </label>
+                  <label for="username">ข้อความแจ้งเตือนการนัดหมาย{{nametype.masseuse}}<span style="color: red">*</span> </label>
 <input v-model="data.message_appointment_chiropractor" type="text" class="form-control " data-original-title="" title="">
 
                 </div>
@@ -120,14 +120,14 @@
                 </div>
                 
                   </div>
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12">
                     <div class="form-group">
                   <label for="username">ชื่อเว็บไซต์<span style="color: red">*</span> </label>
 <input v-model="data.title" type="text" class="form-control " data-original-title="" title="">
 
                 </div>
                 
-                  </div>
+                  </div> -->
                   <!-- <div class="col-md-12">
                     <div class="form-group">
                   <label for="username">พื้นหลังเว็บไซต์<span style="color: red">*</span> </label>
