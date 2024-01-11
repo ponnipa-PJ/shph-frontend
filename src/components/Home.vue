@@ -47,8 +47,10 @@
         <div class="grid xl:grid-cols-2 grid-cols-1 gap-6 items-center">
           <div>
             <img
+            id="imgid"
               :src="imgbg"
-              class="md:h-[600px] rounded-2xl"
+              class="rounded-2xl"
+              :style="'width:'+width+';height:'+height"
               alt=""
             />
           </div>
@@ -154,7 +156,9 @@ export default {
       bgcardcolor:"background-color:#FFFFFF",
       bg:true,
       imgbg:'',
-      fullname:''
+      fullname:'',
+      width:0,
+      height:0
     };
   },
   computed: {
@@ -163,7 +167,12 @@ export default {
     },
   },
   mounted() {
-    
+  //   const getMeta = (url, cb) => {
+  // const img = new Image();
+  // img.onload = () => cb(null, img);
+  // img.onerror = (err) => cb(err);
+  // img.src = url;
+  //   }
     // /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
     if (this.currentUser) {
       if (this.currentUser.shphId) {
@@ -171,6 +180,13 @@ export default {
 
         this.imgbg = res.data.img_path
         this.fullname = res.data.fullname
+        this.width = (res.data.width*10) + 'px'
+  this.height = (res.data.height*10)+ 'px'
+//         getMeta(this.imgbg, (err, img) => {
+//   console.log(img.naturalWidth, img.naturalHeight);
+//   console.log(res.data.width);
+//   // this.width = 
+// });
       });
     }else{
     shphService.getShphs(1,1).then((res) => {       
@@ -178,12 +194,26 @@ export default {
        if (res.data) {
         this.imgbg = res.data[0].img_path
         this.fullname = res.data[0].fullname
+        
+        console.log(res.data.width);
+  //       getMeta(this.imgbg, (err, img) => {
+  // console.log(img.naturalWidth, img.naturalHeight);
+  // this.width = (res.data[0].width/100)*img.naturalWidth
+  // this.height = (res.data[0].height/100)*img.naturalHeight
+  this.width = (res.data[0].width*10) + 'px'
+  this.height = (res.data[0].height*10)+ 'px'
+  // console.log(this.width,this.height);
+// });
        }else{
         shphService.getShphs(1,'').then((res) => {       
       //  console.log(res.data);
         this.imgbg = res.data[0].img_path
         this.fullname = res.data[0].fullname
-        
+        this.width = (res.data[0].width*10) + 'px'
+  this.height = (res.data[0].height*10)+ 'px'
+//         getMeta(this.imgbg, (err, img) => {
+//   console.log(img.naturalWidth, img.naturalHeight);
+// });
        })
        }
       });
@@ -193,17 +223,28 @@ export default {
       if (res.data) {
         this.imgbg = res.data[0].img_path
         this.fullname = res.data[0].fullname
+//         getMeta(this.imgbg, (err, img) => {
+//   console.log(img.naturalWidth, img.naturalHeight);
+// });
+this.width = (res.data[0].width*10) + 'px'
+  this.height = (res.data[0].height*10)+ 'px'
        }else{
         shphService.getShphs(1,'').then((res) => {       
       //  console.log(res.data);
         this.imgbg = res.data[0].img_path
         this.fullname = res.data[0].fullname
-        
+//         getMeta(this.imgbg, (err, img) => {
+//   console.log(img.naturalWidth, img.naturalHeight);
+// });
+this.width = (res.data[0].width*10) + 'px'
+  this.height = (res.data[0].height*10)+ 'px'
        })
        }
       });
     }
-      
+//or however you get a handle to the IMG
+// var width = img.clientWidth;
+// var height = img.clientHeight;
     UserService.getmenuuser(2).then((res) => {
       // console.log(res.data);
       this.menu = res.data;
@@ -220,8 +261,6 @@ export default {
     }
     // console.log(this.status);
     
-
-    // console.log(this.menu);
   },
   methods: {
     savebg(){

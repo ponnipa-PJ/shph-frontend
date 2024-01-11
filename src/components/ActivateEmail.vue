@@ -89,8 +89,8 @@ UserService.updateToken(this.token,data).then((res)=>{
       return this.$store.state.auth.user;
     },
     urlAuth() {
-      var clientId = 'do6mzoSxLMNnOTXkr7USva'
-      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
+      // var clientId = 'do6mzoSxLMNnOTXkr7USva'
+      var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend()+'/line'
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${this.token}`
     },

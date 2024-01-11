@@ -15,6 +15,7 @@
           <th scope="col" style="width: 20%;">ชื่อเต็ม</th>
           <th scope="col" style="width: 20%;">ชื่อย่อ</th>
           <th scope="col" style="width: 20%;">รูปภาพ</th>
+          <th scope="col" style="width: 20%;">ขนาด</th>
           <th scope="col" style="width: 20%;"></th>
           <th scope="col" style="width: 10%;"></th>
           <th scope="col" style="width: 10%;"></th>
@@ -33,6 +34,10 @@
           </td>
           <td>
            <img :src="l.img_path" style="width:100%">
+          </td>
+          <td>
+           กว้าง {{ l.width }}% <br>
+           สูง {{l.height}}%
           </td>
           <td><qr-code :text="link+'?id='+l.id" :size=200> </qr-code></td>
           <td><div class="form-group">
@@ -73,6 +78,25 @@
                   <label for="username">ชื่อย่อ</label>
                   <input v-model="user.name" type="text" min="1" class="form-control form-control-sm" id="username"
                     placeholder="กรุณากรอกชื่อย่อ" />
+                </div>
+                <div class="form-group mt-3">
+                  <label for="username">กว้าง (%)</label>
+                  <div class="input-group mb-3 input-group-sm">
+  <input type="number" v-model="user.width" class="form-control form-control-sm" placeholder="กรุณากรอกความกว้างของรูปภาพ" aria-label="Recipient's username" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <span class="input-group-text input-group-sm" id="basic-addon2">%</span>
+  </div>
+</div>
+                </div>
+                <div class="form-group mt-3">
+                  
+                  <label for="username">สูง (%)</label>
+                    <div class="input-group mb-3 input-group-sm">
+  <input type="number" v-model="user.height" class="form-control form-control-sm" placeholder="กรุณากรอกความสูงของรูปภาพ" aria-label="Recipient's username" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <span class="input-group-text input-group-sm" id="basic-addon2">%</span>
+  </div>
+</div>
                 </div>
                 <div class="form-group">
                   <label for="username">พื้นหลังเว็บไซต์<span style="color: red">*</span> </label>
@@ -266,6 +290,10 @@ shphService.deleteShph(this.user_id).then(()=>{
     save() {
       if (this.user.name == "" || this.user.name == null) {
         alert("กรุณากรอกรพ.สต.");
+      }else if (this.user.width == "" || this.user.width == null) {
+        alert("กรุณากรอกความกว้างของรูปภาพ");
+      }else if (this.user.height == "" || this.user.height == null) {
+        alert("กรุณากรอกความสูงของรูปภาพ");
       }else{
 this.saveUser()
       }
@@ -277,6 +305,8 @@ this.saveUser()
           createdBy:this.currentUser.id,
           img_path:this.user.img_path,
           fullname:this.user.fullname,
+          width:this.user.width,
+          height:this.user.height,
         };
         if (this.user_id == 0) {
 

@@ -226,8 +226,8 @@ export default {
   },
   methods: {  
     urlAuth() {
-      var clientId = 'do6mzoSxLMNnOTXkr7USva'
-      // var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
+      // var clientId = 'do6mzoSxLMNnOTXkr7USva'
+      var clientId = "dbAO5nQR4R4Jtyt5t5NdYk";
       var engine = LinkImageService.getLinkFrontend() + '/line'
       console.log(this.currentUser);
       return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}&scope=notify&state=${this.currentUser.token}`
